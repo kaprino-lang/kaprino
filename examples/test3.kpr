@@ -1,0 +1,12 @@
+Consider a <- R
+
+a := INPUT()
+
+If a > 0 then
+|>
+    PRINT(sqrt(a))
+|>
+Otherwise
+|>
+    PRINT("OMG!")
+|>

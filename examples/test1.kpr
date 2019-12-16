@@ -1,0 +1,12 @@
+#
+# Parameter c
+#
+
+    Consider c <- R c := 10.5
+
+#
+# Parameter a
+#
+    Consider a <- N variable a := 10 * c
+
+    PRINT(a)

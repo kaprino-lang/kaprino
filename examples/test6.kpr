@@ -1,0 +1,5 @@
+Class Vector
+|>
+    array_i <- R, i <- N
+    index(i <- N) <- R = array_i
+|>

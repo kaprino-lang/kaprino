@@ -1,0 +1,9 @@
+f(a <- R) <- R = a * a * cos(a)
+
+Define FUNC(a <- R) <- R
+|>
+    Return a * a * cos(a)
+|>
+
+PRINT(f(30))
+PRINT(FUNC(30))

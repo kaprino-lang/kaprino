@@ -1,0 +1,22 @@
+class Vector2
+|>
+    x <- R
+    y <- R
+
+    distance() <- R = sqrt(x * x + y * y)
+
+    define normalized()
+    |>
+        Consider dist <- R
+        dist := distance()
+        if dist = 0 then
+        |>
+            return
+        |>
+        otherwise
+        |>
+            x := x / distance()
+            y := y / distance()
+        |>
+    |>
+|>

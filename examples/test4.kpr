@@ -1,0 +1,10 @@
+Consider a <- R
+
+a := INPUT()
+
+While a >= 3 and not a < 0 loop
+|>
+    a := a -3
+|>
+
+PRINT(a)
