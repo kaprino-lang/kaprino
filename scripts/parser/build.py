@@ -7,7 +7,7 @@ import scripts.parser.pushd as pushd
 
 def buildParser(lang):
     with pushd.chParserDir():
-        ret = subproc.run(["antlr4", "*.g4", "-Dlanguage=" + lang], shell=True)
+        ret = subproc.run(["antlr4", "*.g4", "-Dlanguage=" + lang, "-visitor"], shell=True)
         if ret.returncode != 0:
             print("antlr4 returns code:" + ret.returncode)
             sys.exit()
