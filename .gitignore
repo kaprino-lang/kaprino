@@ -6,6 +6,12 @@
 /.idea/
 
 #
+# Antlr4
+#
+/src/parser/*
+!/src/parser/*.g4
+
+#
 # Python
 #
 **/__pycache__/
