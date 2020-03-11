@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="antlr4 *.g4 -Dlanguage=CSharp -package Kaprino.Parser -visitor" />
+    <Exec Command="antlr4 *.g4 -o /Generated -Dlanguage=CSharp -package Kaprino.Parser.Generated -visitor" />
   </Target>
 
 </Project>
