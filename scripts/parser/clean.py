@@ -7,7 +7,8 @@ import scripts.parser.pushd as pushd
 def clean():
     with pushd.chParserDir():
         for file in glob.glob("*.*"):
-            if pathlib.Path(file).suffix != ".g4":
+            suffix = pathlib.Path(file).suffix
+            if suffix != ".g4" and suffix != '.csproj':
                 os.remove(file)
 
 if __name__ == "__main__":
