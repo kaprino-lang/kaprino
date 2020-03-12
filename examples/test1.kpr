@@ -1,12 +1,10 @@
-#
-# Parameter c
-#
+#doc
+|>
+    Expect 1000 as output.
+|>
 
-    Consider c <- R c := 10.5
+#let a = 300 (<- R).
 
-#
-# Parameter a
-#
-    Consider a <- N variable a := 10 * c
+a := a + 700.
 
-    PRINT(a)
+#print a.

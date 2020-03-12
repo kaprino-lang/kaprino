@@ -1,12 +1,15 @@
-Consider a <- R
+#let a = True (<- B).
 
-a := INPUT()
+#let b = 0 (<- b).
 
-If a > 0 then
+#read b.
+
+#if a
 |>
-    PRINT(sqrt(a))
+    #print "OK!".
 |>
-Otherwise
+
+#if b >= 0
 |>
-    PRINT("OMG!")
+    #print sqrt(b).
 |>
