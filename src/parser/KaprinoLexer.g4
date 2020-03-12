@@ -8,7 +8,7 @@ lexer grammar KaprinoLexer;
 
 NEWLINE         : ('\r')? '\n' -> skip
                 ;
-COMMENT         : '#' .*? NEWLINE -> skip
+COMMENT         : '#doc' NEWLINE* '|>' .*? '|>' -> skip
                 ;
 
 //
@@ -20,32 +20,36 @@ QUOTE           : '"' -> more, mode(TEXT_MODE)
 //
 // Reserved word
 //
-CONSIDER    : ('C' | 'c') 'onsider'
-            ;
-VARIABLE    : 'variable'
-            ;
-IF          : ('I' | 'i') 'f'
-            ;
-THEN        : 'then'
-            ;
-OTHERWISE   : ('O' | 'o') 'therwise'
-            ;
-WHILE       : ('W' | 'w') 'hile'
-            ;
-LOOP        : 'loop'
-            ;
-CLASS       : ('C' | 'c') 'lass'
-            ;
-DEFINE      : ('D' | 'd') 'efine'
-            ;
-RETURN      : ('R' | 'r') 'eturn'
-            ;
-AND         : 'and'
-            ;
-OR          : 'or'
-            ;
-NOT         : 'not'
-            ;
+fragment COMMAND: '#'
+                ;
+LET             : COMMAND ('let' | 'Let' | 'LET')
+                ;
+PROCESS         : COMMAND ('process' | 'Process' | 'PROCESS')
+                ;
+IF              : COMMAND ('if' | 'If' | 'IF')
+                ;
+OTHERWISE       : COMMAND ('otherwise' | 'Otherwise' | 'OTHERWISE')
+                ;
+WHILE           : COMMAND ('while' | 'While' | 'WHILE')
+                ;
+LOOP            : COMMAND ('loop' | 'Loop' | 'LOOP')
+                ;
+BREAK           : COMMAND ('break' | 'Break' | 'BREAK')
+                ;
+CLASS           : COMMAND ('class' | 'Class' | 'CLASS')
+                ;
+SUBMIT          : COMMAND ('submit' | 'Submit' | 'SUBMIT')
+                ;
+PRINT           : COMMAND ('print' | 'Print' | 'PRINT')
+                ;
+READ            : COMMAND ('read' | 'Read' | 'READ')
+                ;
+AND             : 'and'
+                ;
+OR              : 'or'
+                ;
+NOT             : 'not'
+                ;
 
 //
 // Number
@@ -67,15 +71,15 @@ CLOSER  : '|>'
 //
 // Boolean
 //
-TRUE    : 'True'
+TRUE    : ('true' | 'True')
         ;
-FALSE   : 'False'
+FALSE   : ('false' | 'False')
         ;
 
 //
 // ID
 //
-fragment LETTER : [a-zA-Z]
+fragment LETTER : [a-zA-Z_]
                 ;
 ID              : LETTER (LETTER | DIGIT)*
                 ;
@@ -84,8 +88,6 @@ ID              : LETTER (LETTER | DIGIT)*
 // Operators
 //
 COMMA           : ','
-                ;
-INDEX_OP        : '_'
                 ;
 GRATEROREQUAL   : '>=' | '=>'
                 ;
@@ -111,9 +113,13 @@ MUL_OP          : '*'
                 ;
 DIV_OP          : '/'
                 ;
+UP_ARROW        : '^'
+                ;
 PARCENT         : '%'
                 ;
 CONTAINS        : '<-'
+                ;
+MAPPING_TO      : '->'
                 ;
 
 WS  : [ \t]+ -> skip
