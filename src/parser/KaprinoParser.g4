@@ -42,7 +42,7 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | not_op expr # NotExpr
                 | number # NumberExpr
                 | text # TextExpr
-                | bool # BooleanExpr
+                | const_bool # BooleanExpr
                 | call_func # FunctionExpr
                 | parameter # ParameterExpr
                 ;
@@ -54,7 +54,7 @@ parameter       : ID
 number          : NUMBER PARCENT?
                 | REAL_NUMBER PARCENT?
                 ;
-bool            : TRUE
+const_bool      : TRUE
                 | FALSE
                 ;
 uparrow_op      : UP_ARROW
