@@ -1,22 +1,22 @@
-class Vector2
+#class Vector2
 |>
-    x <- R
-    y <- R
+    #let x = 0 (<- R).
+    #let y = 0 (<- R).
 
-    distance() <- R = sqrt(x * x + y * y)
+    distance() = sqrt(x * x + y * y) (void -> R).
 
-    define normalized()
+    #process normalized() (void -> void)
     |>
-        Consider dist <- R
-        dist := distance()
-        if dist = 0 then
+        #let dist = distance() (<- R).
+
+        #if dist = 0
         |>
-            return
+            #print "Ops!".
         |>
-        otherwise
+        #otherwise
         |>
-            x := x / distance()
-            y := y / distance()
+            x := x / dist.
+            y := y / dist.
         |>
     |>
 |>

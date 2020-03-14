@@ -1,10 +1,16 @@
-Consider a <- R
+#let a (<- Z).
+a := 0.
 
-a := INPUT()
-
-While a >= 3 and not a < 0 loop
+#loop
 |>
-    a := a -3
+    #if a = 5
+    |>
+        #break.
+    |>
+
+    #print a.
+
+    a := a + 1.
 |>
 
-PRINT(a)
+#print "FInished!".

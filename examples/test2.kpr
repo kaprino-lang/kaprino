@@ -1,9 +1,3 @@
-f(a <- R) <- R = a * a * cos(a)
+f(x) = x^2 + x + 1 (R -> R).
 
-Define FUNC(a <- R) <- R
-|>
-    Return a * a * cos(a)
-|>
-
-PRINT(f(30))
-PRINT(FUNC(30))
+#print f(3).
