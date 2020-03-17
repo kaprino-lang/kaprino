@@ -13,19 +13,19 @@ options{
 program         : statement*
                 ;
 
-statement       : LET parameter (EQUAL expr)? LEFT_BRACKET (ID? CONTAINS ID)* RIGHT_BRACKET finisher # LetStatement
-                | LET parameter LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
-                | (call_func | parameter) ASSIGN expr finisher # AssignStatement
+statement       : LET parameter=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetStatement
+                | LET parameter=ID LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
+                | (call_func | ID) ASSIGN assigner=expr finisher # AssignStatement
                 | call_func finisher # RunProcessStatement
-                | ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
+                | funcname=ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
                 | PROCESS ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET CLOSER statement* CLOSER # DefineProcessStatement
-                | IF expr CLOSER statement* CLOSER (OTHERWISE CLOSER statement* CLOSER)? # IfStatement
+                | IF expr CLOSER ifst=statement* CLOSER (OTHERWISE CLOSER owst=statement* CLOSER)? # IfStatement
                 | LOOP CLOSER statement* CLOSER # LoopStatement
-                | CLASS parameter CLOSER statement* CLOSER # ClassStatement
+                | CLASS name=ID CLOSER statement* CLOSER # ClassStatement
                 | SUBMIT expr? finisher # SubmitStatement
                 | BREAK finisher # BreakStatement
                 | PRINT expr finisher # PrintStatement
-                | READ (call_func | parameter) finisher # ReadStatement
+                | READ (call_func | ID) finisher # ReadStatement
                 ;
 finisher        : DOT
                 ;
@@ -44,12 +44,10 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | text # TextExpr
                 | const_bool # BooleanExpr
                 | call_func # FunctionExpr
-                | parameter # ParameterExpr
+                | ID # ParameterExpr
                 ;
 
 function_type   : ID (COMMA ID)* MAPPING_TO ID
-                ;
-parameter       : ID
                 ;
 number          : NUMBER PARCENT?
                 | REAL_NUMBER PARCENT?
