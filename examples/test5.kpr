@@ -20,3 +20,10 @@
         |>
     |>
 |>
+
+#let vec (<- Vector2).
+
+vec_x := 3.
+vec_y := 4.
+
+#print vec_normalized().
