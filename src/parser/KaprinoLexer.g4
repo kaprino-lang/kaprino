@@ -65,6 +65,8 @@ REAL_NUMBER     : DIGIT+ '.' DIGIT+
 //
 DOT     : '.'
         ;
+UNDERBAR: '_'
+        ;
 CLOSER  : '|>'
         ;
 
@@ -79,7 +81,7 @@ FALSE   : ('false' | 'False')
 //
 // ID
 //
-fragment LETTER : [a-zA-Z_]
+fragment LETTER : [a-zA-Z]
                 ;
 ID              : LETTER (LETTER | DIGIT)*
                 ;

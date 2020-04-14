@@ -13,24 +13,21 @@ options{
 program         : statement*
                 ;
 
-statement       : LET parameter=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetStatement
-                | LET parameter=ID LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
-                | (call_func | ID) ASSIGN assigner=expr finisher # AssignStatement
-                | call_func finisher # RunProcessStatement
-                | funcname=ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
-                | PROCESS ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET CLOSER statement* CLOSER # DefineProcessStatement
-                | IF expr CLOSER ifst=statement* CLOSER (OTHERWISE CLOSER owst=statement* CLOSER)? # IfStatement
-                | LOOP CLOSER statement* CLOSER # LoopStatement
-                | CLASS name=ID CLOSER statement* CLOSER # ClassStatement
+statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetStatement
+                | LET name=ID LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
+                | parameter ASSIGN assigner=expr finisher # AssignStatement
+                | ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
+                | PROCESS ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET codeblock # DefineProcessStatement
+                | IF expr ifst=codeblock (OTHERWISE owst=codeblock)? # IfStatement
+                | LOOP codeblock # LoopStatement
+                | CLASS name=ID codeblock # ClassStatement
                 | SUBMIT expr? finisher # SubmitStatement
                 | BREAK finisher # BreakStatement
                 | PRINT expr finisher # PrintStatement
-                | READ (call_func | ID) finisher # ReadStatement
-                ;
-finisher        : DOT
+                | READ parameter finisher # ReadStatement
                 ;
 
-call_func       : ID LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # RunProcessSentence
+codeblock       : CLOSER statement* CLOSER # CodeBlockStatement
                 ;
 
 expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
@@ -43,11 +40,21 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | number # NumberExpr
                 | text # TextExpr
                 | const_bool # BooleanExpr
-                | call_func # FunctionExpr
-                | ID # ParameterExpr
+                | parameter # ParameterExpr
                 ;
 
-function_type   : ID (COMMA ID)* MAPPING_TO ID
+function_type   : ID (COMMA ID)* MAPPING_TO ID # FunctionType
+                ;
+
+parameter       : parameter LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionParameter
+                | parameter UNDERBAR ID # AccessParameter
+                | ID # ParameterItself
+                ;
+
+//
+// There are no plans to implement the visitors of them.
+//
+finisher        : DOT
                 ;
 number          : NUMBER PARCENT?
                 | REAL_NUMBER PARCENT?
