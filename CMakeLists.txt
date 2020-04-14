@@ -33,6 +33,9 @@ if ("" STREQUAL "${LLVM_LibPath}")
     return()
 endif()
 
+#
+# Source files
+#
 set(PARSER_SOURCES
     "src/parser/KaprinoLexer.cpp"
     "src/parser/KaprinoParser.cpp"
@@ -45,19 +48,8 @@ set(INTERPRETER_SOURCES
     "src/interpreter/KaprinoParser.impl.cpp"
     "src/interpreter/VariableManager.cpp"
     "src/interpreter/visitor/ProgramVisitor.cpp"
-    "src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/BreakStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/ClassStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/CodeBlockStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/DefineProcessStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/IfStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/LetFuncStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/LoopStatementVisitor.cpp"
+    "src/interpreter/visitor/expr/NumberExprVisitor.cpp"
     "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/SubmitStatementVisitor.cpp"
 )
 
 #
