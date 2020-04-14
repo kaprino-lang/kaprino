@@ -64,6 +64,12 @@ target_include_directories(kaprino PUBLIC ${LLVM_IncludePath})
 # Link directory
 #
 target_link_libraries(kaprino ${ANTLR4_LibPath}/antlr4-runtime.lib)
+add_custom_command(
+    TARGET kaprino POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${ANTLR4_LibPath}/antlr4-runtime.dll
+    $<TARGET_FILE_DIR:kaprino>
+)
 target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
 target_link_libraries(kaprino
     LLVMCore.lib
