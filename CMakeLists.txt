@@ -2,11 +2,17 @@ cmake_minimum_required(VERSION 3.16)
 
 project(kaprino VERSION 1.0)
 
+#
+# Dependencies pathes
+#
 set(ANTLR4_IncludePath "" CACHE STRING "ANTLR4 include files")
 set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
 set(LLVM_IncludePath "" CACHE STRING "LLVM include files")
 set(LLVM_LibPath "" CACHE STRING "LLVM library files")
 
+#
+# Check whther dependencies pathes are all setted.
+#
 if ("" STREQUAL "${ANTLR4_IncludePath}")
     message(FATAL_ERROR "[Error] Required \${ANTLR4_IncludePath} but not applied")
     return()
@@ -27,14 +33,44 @@ if ("" STREQUAL "${LLVM_LibPath}")
     return()
 endif()
 
-file(GLOB PARSER_SOURCES "src/parser/*.cpp")
-file(GLOB INTERPRETER_SOURCES "src/interpreter/**/*.cpp")
+set(PARSER_SOURCES
+    "src/parser/KaprinoLexer.cpp"
+    "src/parser/KaprinoParser.cpp"
+    "src/parser/KaprinoParserBaseListener.cpp"
+    "src/parser/KaprinoParserBaseVisitor.cpp"
+    "src/parser/KaprinoParserListener.cpp"
+    "src/parser/KaprinoParserVisitor.cpp"
+)
+set(INTERPRETER_SOURCES
+    "src/interpreter/KaprinoParser.impl.cpp"
+    "src/interpreter/VariableManager.cpp"
+    "src/interpreter/visitor/ProgramVisitor.cpp"
+    "src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/BreakStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/ClassStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/CodeBlockStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/DefineProcessStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/IfStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/LetFuncStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/LoopStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/SubmitStatementVisitor.cpp"
+)
 
+#
+# Define kaprino, the application which we want to get.
+#
 add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 
 target_include_directories(kaprino PUBLIC ${ANTLR4_IncludePath})
 target_include_directories(kaprino PUBLIC ${LLVM_IncludePath})
 
+#
+# Link directory
+#
 target_link_libraries(kaprino ${ANTLR4_LibPath}/antlr4-runtime.lib)
 target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
 target_link_libraries(kaprino
