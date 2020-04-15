@@ -9,7 +9,7 @@ def buildParser(lang):
     with pushd.chParserDir():
         ret = subproc.run(["antlr4", "*.g4", "-Dlanguage=" + lang, "-visitor"], shell=True)
         if ret.returncode != 0:
-            print("antlr4 returns code:" + ret.returncode)
+            print("antlr4 returns code:" + str(ret.returncode))
             sys.exit()
         additionalBuild(lang)
 
@@ -17,7 +17,7 @@ def additionalBuild(lang):
     if lang == "Java":
         ret = subproc.run(["javac", "Kaprino*.java"], shell=True)
         if ret.returncode != 0:
-            print("javac returns code:" + ret.returncode)
+            print("javac returns code:" + str(ret.returncode))
             sys.exit()
 
 if __name__ == "__main__":
