@@ -8,7 +8,7 @@ lexer grammar KaprinoLexer;
 
 NEWLINE         : ('\r')? '\n' -> skip
                 ;
-COMMENT         : '#doc' NEWLINE* '|>' .*? '|>' -> skip
+COMMENT         : '//' .*? (NEWLINE | EOF) -> skip
                 ;
 
 //
