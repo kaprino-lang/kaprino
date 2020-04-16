@@ -15,7 +15,7 @@ program         : statement*
 
 statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetStatement
                 | LET name=ID LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
-                | parameter ASSIGN assigner=expr finisher # AssignStatement
+                | assignee ASSIGN assigner=expr finisher # AssignStatement
                 | ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
                 | PROCESS ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET codeblock # DefineProcessStatement
                 | IF expr ifst=codeblock (OTHERWISE owst=codeblock)? # IfStatement
@@ -24,7 +24,7 @@ statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT
                 | SUBMIT expr? finisher # SubmitStatement
                 | BREAK finisher # BreakStatement
                 | PRINT expr finisher # PrintStatement
-                | READ parameter finisher # ReadStatement
+                | READ expr finisher # ReadStatement
                 ;
 
 codeblock       : CLOSER statement* CLOSER # CodeBlockStatement
@@ -40,15 +40,17 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | number # NumberExpr
                 | text # TextExpr
                 | const_bool # BooleanExpr
-                | parameter # ParameterExpr
+                | name=ID # ParameterExpr
+                | expr UNDERBAR ID # AccessExpr
+                | expr LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionExpr
                 ;
 
 function_type   : ID (COMMA ID)* MAPPING_TO ID # FunctionType
                 ;
 
-parameter       : parameter LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionParameter
-                | parameter UNDERBAR ID # AccessParameter
-                | ID # ParameterItself
+assignee        : ID # ParameterAssignee
+                | assignee UNDERBAR ID # AccessAssignee
+                | assignee LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionAssignee
                 ;
 
 //
@@ -59,8 +61,8 @@ finisher        : DOT
 number          : NUMBER PARCENT?
                 | REAL_NUMBER PARCENT?
                 ;
-const_bool      : TRUE
-                | FALSE
+const_bool      : B_TRUE
+                | B_FALSE
                 ;
 uparrow_op      : UP_ARROW
                 ;

@@ -8,7 +8,7 @@ lexer grammar KaprinoLexer;
 
 NEWLINE         : ('\r')? '\n' -> skip
                 ;
-COMMENT         : '#doc' NEWLINE* '|>' .*? '|>' -> skip
+COMMENT         : '//' .*? (NEWLINE | EOF) -> skip
                 ;
 
 //
@@ -73,9 +73,9 @@ CLOSER  : '|>'
 //
 // Boolean
 //
-TRUE    : ('true' | 'True')
+B_TRUE    : ('true' | 'True')
         ;
-FALSE   : ('false' | 'False')
+B_FALSE   : ('false' | 'False')
         ;
 
 //
