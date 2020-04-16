@@ -73,9 +73,9 @@ CLOSER  : '|>'
 //
 // Boolean
 //
-TRUE    : ('true' | 'True')
+B_TRUE    : ('true' | 'True')
         ;
-FALSE   : ('false' | 'False')
+B_FALSE   : ('false' | 'False')
         ;
 
 //
