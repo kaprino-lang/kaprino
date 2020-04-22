@@ -1,11 +1,11 @@
 #include <memory>
 #include <vector>
 
-#include "../../../parser/KaprinoParserVisitor.h"
-#include "../../StatementVisitor.h"
+#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
 #include "../../internallib/PrintfInternal.h"
+#include "../../StatementVisitor.h"
 
 class PrintStatementObject : StatementObject {
    public:
@@ -14,7 +14,7 @@ class PrintStatementObject : StatementObject {
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto printfFunc = get_printf(builder, module);
 
-        auto formatVal = builder->CreateGlobalStringPtr("%f");
+        auto formatVal = builder->CreateGlobalStringPtr("%f\n");
         auto value = expr->codegen(builder, module);
 
         builder->CreateCall(printfFunc, { formatVal, value });
