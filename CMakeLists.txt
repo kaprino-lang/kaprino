@@ -55,6 +55,7 @@ set(INTERPRETER_SOURCES
     "src/interpreter/visitor/ProgramVisitor.cpp"
     "src/interpreter/visitor/expr/NumberExprVisitor.cpp"
     "src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
+    "src/interpreter/visitor/expr/TextExprVisitor.cpp"
     "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
     "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
 )
