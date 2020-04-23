@@ -24,7 +24,7 @@ statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT
                 | SUBMIT expr? finisher # SubmitStatement
                 | BREAK finisher # BreakStatement
                 | PRINT expr (COMMA expr)* finisher # PrintStatement
-                | READ expr finisher # ReadStatement
+                | READ assignee finisher # ReadStatement
                 ;
 
 codeblock       : CLOSER statement* CLOSER # CodeBlockStatement
