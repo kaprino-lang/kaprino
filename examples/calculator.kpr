@@ -1,0 +1,15 @@
+//
+// Simple calculator
+//
+
+#let x = 0 (<- R).
+#let y = 0 (<- R).
+
+#print "Type two numbers !".
+
+#read x.
+#read y.
+
+#print x "+" y "=" x + y.
+
+#print x "*" y "=" x * y.
