@@ -1,10 +1,7 @@
-#doc
-|>
-    Expect 1000 as output.
-|>
+// Expect 3.14 as output.
 
-#let a = 300 (<- R).
+#print 3.14.
 
-a := a + 700.
+#let a = 3.14 (<- R).
 
 #print a.

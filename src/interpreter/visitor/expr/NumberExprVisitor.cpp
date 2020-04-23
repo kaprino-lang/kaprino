@@ -1,9 +1,10 @@
 #include <stdlib.h>
 
-#include "../../../parser/KaprinoParserVisitor.h"
-#include "../../StatementVisitor.h"
+#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
+#include "../../StatementVisitor.h"
+#include "../../KaprinoLogger.h"
 
 class NumberExprObject : ExprObject {
    public:
@@ -21,7 +22,7 @@ antlrcpp::Any StatementVisitor::visitNumberExpr(KaprinoParser::NumberExprContext
 
     exprObj->value = atof(ctx->number()->getText().c_str());
 
-    std::cout << "[LOG] Static value ditected: " << exprObj->value << std::endl;
+    KAPRINO_LOG("Static value ditected: " << exprObj->value);
 
     return (ExprObject*)exprObj;
 }

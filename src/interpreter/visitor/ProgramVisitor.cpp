@@ -1,16 +1,17 @@
 #include <memory>
 #include <vector>
 
-#include "../../parser/KaprinoParserVisitor.h"
-#include "../StatementVisitor.h"
+#include "../../parser/KaprinoParserBaseVisitor.h"
 #include "../abstructs/StatementObject.h"
+#include "../StatementVisitor.h"
+#include "../KaprinoLogger.h"
 
 antlrcpp::Any StatementVisitor::visitProgram(KaprinoParser::ProgramContext *ctx) {
     auto statements = ctx->statement();
 
     auto statementsObj = new std::vector<StatementObject*>();
 
-    std::cout << "[LOG] This program contains " << statements.size() << "statement(s)" << std::endl;
+    KAPRINO_LOG("This program contains " << statements.size() << "statement(s)");
 
     for (auto statement : statements) {
         auto statementObjAny = visit(statement);
