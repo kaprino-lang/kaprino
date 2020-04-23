@@ -12,8 +12,9 @@ class NumberExprObject : ExprObject {
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto doubleTy = llvm::Type::getDoubleTy(module->getContext());
+        auto doubleVal = llvm::ConstantFP::get(doubleTy, value);
 
-        return llvm::ConstantFP::get(doubleTy, value);
+        return doubleVal;
     }
 };
 
