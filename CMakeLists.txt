@@ -8,6 +8,7 @@ project(kaprino VERSION 1.0)
 set(KAPRINO_WIN32 OFF CACHE BOOL "Activate Windows virtual terminal processor")
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
+set(KAPRINO_EMIT_OBJECT_CODE OFF CACHE BOOL "Generate object codes after running")
 set(ANTLR4_IncludePath "" CACHE STRING "ANTLR4 include files")
 set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
 set(LLVM_IncludePath "" CACHE STRING "LLVM include files")
@@ -235,5 +236,25 @@ if (${KAPRINO_MONOTONE_LOG})
     message(WARNING "[WARN] Make stdout monotone")
     target_compile_definitions(kaprino
         PUBLIC KAPRINO_MONOTONE_LOG
+    )
+endif()
+
+#
+# Optimizer option
+#
+if (${KAPRINO_OPTIMIZER_ON})
+    message(WARNING "[EXPERIMENTAL] Optimizer on")
+    target_compile_definitions(kaprino
+        PUBLIC KAPRINO_OPTIMIZER_ON
+    )
+endif()
+
+#
+# llvm-llc option
+#
+if (${KAPRINO_EMIT_OBJECT_CODE})
+    message(WARNING "[EXPERIMENTAL] The tool will generate object codes after running")
+    target_compile_definitions(kaprino
+        PUBLIC KAPRINO_EMIT_OBJECT_CODE
     )
 endif()
