@@ -52,12 +52,15 @@ set(INTERPRETER_SOURCES
     "src/interpreter/KaprinoParser.impl.cpp"
     "src/interpreter/VariableManager.cpp"
     "src/interpreter/internallib/PrintfInternal.cpp"
+    "src/interpreter/internallib/ScanfInternal.cpp"
     "src/interpreter/visitor/ProgramVisitor.cpp"
+    "src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
     "src/interpreter/visitor/expr/NumberExprVisitor.cpp"
     "src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
     "src/interpreter/visitor/expr/TextExprVisitor.cpp"
     "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
     "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
+    "src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
 )
 
 #
