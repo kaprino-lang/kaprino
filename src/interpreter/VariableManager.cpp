@@ -14,7 +14,7 @@ void VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, s
     params[paramName] = allocated;
 }
 
-llvm::Value* VariableManager::load(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName) {
+llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName) {
     auto found = params.find(paramName);
 
     if (found == params.end()) {
@@ -23,9 +23,7 @@ llvm::Value* VariableManager::load(llvm::IRBuilder<>* builder, llvm::Module* mod
     }
 
     llvm::AllocaInst* allocated = found->second;
-    auto loaded = builder->CreateLoad(allocated);
-
-    return loaded;
+    return allocated;
 }
 
 void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value) {
