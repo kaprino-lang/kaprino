@@ -4,7 +4,7 @@
 #include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../internallib/PrintfInternal.h"
+#include "../../internallib/InternalFuncs.h"
 #include "../../StatementVisitor.h"
 #include "../../KaprinoLogger.h"
 
