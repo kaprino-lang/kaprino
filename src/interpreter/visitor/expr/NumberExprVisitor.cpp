@@ -4,7 +4,7 @@
 #include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
 #include "../../StatementVisitor.h"
-#include "../../KaprinoLogger.h"
+#include "../../KaprinoAccelerator.h"
 
 class NumberExprObject : ExprObject {
    public:

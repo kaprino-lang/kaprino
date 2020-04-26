@@ -5,7 +5,7 @@
 #include "../../abstructs/ExprObject.h"
 #include "../../abstructs/AssigneeObject.h"
 #include "../../StatementVisitor.h"
-#include "../../KaprinoLogger.h"
+#include "../../KaprinoAccelerator.h"
 #include "../../VariableManager.h"
 
 class ParameterAssigneeObject : AssigneeObject {

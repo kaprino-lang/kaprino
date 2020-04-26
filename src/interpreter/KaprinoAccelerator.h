@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 
 #if !defined(KAPRINO_MONOTONE_LOG)

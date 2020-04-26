@@ -6,7 +6,7 @@
 #include "../../abstructs/ExprObject.h"
 #include "../../internallib/InternalFuncs.h"
 #include "../../StatementVisitor.h"
-#include "../../KaprinoLogger.h"
+#include "../../KaprinoAccelerator.h"
 
 class PrintStatementObject : StatementObject {
    public:

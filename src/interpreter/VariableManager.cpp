@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "VariableManager.h"
-#include "KaprinoLogger.h"
+#include "KaprinoAccelerator.h"
 
 bool VariableManager::exists(std::string paramName) {
     auto found = params.find(paramName);

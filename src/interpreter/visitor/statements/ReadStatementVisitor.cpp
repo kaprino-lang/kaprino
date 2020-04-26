@@ -8,7 +8,7 @@
 #include "../../StatementVisitor.h"
 #include "../../internallib/InternalFuncs.h"
 #include "../../abstructs/AssigneeObject.h"
-#include "../../KaprinoLogger.h"
+#include "../../KaprinoAccelerator.h"
 
 class ReadStatementObject : StatementObject {
    public:
