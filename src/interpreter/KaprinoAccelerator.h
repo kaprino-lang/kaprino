@@ -3,6 +3,10 @@
 #include <iostream>
 #include <string>
 
+//
+// ------ Log system ------
+//
+
 #if !defined(KAPRINO_MONOTONE_LOG)
 
 #if defined(KAPRINO_WIN32)
@@ -33,3 +37,9 @@
 #define KAPRINO_LOG_INIT()
 
 #endif
+
+//
+// ------ File system ------
+//
+
+#define KAPRINO_RM_FILE_EXT(file_path) (file_path).substr(0, (file_path).find_last_of("."))
