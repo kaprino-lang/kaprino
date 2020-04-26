@@ -44,7 +44,7 @@ class PrintStatementObject : StatementObject {
         }
         else {
             KAPRINO_ERR("An unexpected value was served to print");
-            return;
+            throw -1;
         }
     }
 };

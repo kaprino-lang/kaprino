@@ -19,7 +19,7 @@ llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* m
 
     if (found == params.end()) {
         KAPRINO_ERR("Try to access a variable which doesn't exist");
-        return nullptr;
+        throw -1;
     }
 
     llvm::AllocaInst* allocated = found->second;
@@ -31,7 +31,7 @@ void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, st
 
     if (found == params.end()) {
         KAPRINO_ERR("Try to access a variable which doesn't exist");
-        return;
+        throw -1;
     }
 
     llvm::AllocaInst* allocated = found->second;

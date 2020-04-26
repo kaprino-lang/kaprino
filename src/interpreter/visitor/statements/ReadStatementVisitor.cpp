@@ -23,7 +23,7 @@ class ReadStatementObject : StatementObject {
         }
         else {
             KAPRINO_ERR("An unexpected value was served to read");
-            return;
+            throw -1;
         }
     }
 };
