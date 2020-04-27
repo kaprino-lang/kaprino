@@ -58,6 +58,7 @@ void EmitExecutable(llvm::Module* module, bool optimize) {
 #if _WIN32
 
     compile_command << ".exe";
+    compile_command << " -llegacy_stdio_definitions.lib ";
 
 #endif
 
