@@ -5,11 +5,17 @@
 #let x = 0 (<- R).
 #let y = 0 (<- R).
 
-#print "Type two numbers !".
-
 #read x.
 #read y.
 
-#print x "+" y "=" x + y.
+#let addans = x + y (<- R).
+#let subans = x - y (<- R).
+#let mulans = x * y (<- R).
+#let divans = x / y (<- R).
+#let powans = x ^ y (<- R).
 
-#print x "*" y "=" x * y.
+#print x, " + ", y, " = ", addans.
+#print x, " - ", y, " = ", subans.
+#print x, " * ", y, " = ", mulans.
+#print x, " / ", y, " = ", divans.
+#print x, " ^ ", y, " = ", powans.
