@@ -6,22 +6,22 @@
 #include "../../StatementVisitor.h"
 #include "../../KaprinoAccelerator.h"
 
-class NumberExprObject : ExprObject {
+class TextExprObject : ExprObject {
    public:
-    double value;
+    std::string value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto doubleTy = llvm::Type::getDoubleTy(module->getContext());
-        auto doubleVal = llvm::ConstantFP::get(doubleTy, value);
+        auto val = builder->CreateGlobalStringPtr(value);
 
-        return doubleVal;
+        return val;
     }
 };
 
-antlrcpp::Any StatementVisitor::visitNumberExpr(KaprinoParser::NumberExprContext* ctx) {
-    auto exprObj = new NumberExprObject();
+antlrcpp::Any StatementVisitor::visitTextExpr(KaprinoParser::TextExprContext* ctx) {
+    auto exprObj = new TextExprObject();
 
-    exprObj->value = atof(ctx->number()->getText().c_str());
+    auto text = ctx->text()->getText();
+    exprObj->value = text.substr(1, text.size() - 2);
 
     KAPRINO_LOG("Static value ditected: " << exprObj->value);
 

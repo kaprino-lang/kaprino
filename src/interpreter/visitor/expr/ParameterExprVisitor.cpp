@@ -11,7 +11,8 @@ class ParameterExprObject : ExprObject {
     std::string name;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto value = VariableManager::load(builder, module, name);
+        auto valuePtr = VariableManager::getptr(builder, module, name);
+        auto value = builder->CreateLoad(valuePtr);
         return value;
     }
 };

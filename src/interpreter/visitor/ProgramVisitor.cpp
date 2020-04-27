@@ -4,7 +4,7 @@
 #include "../../parser/KaprinoParserBaseVisitor.h"
 #include "../abstructs/StatementObject.h"
 #include "../StatementVisitor.h"
-#include "../KaprinoLogger.h"
+#include "../KaprinoAccelerator.h"
 
 antlrcpp::Any StatementVisitor::visitProgram(KaprinoParser::ProgramContext *ctx) {
     auto statements = ctx->statement();

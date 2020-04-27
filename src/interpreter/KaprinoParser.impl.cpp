@@ -16,28 +16,17 @@
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/Support/InitLLVM.h"
 
-#include "KaprinoLogger.h"
+#include "KaprinoAccelerator.h"
 #include "../parser/KaprinoLexer.h"
 #include "../parser/KaprinoParser.h"
 #include "StatementVisitor.h"
 #include "abstructs/StatementObject.h"
+#include "ExecutableGenerator.h"
 
 using namespace antlr4;
 
 std::vector<StatementObject*>* ParseFile(std::string text);
 void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileName);
-
-#ifdef KAPRINO_EMIT_OBJECT_CODE
-
-void EmitObjectCode(llvm::Module* module);
-
-#endif
-
-#ifdef KAPRINO_OPTIMIZER_ON
-
-void OptimizeAll(llvm::Module* module);
-
-#endif
 
 int main(int argc, const char* argv[]) {
     llvm::InitLLVM X(argc, argv);
@@ -48,7 +37,7 @@ int main(int argc, const char* argv[]) {
 
     if (argc <= 1) {
         KAPRINO_ERR("No input");
-        return -1;
+        throw -1;
     }
 
     std::string input_file_path = argv[1];
@@ -56,7 +45,7 @@ int main(int argc, const char* argv[]) {
 
     if (!input_file.good()) {
         KAPRINO_ERR("Not found input files: \"" << argv[1] << "\"");
-        return -1;
+        throw -1;
     }
 
     std::ostringstream ss;
@@ -70,8 +59,7 @@ int main(int argc, const char* argv[]) {
 
     KAPRINO_LOG("Parsing succeeded");
 
-    std::string input_without_extension = input_file_path.substr(0, input_file_path.find_last_of("."));
-    std::string output_file_path = input_without_extension + ".ll";
+    std::string output_file_path = KAPRINO_RM_FILE_EXT(input_file_path) + ".ll";
 
     GenerateCode(programObject, output_file_path);
 }
@@ -124,100 +112,13 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
 
     llvm::verifyModule(*module);
 
-    std::error_code errorcode;
-    auto stream = new llvm::raw_fd_ostream(fileName, errorcode);
+#ifdef KAPRINO_EMIT_LLVM_IR_ONLY
 
-    KAPRINO_LOG("Outputing file task: " << errorcode.message());
+    EmitLLVMIR(module, false);
 
-#ifdef KAPRINO_OPTIMIZER_ON
+#else
 
-    OptimizeAll(module);
-
-#endif
-
-    module->print(*stream, nullptr);
-
-#ifdef KAPRINO_EMIT_OBJECT_CODE
-
-    EmitObjectCode(module);
+    EmitExecutable(module, false);
 
 #endif
 }
-
-#ifdef KAPRINO_EMIT_OBJECT_CODE
-
-void EmitObjectCode(llvm::Module* module) {
-    auto TargetTriple = llvm::sys::getDefaultTargetTriple();
-
-    KAPRINO_LOG("Target: " << TargetTriple);
-
-    llvm::InitializeAllTargetInfos();
-    llvm::InitializeAllTargets();
-    llvm::InitializeAllTargetMCs();
-    llvm::InitializeAllAsmParsers();
-    llvm::InitializeAllAsmPrinters();
-
-    std::string Error;
-    auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
-
-    if (!Target) {
-        KAPRINO_ERR(Error);
-        return;
-    }
-
-    auto CPU = "generic";
-    auto Features = "";
-
-    llvm::TargetOptions opt;
-    auto RM = llvm::Optional<llvm::Reloc::Model>();
-    auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, RM);
-
-    module->setDataLayout(TargetMachine->createDataLayout());
-    module->setTargetTriple(TargetTriple);
-
-    auto Filename = "output.o";
-    std::error_code errorcode;
-    llvm::raw_fd_ostream dest(Filename, errorcode);
-
-    KAPRINO_LOG("Emit object file task: " << errorcode.message());
-
-    llvm::legacy::PassManager pass;
-    auto FileType = llvm::TargetMachine::CGFT_ObjectFile;
-
-    if (TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
-        KAPRINO_ERR("TargetMachine can't emit a file of this type");
-        return;
-    }
-
-    pass.run(*module);
-    dest.flush();
-}
-
-#endif
-
-#ifdef KAPRINO_OPTIMIZER_ON
-
-void OptimizeAll(llvm::Module* module) {
-    llvm::PassBuilder passBuilder;
-    llvm::LoopAnalysisManager loopAnalysisManager(true);
-    llvm::FunctionAnalysisManager functionAnalysisManager(true);
-    llvm::CGSCCAnalysisManager cGSCCAnalysisManager(true);
-    llvm::ModuleAnalysisManager moduleAnalysisManager(true);
-    llvm::ModulePassManager modulePassManager;
-    passBuilder.registerModuleAnalyses(moduleAnalysisManager);
-    passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
-    passBuilder.registerFunctionAnalyses(functionAnalysisManager);
-    passBuilder.registerLoopAnalyses(loopAnalysisManager);
-    passBuilder.crossRegisterProxies(
-        loopAnalysisManager,
-        functionAnalysisManager,
-        cGSCCAnalysisManager,
-        moduleAnalysisManager
-    );
-    modulePassManager = passBuilder.buildPerModuleDefaultPipeline(
-        llvm::PassBuilder::OptimizationLevel::O3
-    );
-    modulePassManager.run(*module, moduleAnalysisManager);
-}
-
-#endif

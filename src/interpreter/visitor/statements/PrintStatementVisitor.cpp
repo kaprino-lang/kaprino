@@ -4,27 +4,58 @@
 #include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../internallib/PrintfInternal.h"
+#include "../../internallib/InternalFuncs.h"
 #include "../../StatementVisitor.h"
+#include "../../KaprinoAccelerator.h"
 
 class PrintStatementObject : StatementObject {
    public:
-    ExprObject* expr;
+    std::vector<ExprObject*> exprs;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto printfFunc = get_printf(builder, module);
 
-        auto formatVal = builder->CreateGlobalStringPtr("%f\n");
-        auto value = expr->codegen(builder, module);
+        std::string formatText;
+        std::vector<llvm::Value*> args;
 
-        builder->CreateCall(printfFunc, { formatVal, value });
+        for (auto expr : exprs) {
+            auto value = expr->codegen(builder, module);
+            argconv(value, module->getContext(), formatText, args);
+        }
+
+        formatText += "\n";
+        auto formatVal = builder->CreateGlobalStringPtr(formatText);
+
+        args.insert(args.begin(), formatVal);
+
+        builder->CreateCall(printfFunc, args);
+    }
+
+   private:
+    void argconv(llvm::Value* val, llvm::LLVMContext& ctx, std::string& format, std::vector<llvm::Value*>& args) {
+        auto type = val->getType();
+        if (type == llvm::Type::getDoubleTy(ctx)) {
+            format += "%f";
+            args.push_back(val);
+        }
+        else if (type == llvm::Type::getInt8PtrTy(ctx)) {
+            format += "%s";
+            args.push_back(val);
+        }
+        else {
+            KAPRINO_ERR("An unexpected value was served to print");
+            throw -1;
+        }
     }
 };
 
 antlrcpp::Any StatementVisitor::visitPrintStatement(KaprinoParser::PrintStatementContext* ctx) {
     auto statementObj = new PrintStatementObject();
 
-    statementObj->expr = visit(ctx->expr()).as<ExprObject*>();
+    auto exprs = ctx->expr();
+    for (auto expr : exprs) {
+        statementObj->exprs.push_back(visit(expr).as<ExprObject*>());
+    }
 
     return (StatementObject*)statementObj;
 }
