@@ -7,9 +7,15 @@
 // ------ Log system ------
 //
 
-#if !defined(KAPRINO_MONOTONE_LOG)
+#ifdef KAPRINO_MONOTONE_LOG
 
-#if defined(KAPRINO_WIN32)
+#define KAPRINO_LOG(msg) std::cout << "[LOG] " << msg << std::endl
+#define KAPRINO_WARN(msg) std::cout << "[WARNING] " << msg << std::endl
+#define KAPRINO_ERR(msg) std::cerr << "[ERROR] " << msg << std::endl
+
+#else
+
+#ifdef _WIN32
 
 #include <windows.h>
 #define KAPRINO_LOG_INIT() SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_VIRTUAL_TERMINAL_PROCESSING)
@@ -23,12 +29,6 @@
 #define KAPRINO_LOG(msg) std::cout << "[LOG] " << msg << std::endl
 #define KAPRINO_WARN(msg) std::cout << ANSI_YELLOW_CODE << "[WARNING] " << msg << ANSI_CLEAN_CODE << std::endl
 #define KAPRINO_ERR(msg) std::cerr << ANSI_RED_CODE << "[ERROR] " << msg << ANSI_CLEAN_CODE << std::endl
-
-#else
-
-#define KAPRINO_LOG(msg) std::cout << "[LOG] " << msg << std::endl
-#define KAPRINO_WARN(msg) std::cout << "[WARNING] " << msg << std::endl
-#define KAPRINO_ERR(msg) std::cerr << "[ERROR] " << msg << std::endl
 
 #endif
 
