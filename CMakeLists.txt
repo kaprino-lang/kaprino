@@ -5,10 +5,9 @@ project(kaprino VERSION 1.0)
 #
 # Dependencies pathes
 #
-set(KAPRINO_WIN32 OFF CACHE BOOL "Activate Windows virtual terminal processor")
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
-set(KAPRINO_EMIT_OBJECT_CODE OFF CACHE BOOL "Generate object codes after running")
+set(KAPRINO_EMIT_LLVM_IR_ONLY OFF CACHE BOOL "Generate LLVM IR and finish program")
 set(ANTLR4_IncludePath "" CACHE STRING "ANTLR4 include files")
 set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
 set(LLVM_IncludePath "" CACHE STRING "LLVM include files")
@@ -49,6 +48,7 @@ set(PARSER_SOURCES
     "src/parser/KaprinoParserVisitor.cpp"
 )
 set(INTERPRETER_SOURCES
+    "src/interpreter/ExecutableGenerator.cpp"
     "src/interpreter/KaprinoParser.impl.cpp"
     "src/interpreter/VariableManager.cpp"
     "src/interpreter/internallib/PrintfInternal.cpp"
@@ -226,16 +226,6 @@ target_link_libraries(kaprino
     LLVMXRay.lib
 )
 
-#
-# Activate Windows virtual terminal processor.
-#
-if (${KAPRINO_WIN32})
-    message(WARNING "[WARN] Win32 option is currently activated")
-    target_compile_definitions(kaprino
-        PUBLIC KAPRINO_WIN32
-    )
-endif()
-
 if (${KAPRINO_MONOTONE_LOG})
     message(WARNING "[WARN] Make stdout monotone")
     target_compile_definitions(kaprino
@@ -254,11 +244,11 @@ if (${KAPRINO_OPTIMIZER_ON})
 endif()
 
 #
-# llvm-llc option
+# LLVM IR option
 #
-if (${KAPRINO_EMIT_OBJECT_CODE})
-    message(WARNING "[EXPERIMENTAL] The tool will generate object codes after running")
+if (${KAPRINO_EMIT_LLVM_IR_ONLY})
+    message(WARNING "[WARN] The tool will generate only llvm ir")
     target_compile_definitions(kaprino
-        PUBLIC KAPRINO_EMIT_OBJECT_CODE
+        PUBLIC KAPRINO_EMIT_LLVM_IR_ONLY
     )
 endif()
