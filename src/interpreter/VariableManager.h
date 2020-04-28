@@ -3,8 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Value.h"
+#include "KaprinoAccelerator.h"
 
 class VariableManager {
    public:

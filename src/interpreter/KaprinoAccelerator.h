@@ -3,6 +3,23 @@
 #include <iostream>
 #include <string>
 
+#include "antlr4-runtime.h"
+
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/Passes/PassBuilder.h"
+#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm/Pass.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/TargetSelect.h"
+#include "llvm/Target/TargetMachine.h"
+#include "llvm/Target/TargetOptions.h"
+#include "llvm/ADT/Optional.h"
+#include "llvm/ADT/STLExtras.h"
+#include "llvm/Support/InitLLVM.h"
+
 //
 // ------ Log system ------
 //
@@ -37,6 +54,14 @@
 #define KAPRINO_LOG_INIT()
 
 #endif
+
+//
+// ------ LLVM type ------
+//
+
+#define LLVM_INT8_PTR_TY(mod) llvm::Type::getInt8PtrTy((mod)->getContext())
+#define LLVM_INT32_TY(mod) llvm::Type::getInt32Ty((mod)->getContext())
+#define LLVM_DOUBLE_TY(mod) llvm::Type::getDoubleTy((mod)->getContext())
 
 //
 // ------ File system ------
