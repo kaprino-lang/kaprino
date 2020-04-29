@@ -1,20 +1,17 @@
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-
-#define LLVM_INT8_PTR_TY llvm::Type::getInt8PtrTy(module->getContext())
-#define LLVM_INT32_TY llvm::Type::getInt32Ty(module->getContext())
+#include "../KaprinoAccelerator.h"
 
 llvm::Function* internal_scanf;
 
 llvm::Function* get_scanf(llvm::IRBuilder<>* builder, llvm::Module* module) {
     if (!internal_scanf) {
         std::vector<llvm::Type*> scanfFuncArgs;
-        scanfFuncArgs.push_back(LLVM_INT8_PTR_TY);
+        scanfFuncArgs.push_back(LLVM_INT8_PTR_TY(module));
 
         auto scanfFuncType = llvm::FunctionType::get(
-            LLVM_INT32_TY,
+            LLVM_INT32_TY(module),
             scanfFuncArgs,
-            true);
+            true
+        );
 
         internal_scanf = llvm::Function::Create(scanfFuncType, llvm::GlobalValue::ExternalLinkage, "scanf", module);
         internal_scanf->setCallingConv(llvm::CallingConv::C);
@@ -22,6 +19,3 @@ llvm::Function* get_scanf(llvm::IRBuilder<>* builder, llvm::Module* module) {
 
     return internal_scanf;
 }
-
-#undef LLVM_INT8_PTR_TY
-#undef LLVM_INT32_TY

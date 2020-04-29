@@ -42,7 +42,7 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | const_bool # BooleanExpr
                 | name=ID # ParameterExpr
                 | expr UNDERBAR ID # AccessExpr
-                | expr LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionExpr
+                | ID LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionExpr
                 ;
 
 function_type   : ID (COMMA ID)* MAPPING_TO ID # FunctionType

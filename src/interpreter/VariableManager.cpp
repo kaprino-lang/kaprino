@@ -3,39 +3,52 @@
 #include "VariableManager.h"
 #include "KaprinoAccelerator.h"
 
-bool VariableManager::exists(std::string paramName) {
-    auto found = params.find(paramName);
-
-    return found == params.end();
-}
-
 void VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::AllocaInst* allocated) {
     KAPRINO_LOG("Allocated " << paramName);
-    params[paramName] = allocated;
+
+    params.push_back({ paramName, allocated });
 }
 
 llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName) {
-    auto found = params.find(paramName);
+    llvm::Value* found;
 
-    if (found == params.end()) {
+    for (auto param : params) {
+        if (param.name == paramName) {
+            found = param.alloca_ptr;
+        }
+    }
+
+    if (found == nullptr) {
         KAPRINO_ERR("Try to access a variable which doesn't exist");
         throw -1;
     }
 
-    llvm::AllocaInst* allocated = found->second;
-    return allocated;
+    return found;
 }
 
 void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value) {
-    auto found = params.find(paramName);
-
-    if (found == params.end()) {
-        KAPRINO_ERR("Try to access a variable which doesn't exist");
-        throw -1;
+    for (auto param : params) {
+        if (param.name == paramName) {
+            builder->CreateStore(value, param.alloca_ptr);
+        }
     }
 
-    llvm::AllocaInst* allocated = found->second;
-    builder->CreateStore(value, allocated);
+    KAPRINO_ERR("Try to access a variable which doesn't exist");
+    throw -1;
 }
 
-std::unordered_map<std::string, llvm::AllocaInst*> VariableManager::params;
+void VariableManager::add_scope() {
+    depth++;
+    params.push_back({ std::to_string(depth), nullptr });
+}
+
+void VariableManager::remove_scope() {
+    while(params.back().name != std::to_string(depth)) {
+        params.pop_back();
+    }
+    params.pop_back();
+    depth--;
+}
+
+int VariableManager::depth = 0;
+std::vector<ParamInfo> VariableManager::params;
