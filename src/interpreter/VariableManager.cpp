@@ -29,6 +29,7 @@ void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, st
     for (auto param : params) {
         if (param.name == paramName) {
             builder->CreateStore(value, param.alloca_ptr);
+            return;
         }
     }
 
