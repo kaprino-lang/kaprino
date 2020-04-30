@@ -1,12 +1,12 @@
 #include <stdlib.h>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../StatementVisitor.h"
-#include "../../KaprinoAccelerator.h"
-#include "../../internallib/InternalFuncs.h"
+#include "../../abstructs/StatementObject.h"
 #include "../../FunctionManager.h"
+#include "../../internallib/InternalFuncs.h"
+#include "../../KaprinoAccelerator.h"
+#include "../../StatementVisitor.h"
 
 class FunctionExprObject : ExprObject {
    public:

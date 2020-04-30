@@ -1,10 +1,10 @@
 #include <stdlib.h>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../StatementVisitor.h"
+#include "../../abstructs/StatementObject.h"
 #include "../../KaprinoAccelerator.h"
+#include "../../StatementVisitor.h"
 
 class BracketExprObject : ExprObject {
    public:

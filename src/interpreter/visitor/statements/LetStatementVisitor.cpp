@@ -2,11 +2,11 @@
 #include <vector>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../VariableManager.h"
-#include "../../TypeManager.h"
+#include "../../abstructs/StatementObject.h"
 #include "../../StatementVisitor.h"
+#include "../../TypeManager.h"
+#include "../../VariableManager.h"
 
 class LetStatementObject : StatementObject {
    public:

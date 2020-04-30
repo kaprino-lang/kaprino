@@ -3,8 +3,8 @@
 
 #include "../../parser/KaprinoParserBaseVisitor.h"
 #include "../abstructs/StatementObject.h"
-#include "../StatementVisitor.h"
 #include "../KaprinoAccelerator.h"
+#include "../StatementVisitor.h"
 
 antlrcpp::Any StatementVisitor::visitProgram(KaprinoParser::ProgramContext *ctx) {
     auto statements = ctx->statement();

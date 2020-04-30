@@ -2,14 +2,14 @@
 #include <vector>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
-#include "../../abstructs/FunctionTypeObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../VariableManager.h"
-#include "../../TypeManager.h"
+#include "../../abstructs/FunctionTypeObject.h"
+#include "../../abstructs/StatementObject.h"
 #include "../../FunctionManager.h"
-#include "../../StatementVisitor.h"
 #include "../../KaprinoAccelerator.h"
+#include "../../StatementVisitor.h"
+#include "../../TypeManager.h"
+#include "../../VariableManager.h"
 
 class DefineFunctionStatementObject : StatementObject {
    public:

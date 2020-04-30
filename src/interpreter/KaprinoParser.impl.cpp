@@ -1,12 +1,12 @@
 #include <iostream>
 #include <fstream>
 
-#include "KaprinoAccelerator.h"
 #include "../parser/KaprinoLexer.h"
 #include "../parser/KaprinoParser.h"
-#include "StatementVisitor.h"
 #include "abstructs/StatementObject.h"
 #include "ExecutableGenerator.h"
+#include "KaprinoAccelerator.h"
+#include "StatementVisitor.h"
 #include "TypeManager.h"
 
 using namespace antlr4;

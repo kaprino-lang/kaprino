@@ -61,3 +61,7 @@ void EmitExecutable(llvm::Module* module, bool optimize) {
 
     KAPRINO_LOG("Compile complete");
 }
+
+void Interpret(llvm::Module* module, bool optimize) {
+    
+}
