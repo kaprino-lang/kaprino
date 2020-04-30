@@ -6,6 +6,13 @@
 /.idea/
 
 #
+# LLVM
+#
+*.bc
+*.ll
+*.exe
+
+#
 # Antlr4
 #
 /src/parser/*
