@@ -8,6 +8,8 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
 
     virtual antlrcpp::Any visitLetStatement(KaprinoParser::LetStatementContext* ctx) override;
 
+    virtual antlrcpp::Any visitAssignStatement(KaprinoParser::AssignStatementContext* ctx) override;
+
     virtual antlrcpp::Any visitDefineFunctionStatement(KaprinoParser::DefineFunctionStatementContext* ctx) override;
 
     virtual antlrcpp::Any visitPrintStatement(KaprinoParser::PrintStatementContext *ctx) override;

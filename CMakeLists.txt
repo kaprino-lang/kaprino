@@ -67,6 +67,7 @@ set(INTERPRETER_SOURCES
     "src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
     "src/interpreter/visitor/expr/TextExprVisitor.cpp"
     "src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
+    "src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
     "src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
     "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
     "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
