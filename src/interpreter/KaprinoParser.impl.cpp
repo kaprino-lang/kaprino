@@ -1,12 +1,13 @@
 #include <iostream>
 #include <fstream>
 
-#include "KaprinoAccelerator.h"
 #include "../parser/KaprinoLexer.h"
 #include "../parser/KaprinoParser.h"
-#include "StatementVisitor.h"
 #include "abstructs/StatementObject.h"
 #include "ExecutableGenerator.h"
+#include "KaprinoAccelerator.h"
+#include "StatementVisitor.h"
+#include "TypeManager.h"
 
 using namespace antlr4;
 
@@ -73,7 +74,7 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     std::vector<llvm::Type*> mainFuncArgs;
 
     auto mainFuncType = llvm::FunctionType::get(
-        llvm::Type::getInt32Ty(context),
+        LLVM_INT32_TY(module),
         mainFuncArgs,
         false
     );
@@ -89,8 +90,13 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     auto mainBlock = llvm::BasicBlock::Create(context, "entry", module->getFunction("main"));
     builder.SetInsertPoint(mainBlock);
 
+    TypeManager::create(&builder, module, "Text", LLVM_INT8_PTR_TY(module));
+    TypeManager::create(&builder, module, "R", LLVM_DOUBLE_TY(module));
+    TypeManager::create(&builder, module, "Z", LLVM_INT64_TY(module));
+
     for(auto statement : *programObj) {
         statement->codegen(&builder, module);
+        builder.SetInsertPoint(mainBlock);
     }
 
     builder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(context), 0));

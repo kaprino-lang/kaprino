@@ -2,13 +2,13 @@
 #include <vector>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
-#include "../../abstructs/ExprObject.h"
-#include "../../VariableManager.h"
-#include "../../StatementVisitor.h"
-#include "../../internallib/InternalFuncs.h"
 #include "../../abstructs/AssigneeObject.h"
+#include "../../abstructs/ExprObject.h"
+#include "../../abstructs/StatementObject.h"
+#include "../../internallib/InternalFuncs.h"
 #include "../../KaprinoAccelerator.h"
+#include "../../StatementVisitor.h"
+#include "../../VariableManager.h"
 
 class ReadStatementObject : StatementObject {
    public:

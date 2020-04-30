@@ -2,11 +2,11 @@
 #include <vector>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
+#include "../../abstructs/StatementObject.h"
 #include "../../internallib/InternalFuncs.h"
-#include "../../StatementVisitor.h"
 #include "../../KaprinoAccelerator.h"
+#include "../../StatementVisitor.h"
 
 class PrintStatementObject : StatementObject {
    public:

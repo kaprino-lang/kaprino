@@ -15,6 +15,7 @@ llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* m
     for (auto param : params) {
         if (param.name == paramName) {
             found = param.alloca_ptr;
+            return found;
         }
     }
 
@@ -22,8 +23,6 @@ llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* m
         KAPRINO_ERR("Try to access a variable which doesn't exist");
         throw -1;
     }
-
-    return found;
 }
 
 void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value) {

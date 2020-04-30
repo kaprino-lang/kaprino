@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "FunctionManager.h"
 #include "KaprinoAccelerator.h"
 

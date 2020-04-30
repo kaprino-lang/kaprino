@@ -2,10 +2,11 @@
 #include <vector>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../VariableManager.h"
+#include "../../abstructs/StatementObject.h"
 #include "../../StatementVisitor.h"
+#include "../../TypeManager.h"
+#include "../../VariableManager.h"
 
 class LetStatementObject : StatementObject {
    public:
@@ -15,11 +16,9 @@ class LetStatementObject : StatementObject {
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         llvm::AllocaInst* allocated;
-        if (type == "R") {
-            allocated = builder->CreateAlloca(
-                llvm::Type::getDoubleTy(module->getContext())
-            );
-        }
+        allocated = builder->CreateAlloca(
+            TypeManager::gettype(builder, module, type)
+        );
         VariableManager::create(builder, module, name, allocated);
         if (initVal) {
             auto init_val = initVal->codegen(builder, module);
