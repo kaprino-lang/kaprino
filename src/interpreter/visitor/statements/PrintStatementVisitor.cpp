@@ -20,7 +20,7 @@ class PrintStatementObject : StatementObject {
 
         for (auto expr : exprs) {
             auto value = expr->codegen(builder, module);
-            argconv(value, module->getContext(), formatText, args);
+            argconv(value, module, formatText, args);
         }
 
         formatText += "\n";
@@ -32,13 +32,17 @@ class PrintStatementObject : StatementObject {
     }
 
    private:
-    void argconv(llvm::Value* val, llvm::LLVMContext& ctx, std::string& format, std::vector<llvm::Value*>& args) {
+    void argconv(llvm::Value* val, llvm::Module* module, std::string& format, std::vector<llvm::Value*>& args) {
         auto type = val->getType();
-        if (type == llvm::Type::getDoubleTy(ctx)) {
+        if (type == LLVM_DOUBLE_TY(module)) {
             format += "%f";
             args.push_back(val);
         }
-        else if (type == llvm::Type::getInt8PtrTy(ctx)) {
+        else if (type == LLVM_INT64_TY(module)) {
+            format += "%lld";
+            args.push_back(val);
+        }
+        else if (type == LLVM_INT8_PTR_TY(module)) {
             format += "%s";
             args.push_back(val);
         }

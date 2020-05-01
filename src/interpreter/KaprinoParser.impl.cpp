@@ -99,7 +99,7 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
         statement->codegen(&builder, module);
     }
 
-    builder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(context), 0));
+    builder.CreateRet(llvm::ConstantInt::get(LLVM_INT32_TY(module), 0));
 
     llvm::verifyModule(*module);
 

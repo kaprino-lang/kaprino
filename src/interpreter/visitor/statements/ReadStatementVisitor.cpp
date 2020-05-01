@@ -17,7 +17,7 @@ class ReadStatementObject : StatementObject {
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto val = assignee->codegen(builder, module);
         auto scanfFunc = get_scanf(builder, module);
-        if (val->getType() == llvm::Type::getDoublePtrTy(module->getContext())) {
+        if (val->getType() == LLVM_DOUBLE_TY(module)) {
             auto format = builder->CreateGlobalStringPtr("%lf");
             builder->CreateCall(scanfFunc, { format, val });
         }
