@@ -91,12 +91,12 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     builder.SetInsertPoint(mainBlock);
 
     TypeManager::create(&builder, module, "Text", LLVM_INT8_PTR_TY(module));
+    TypeManager::create(&builder, module, "B", LLVM_BOOL_TY(module));
     TypeManager::create(&builder, module, "R", LLVM_DOUBLE_TY(module));
     TypeManager::create(&builder, module, "Z", LLVM_INT64_TY(module));
 
     for(auto statement : *programObj) {
         statement->codegen(&builder, module);
-        builder.SetInsertPoint(mainBlock);
     }
 
     builder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(context), 0));

@@ -62,6 +62,7 @@
 //
 
 #define LLVM_INT8_PTR_TY(mod) llvm::Type::getInt8PtrTy((mod)->getContext())
+#define LLVM_BOOL_TY(mod) llvm::Type::getInt1Ty((mod)->getContext())
 #define LLVM_INT32_TY(mod) llvm::Type::getInt32Ty((mod)->getContext())
 #define LLVM_INT64_TY(mod) llvm::Type::getInt64Ty((mod)->getContext())
 #define LLVM_DOUBLE_TY(mod) llvm::Type::getDoubleTy((mod)->getContext())

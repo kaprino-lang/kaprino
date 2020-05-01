@@ -19,6 +19,7 @@ class DefineFunctionStatementObject : StatementObject {
     ExprObject* expr;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        auto previousblock = builder->GetInsertBlock();
         VariableManager::add_scope();
         {
             auto types = functionType->inputTypes;
@@ -66,6 +67,7 @@ class DefineFunctionStatementObject : StatementObject {
             FunctionManager::create(builder, module, funcName, userdefinedFunc);
         }
         VariableManager::remove_scope();
+        builder->SetInsertPoint(previousblock);
     }
 };
 
