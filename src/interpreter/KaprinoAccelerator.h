@@ -66,6 +66,7 @@
 #define LLVM_INT32_TY(mod) llvm::Type::getInt32Ty((mod)->getContext())
 #define LLVM_INT64_TY(mod) llvm::Type::getInt64Ty((mod)->getContext())
 #define LLVM_DOUBLE_TY(mod) llvm::Type::getDoubleTy((mod)->getContext())
+#define LLVM_DOUBLE_PTR_TY(mod) llvm::Type::getDoublePtrTy((mod)->getContext())
 
 //
 // ------ File system ------
