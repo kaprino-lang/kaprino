@@ -23,7 +23,7 @@ antlrcpp::Any StatementVisitor::visitTextExpr(KaprinoParser::TextExprContext* ct
     auto text = ctx->text()->getText();
     exprObj->value = text.substr(1, text.size() - 2);
 
-    KAPRINO_LOG("Static value ditected: " << exprObj->value);
+    KAPRINO_LOG("Static value ditected: \"" << exprObj->value << "\"");
 
     return (ExprObject*)exprObj;
 }
