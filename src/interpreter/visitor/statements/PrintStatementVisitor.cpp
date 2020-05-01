@@ -34,15 +34,15 @@ class PrintStatementObject : StatementObject {
    private:
     void argconv(llvm::Value* val, llvm::Module* module, std::string& format, std::vector<llvm::Value*>& args) {
         auto type = val->getType();
-        if (type == LLVM_DOUBLE_TY(module)) {
+        if (type == KAPRINO_DOUBLE_TY(module)) {
             format += "%f";
             args.push_back(val);
         }
-        else if (type == LLVM_INT64_TY(module)) {
+        else if (type == KAPRINO_INT64_TY(module)) {
             format += "%lld";
             args.push_back(val);
         }
-        else if (type == LLVM_INT8_PTR_TY(module)) {
+        else if (type == KAPRINO_INT8_PTR_TY(module)) {
             format += "%s";
             args.push_back(val);
         }

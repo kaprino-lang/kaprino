@@ -11,7 +11,7 @@ class BooleanExprObject : ExprObject {
     bool value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto boolVal = llvm::ConstantInt::get(LLVM_BOOL_TY(module), value);
+        auto boolVal = llvm::ConstantInt::get(KAPRINO_BOOL_TY(module), value);
 
         return boolVal;
     }

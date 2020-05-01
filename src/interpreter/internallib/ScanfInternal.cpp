@@ -5,10 +5,10 @@ llvm::Function* internal_scanf;
 llvm::Function* get_scanf(llvm::IRBuilder<>* builder, llvm::Module* module) {
     if (!internal_scanf) {
         std::vector<llvm::Type*> scanfFuncArgs;
-        scanfFuncArgs.push_back(LLVM_INT8_PTR_TY(module));
+        scanfFuncArgs.push_back(KAPRINO_INT8_PTR_TY(module));
 
         auto scanfFuncType = llvm::FunctionType::get(
-            LLVM_INT32_TY(module),
+            KAPRINO_INT32_TY(module),
             scanfFuncArgs,
             true
         );

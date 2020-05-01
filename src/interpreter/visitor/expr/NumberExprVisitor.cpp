@@ -11,7 +11,7 @@ class NumberExprObject : ExprObject {
     double value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto doubleVal = llvm::ConstantFP::get(LLVM_DOUBLE_TY(module), value);
+        auto doubleVal = llvm::ConstantFP::get(KAPRINO_DOUBLE_TY(module), value);
 
         return doubleVal;
     }
