@@ -1,15 +1,18 @@
-#let a = True (<- B).
-
-#let b = 0 (<- b).
-
-#read b.
+#let a = true (<- B).
 
 #if a
 |>
-    #print "OK!".
+    a := False.
+    #if a
+    |>
+        #print "Too bad!".
+    |>
+    #otherwise
+    |>
+        #print "OK!".
+    |>
 |>
-
-#if b >= 0
+#otherwise
 |>
-    #print sqrt(b).
+    #print "Not good!".
 |>
