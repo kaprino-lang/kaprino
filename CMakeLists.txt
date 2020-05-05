@@ -82,187 +82,201 @@ set(INTERPRETER_SOURCES
 #
 add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 
-target_include_directories(kaprino PUBLIC ${ANTLR4_IncludePath})
-target_include_directories(kaprino PUBLIC ${LLVM_IncludePath})
+target_include_directories(kaprino PRIVATE ${ANTLR4_IncludePath})
+target_include_directories(kaprino PRIVATE ${LLVM_IncludePath})
 
 #
-# Link directory
+# Link ANTLR4
 #
-target_link_libraries(kaprino ${ANTLR4_LibPath}/antlr4-runtime.lib)
-add_custom_command(
-    TARGET kaprino POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${ANTLR4_LibPath}/antlr4-runtime.dll
-    $<TARGET_FILE_DIR:kaprino>
-)
+target_link_directories(kaprino PUBLIC ${ANTLR4_LibPath})
+target_link_libraries(kaprino antlr4-runtime)
+if(MSVC)
+    add_custom_command(
+        TARGET kaprino POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ANTLR4_LibPath}/antlr4-runtime.dll
+        $<TARGET_FILE_DIR:kaprino>
+    )
+else()
+    add_custom_command(
+        TARGET kaprino POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ANTLR4_LibPath}/libantlr4-runtime.so
+        $<TARGET_FILE_DIR:kaprino>
+    )
+endif()
+
+#
+# Link LLVM
+#
 target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
 target_link_libraries(kaprino
-    LLVM-C.lib
-    LLVMAArch64AsmParser.lib
-    LLVMAArch64CodeGen.lib
-    LLVMAArch64Desc.lib
-    LLVMAArch64Disassembler.lib
-    LLVMAArch64Info.lib
-    LLVMAArch64Utils.lib
-    LLVMAggressiveInstCombine.lib
-    LLVMAMDGPUAsmParser.lib
-    LLVMAMDGPUCodeGen.lib
-    LLVMAMDGPUDesc.lib
-    LLVMAMDGPUDisassembler.lib
-    LLVMAMDGPUInfo.lib
-    LLVMAMDGPUUtils.lib
-    LLVMAnalysis.lib
-    LLVMARMAsmParser.lib
-    LLVMARMCodeGen.lib
-    LLVMARMDesc.lib
-    LLVMARMDisassembler.lib
-    LLVMARMInfo.lib
-    LLVMARMUtils.lib
-    LLVMAsmParser.lib
-    LLVMAsmPrinter.lib
-    LLVMBinaryFormat.lib
-    LLVMBitReader.lib
-    LLVMBitstreamReader.lib
-    LLVMBitWriter.lib
-    LLVMBPFAsmParser.lib
-    LLVMBPFCodeGen.lib
-    LLVMBPFDesc.lib
-    LLVMBPFDisassembler.lib
-    LLVMBPFInfo.lib
-    LLVMCodeGen.lib
-    LLVMCore.lib
-    LLVMCoroutines.lib
-    LLVMCoverage.lib
-    LLVMDebugInfoCodeView.lib
-    LLVMDebugInfoDWARF.lib
-    LLVMDebugInfoGSYM.lib
-    LLVMDebugInfoMSF.lib
-    LLVMDebugInfoPDB.lib
-    LLVMDemangle.lib
-    LLVMDlltoolDriver.lib
-    LLVMExecutionEngine.lib
-    LLVMFuzzMutate.lib
-    LLVMGlobalISel.lib
-    LLVMHexagonAsmParser.lib
-    LLVMHexagonCodeGen.lib
-    LLVMHexagonDesc.lib
-    LLVMHexagonDisassembler.lib
-    LLVMHexagonInfo.lib
-    LLVMInstCombine.lib
-    LLVMInstrumentation.lib
-    LLVMInterpreter.lib
-    LLVMipo.lib
-    LLVMIRReader.lib
-    LLVMJITLink.lib
-    LLVMLanaiAsmParser.lib
-    LLVMLanaiCodeGen.lib
-    LLVMLanaiDesc.lib
-    LLVMLanaiDisassembler.lib
-    LLVMLanaiInfo.lib
-    LLVMLibDriver.lib
-    LLVMLineEditor.lib
-    LLVMLinker.lib
-    LLVMLTO.lib
-    LLVMMC.lib
-    LLVMMCA.lib
-    LLVMMCDisassembler.lib
-    LLVMMCJIT.lib
-    LLVMMCParser.lib
-    LLVMMipsAsmParser.lib
-    LLVMMipsCodeGen.lib
-    LLVMMipsDesc.lib
-    LLVMMipsDisassembler.lib
-    LLVMMipsInfo.lib
-    LLVMMIRParser.lib
-    LLVMMSP430AsmParser.lib
-    LLVMMSP430CodeGen.lib
-    LLVMMSP430Desc.lib
-    LLVMMSP430Disassembler.lib
-    LLVMMSP430Info.lib
-    LLVMNVPTXCodeGen.lib
-    LLVMNVPTXDesc.lib
-    LLVMNVPTXInfo.lib
-    LLVMObjCARCOpts.lib
-    LLVMObject.lib
-    LLVMObjectYAML.lib
-    LLVMOption.lib
-    LLVMOrcJIT.lib
-    LLVMPasses.lib
-    LLVMPowerPCAsmParser.lib
-    LLVMPowerPCCodeGen.lib
-    LLVMPowerPCDesc.lib
-    LLVMPowerPCDisassembler.lib
-    LLVMPowerPCInfo.lib
-    LLVMProfileData.lib
-    LLVMRemarks.lib
-    LLVMRISCVAsmParser.lib
-    LLVMRISCVCodeGen.lib
-    LLVMRISCVDesc.lib
-    LLVMRISCVDisassembler.lib
-    LLVMRISCVInfo.lib
-    LLVMRISCVUtils.lib
-    LLVMRuntimeDyld.lib
-    LLVMScalarOpts.lib
-    LLVMSelectionDAG.lib
-    LLVMSparcAsmParser.lib
-    LLVMSparcCodeGen.lib
-    LLVMSparcDesc.lib
-    LLVMSparcDisassembler.lib
-    LLVMSparcInfo.lib
-    LLVMSupport.lib
-    LLVMSymbolize.lib
-    LLVMSystemZAsmParser.lib
-    LLVMSystemZCodeGen.lib
-    LLVMSystemZDesc.lib
-    LLVMSystemZDisassembler.lib
-    LLVMSystemZInfo.lib
-    LLVMTableGen.lib
-    LLVMTarget.lib
-    LLVMTextAPI.lib
-    LLVMTransformUtils.lib
-    LLVMVectorize.lib
-    LLVMWebAssemblyAsmParser.lib
-    LLVMWebAssemblyCodeGen.lib
-    LLVMWebAssemblyDesc.lib
-    LLVMWebAssemblyDisassembler.lib
-    LLVMWebAssemblyInfo.lib
-    LLVMWindowsManifest.lib
-    LLVMX86AsmParser.lib
-    LLVMX86CodeGen.lib
-    LLVMX86Desc.lib
-    LLVMX86Disassembler.lib
-    LLVMX86Info.lib
-    LLVMX86Utils.lib
-    LLVMXCoreCodeGen.lib
-    LLVMXCoreDesc.lib
-    LLVMXCoreDisassembler.lib
-    LLVMXCoreInfo.lib
-    LLVMXRay.lib
+    LLVM-C
+    LLVMAArch64AsmParser
+    LLVMAArch64CodeGen
+    LLVMAArch64Desc
+    LLVMAArch64Disassembler
+    LLVMAArch64Info
+    LLVMAArch64Utils
+    LLVMAggressiveInstCombine
+    LLVMAMDGPUAsmParser
+    LLVMAMDGPUCodeGen
+    LLVMAMDGPUDesc
+    LLVMAMDGPUDisassembler
+    LLVMAMDGPUInfo
+    LLVMAMDGPUUtils
+    LLVMAnalysis
+    LLVMARMAsmParser
+    LLVMARMCodeGen
+    LLVMARMDesc
+    LLVMARMDisassembler
+    LLVMARMInfo
+    LLVMARMUtils
+    LLVMAsmParser
+    LLVMAsmPrinter
+    LLVMBinaryFormat
+    LLVMBitReader
+    LLVMBitstreamReader
+    LLVMBitWriter
+    LLVMBPFAsmParser
+    LLVMBPFCodeGen
+    LLVMBPFDesc
+    LLVMBPFDisassembler
+    LLVMBPFInfo
+    LLVMCodeGen
+    LLVMCore
+    LLVMCoroutines
+    LLVMCoverage
+    LLVMDebugInfoCodeView
+    LLVMDebugInfoDWARF
+    LLVMDebugInfoGSYM
+    LLVMDebugInfoMSF
+    LLVMDebugInfoPDB
+    LLVMDemangle
+    LLVMDlltoolDriver
+    LLVMExecutionEngine
+    LLVMFuzzMutate
+    LLVMGlobalISel
+    LLVMHexagonAsmParser
+    LLVMHexagonCodeGen
+    LLVMHexagonDesc
+    LLVMHexagonDisassembler
+    LLVMHexagonInfo
+    LLVMInstCombine
+    LLVMInstrumentation
+    LLVMInterpreter
+    LLVMipo
+    LLVMIRReader
+    LLVMJITLink
+    LLVMLanaiAsmParser
+    LLVMLanaiCodeGen
+    LLVMLanaiDesc
+    LLVMLanaiDisassembler
+    LLVMLanaiInfo
+    LLVMLibDriver
+    LLVMLineEditor
+    LLVMLinker
+    LLVMLTO
+    LLVMMC
+    LLVMMCA
+    LLVMMCDisassembler
+    LLVMMCJIT
+    LLVMMCParser
+    LLVMMipsAsmParser
+    LLVMMipsCodeGen
+    LLVMMipsDesc
+    LLVMMipsDisassembler
+    LLVMMipsInfo
+    LLVMMIRParser
+    LLVMMSP430AsmParser
+    LLVMMSP430CodeGen
+    LLVMMSP430Desc
+    LLVMMSP430Disassembler
+    LLVMMSP430Info
+    LLVMNVPTXCodeGen
+    LLVMNVPTXDesc
+    LLVMNVPTXInfo
+    LLVMObjCARCOpts
+    LLVMObject
+    LLVMObjectYAML
+    LLVMOption
+    LLVMOrcJIT
+    LLVMPasses
+    LLVMPowerPCAsmParser
+    LLVMPowerPCCodeGen
+    LLVMPowerPCDesc
+    LLVMPowerPCDisassembler
+    LLVMPowerPCInfo
+    LLVMProfileData
+    LLVMRemarks
+    LLVMRISCVAsmParser
+    LLVMRISCVCodeGen
+    LLVMRISCVDesc
+    LLVMRISCVDisassembler
+    LLVMRISCVInfo
+    LLVMRISCVUtils
+    LLVMRuntimeDyld
+    LLVMScalarOpts
+    LLVMSelectionDAG
+    LLVMSparcAsmParser
+    LLVMSparcCodeGen
+    LLVMSparcDesc
+    LLVMSparcDisassembler
+    LLVMSparcInfo
+    LLVMSupport
+    LLVMSymbolize
+    LLVMSystemZAsmParser
+    LLVMSystemZCodeGen
+    LLVMSystemZDesc
+    LLVMSystemZDisassembler
+    LLVMSystemZInfo
+    LLVMTableGen
+    LLVMTarget
+    LLVMTextAPI
+    LLVMTransformUtils
+    LLVMVectorize
+    LLVMWebAssemblyAsmParser
+    LLVMWebAssemblyCodeGen
+    LLVMWebAssemblyDesc
+    LLVMWebAssemblyDisassembler
+    LLVMWebAssemblyInfo
+    LLVMWindowsManifest
+    LLVMX86AsmParser
+    LLVMX86CodeGen
+    LLVMX86Desc
+    LLVMX86Disassembler
+    LLVMX86Info
+    LLVMX86Utils
+    LLVMXCoreCodeGen
+    LLVMXCoreDesc
+    LLVMXCoreDisassembler
+    LLVMXCoreInfo
+    LLVMXRay
 )
 
-if (${KAPRINO_MONOTONE_LOG})
+if(${KAPRINO_MONOTONE_LOG})
     message(WARNING "[WARN] Make stdout monotone")
     target_compile_definitions(kaprino
-        PUBLIC KAPRINO_MONOTONE_LOG
+        PRIVATE KAPRINO_MONOTONE_LOG
     )
 endif()
 
 #
 # Optimizer option
 #
-if (${KAPRINO_OPTIMIZER_ON})
+if(${KAPRINO_OPTIMIZER_ON})
     message(WARNING "[EXPERIMENTAL] Optimizer on")
     target_compile_definitions(kaprino
-        PUBLIC KAPRINO_OPTIMIZER_ON
+        PRIVATE KAPRINO_OPTIMIZER_ON
     )
 endif()
 
 #
 # LLVM IR option
 #
-if (${KAPRINO_EMIT_LLVM_IR_ONLY})
+if(${KAPRINO_EMIT_LLVM_IR_ONLY})
     message(WARNING "[WARN] The tool will generate only llvm ir")
     target_compile_definitions(kaprino
-        PUBLIC KAPRINO_EMIT_LLVM_IR_ONLY
+        PRIVATE KAPRINO_EMIT_LLVM_IR_ONLY
     )
 endif()
