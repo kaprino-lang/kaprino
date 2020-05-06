@@ -38,6 +38,7 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | expr boolean_op expr # BooleanOpExpr
                 | not_op expr # NotExpr
                 | number # NumberExpr
+                | real_number # RealNumberExpr
                 | text # TextExpr
                 | const_bool # BooleanExpr
                 | name=ID # ParameterExpr
@@ -59,7 +60,8 @@ assignee        : ID # ParameterAssignee
 finisher        : DOT
                 ;
 number          : NUMBER PARCENT?
-                | REAL_NUMBER PARCENT?
+                ;
+real_number     : REAL_NUMBER PARCENT?
                 ;
 const_bool      : B_TRUE
                 | B_FALSE
