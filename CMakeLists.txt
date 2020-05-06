@@ -2,9 +2,12 @@ cmake_minimum_required(VERSION 3.16)
 
 project(kaprino VERSION 1.0)
 
+########################################################
 #
 # Dependencies pathes
 #
+########################################################
+
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
 set(KAPRINO_EMIT_LLVM_IR_ONLY OFF CACHE BOOL "Generate LLVM IR and finish program")
@@ -13,9 +16,12 @@ set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
 set(LLVM_IncludePath "" CACHE STRING "LLVM include files")
 set(LLVM_LibPath "" CACHE STRING "LLVM library files")
 
+########################################################
 #
 # Check whether dependencies pathes are all setted.
 #
+########################################################
+
 if ("" STREQUAL "${ANTLR4_IncludePath}")
     message(FATAL_ERROR "[Error] Required \${ANTLR4_IncludePath} but not applied")
     return()
@@ -36,58 +42,86 @@ if ("" STREQUAL "${LLVM_LibPath}")
     return()
 endif()
 
+########################################################
 #
 # Source files
 #
+########################################################
+
 set(PARSER_SOURCES
-    "src/parser/KaprinoLexer.cpp"
-    "src/parser/KaprinoParser.cpp"
-    "src/parser/KaprinoParserBaseListener.cpp"
-    "src/parser/KaprinoParserBaseVisitor.cpp"
-    "src/parser/KaprinoParserListener.cpp"
-    "src/parser/KaprinoParserVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParser.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserBaseListener.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserBaseVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserListener.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserVisitor.cpp"
 )
 set(INTERPRETER_SOURCES
-    "src/interpreter/ExecutableGenerator.cpp"
-    "src/interpreter/FunctionManager.cpp"
-    "src/interpreter/KaprinoParser.impl.cpp"
-    "src/interpreter/TypeManager.cpp"
-    "src/interpreter/VariableManager.cpp"
-    "src/interpreter/internallib/PowInternal.cpp"
-    "src/interpreter/internallib/PrintfInternal.cpp"
-    "src/interpreter/internallib/ScanfInternal.cpp"
-    "src/interpreter/visitor/CodeBlockStatementVisitor.cpp"
-    "src/interpreter/visitor/FunctionTypeVisitor.cpp"
-    "src/interpreter/visitor/ProgramVisitor.cpp"
-    "src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
-    "src/interpreter/visitor/expr/AddExprVisitor.cpp"
-    "src/interpreter/visitor/expr/BooleanExprVisitor.cpp"
-    "src/interpreter/visitor/expr/BracketExprVisitor.cpp"
-    "src/interpreter/visitor/expr/FunctionExprVisitor.cpp"
-    "src/interpreter/visitor/expr/MulExprVisitor.cpp"
-    "src/interpreter/visitor/expr/NumberExprVisitor.cpp"
-    "src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
-    "src/interpreter/visitor/expr/TextExprVisitor.cpp"
-    "src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
-    "src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/IfStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/ExecutableGenerator.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/FunctionManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/KaprinoParser.impl.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/TypeManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/VariableManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/PowInternal.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/PrintfInternal.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/ScanfInternal.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/CodeBlockStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/FunctionTypeVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/ProgramVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/AddExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/BooleanExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/BracketExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/FunctionExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/MulExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/NumberExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/RealNumberExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/TextExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/IfStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LetStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+)
+set(GRAMMER_FILES
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.g4"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParser.g4"
 )
 
+########################################################
+#
+# Compile grammer files.
+#
+########################################################
+
+add_custom_command(
+    OUTPUT ${PARSER_SOURCES}
+    COMMAND antlr4 ${GRAMMER_FILES} -Dlanguage=Cpp -visitor -o src/parser
+    COMMENT "Generate lexer and parser from Grammer files"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    VERBATIM
+)
+
+########################################################
 #
 # Define kaprino, the application which we want to get.
 #
+########################################################
+
 add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 
 target_include_directories(kaprino PRIVATE ${ANTLR4_IncludePath})
 target_include_directories(kaprino PRIVATE ${LLVM_IncludePath})
 
+########################################################
 #
-# Link ANTLR4
+# Link ANTLR4 libraries.
 #
+########################################################
+
 target_link_directories(kaprino PUBLIC ${ANTLR4_LibPath})
 target_link_libraries(kaprino antlr4-runtime)
 if(MSVC)
@@ -97,18 +131,14 @@ if(MSVC)
         ${ANTLR4_LibPath}/antlr4-runtime.dll
         $<TARGET_FILE_DIR:kaprino>
     )
-else()
-    add_custom_command(
-        TARGET kaprino POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${ANTLR4_LibPath}/libantlr4-runtime.so
-        $<TARGET_FILE_DIR:kaprino>
-    )
 endif()
 
+########################################################
 #
-# Link LLVM
+# Link LLVM libraries.
 #
+########################################################
+
 target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
 target_link_libraries(kaprino
     LLVM-C
@@ -254,6 +284,12 @@ target_link_libraries(kaprino
     LLVMXRay
 )
 
+########################################################
+#
+# Make output monotone.
+#
+########################################################
+
 if(${KAPRINO_MONOTONE_LOG})
     message(WARNING "[WARN] Make stdout monotone")
     target_compile_definitions(kaprino
@@ -261,9 +297,12 @@ if(${KAPRINO_MONOTONE_LOG})
     )
 endif()
 
+########################################################
 #
-# Optimizer option
+# Define kaprino, the application which we want to get.
 #
+########################################################
+
 if(${KAPRINO_OPTIMIZER_ON})
     message(WARNING "[EXPERIMENTAL] Optimizer on")
     target_compile_definitions(kaprino
