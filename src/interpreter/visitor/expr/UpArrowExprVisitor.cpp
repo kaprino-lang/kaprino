@@ -16,6 +16,12 @@ class UpArrowExprObject : ExprObject {
         auto l = left->codegen(builder, module);
         auto r = right->codegen(builder, module);
         auto powFunc = get_pow(builder, module);
+        if (l->getType() == KAPRINO_INT64_TY(module)) {
+            l = builder->CreateSIToFP(l, KAPRINO_DOUBLE_TY(module));
+        }
+        if (r->getType() == KAPRINO_INT64_TY(module)) {
+            r = builder->CreateSIToFP(r, KAPRINO_DOUBLE_TY(module));
+        }
         return builder->CreateCall(powFunc, {l, r});
     }
 };
