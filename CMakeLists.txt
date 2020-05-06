@@ -2,9 +2,12 @@ cmake_minimum_required(VERSION 3.16)
 
 project(kaprino VERSION 1.0)
 
+########################################################
 #
 # Dependencies pathes
 #
+########################################################
+
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
 set(KAPRINO_EMIT_LLVM_IR_ONLY OFF CACHE BOOL "Generate LLVM IR and finish program")
@@ -13,9 +16,12 @@ set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
 set(LLVM_IncludePath "" CACHE STRING "LLVM include files")
 set(LLVM_LibPath "" CACHE STRING "LLVM library files")
 
+########################################################
 #
 # Check whether dependencies pathes are all setted.
 #
+########################################################
+
 if ("" STREQUAL "${ANTLR4_IncludePath}")
     message(FATAL_ERROR "[Error] Required \${ANTLR4_IncludePath} but not applied")
     return()
@@ -36,233 +42,280 @@ if ("" STREQUAL "${LLVM_LibPath}")
     return()
 endif()
 
+########################################################
 #
 # Source files
 #
+########################################################
+
 set(PARSER_SOURCES
-    "src/parser/KaprinoLexer.cpp"
-    "src/parser/KaprinoParser.cpp"
-    "src/parser/KaprinoParserBaseListener.cpp"
-    "src/parser/KaprinoParserBaseVisitor.cpp"
-    "src/parser/KaprinoParserListener.cpp"
-    "src/parser/KaprinoParserVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParser.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserBaseListener.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserBaseVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserListener.cpp"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserVisitor.cpp"
 )
 set(INTERPRETER_SOURCES
-    "src/interpreter/ExecutableGenerator.cpp"
-    "src/interpreter/FunctionManager.cpp"
-    "src/interpreter/KaprinoParser.impl.cpp"
-    "src/interpreter/TypeManager.cpp"
-    "src/interpreter/VariableManager.cpp"
-    "src/interpreter/internallib/PowInternal.cpp"
-    "src/interpreter/internallib/PrintfInternal.cpp"
-    "src/interpreter/internallib/ScanfInternal.cpp"
-    "src/interpreter/visitor/CodeBlockStatementVisitor.cpp"
-    "src/interpreter/visitor/FunctionTypeVisitor.cpp"
-    "src/interpreter/visitor/ProgramVisitor.cpp"
-    "src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
-    "src/interpreter/visitor/expr/AddExprVisitor.cpp"
-    "src/interpreter/visitor/expr/BooleanExprVisitor.cpp"
-    "src/interpreter/visitor/expr/BracketExprVisitor.cpp"
-    "src/interpreter/visitor/expr/FunctionExprVisitor.cpp"
-    "src/interpreter/visitor/expr/MulExprVisitor.cpp"
-    "src/interpreter/visitor/expr/NumberExprVisitor.cpp"
-    "src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
-    "src/interpreter/visitor/expr/TextExprVisitor.cpp"
-    "src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
-    "src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/IfStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/LetStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
-    "src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/ExecutableGenerator.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/FunctionManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/KaprinoParser.impl.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/TypeManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/VariableManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/PowInternal.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/PrintfInternal.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/ScanfInternal.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/CodeBlockStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/FunctionTypeVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/ProgramVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/AddExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/BooleanExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/BracketExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/FunctionExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/MulExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/NumberExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/ParameterExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/RealNumberExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/TextExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/IfStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LetStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+)
+set(GRAMMER_FILES
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.g4"
+    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParser.g4"
 )
 
+########################################################
+#
+# Compile grammer files.
+#
+########################################################
+
+add_custom_command(
+    OUTPUT ${PARSER_SOURCES}
+    COMMAND antlr4 ${GRAMMER_FILES} -Dlanguage=Cpp -visitor -o src/parser
+    COMMENT "Generate lexer and parser from Grammer files"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    VERBATIM
+)
+
+########################################################
 #
 # Define kaprino, the application which we want to get.
 #
+########################################################
+
 add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 
-target_include_directories(kaprino PUBLIC ${ANTLR4_IncludePath})
-target_include_directories(kaprino PUBLIC ${LLVM_IncludePath})
+target_include_directories(kaprino PRIVATE ${ANTLR4_IncludePath})
+target_include_directories(kaprino PRIVATE ${LLVM_IncludePath})
 
+########################################################
 #
-# Link directory
+# Link ANTLR4 libraries.
 #
-target_link_libraries(kaprino ${ANTLR4_LibPath}/antlr4-runtime.lib)
-add_custom_command(
-    TARGET kaprino POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${ANTLR4_LibPath}/antlr4-runtime.dll
-    $<TARGET_FILE_DIR:kaprino>
-)
-target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
-target_link_libraries(kaprino
-    LLVM-C.lib
-    LLVMAArch64AsmParser.lib
-    LLVMAArch64CodeGen.lib
-    LLVMAArch64Desc.lib
-    LLVMAArch64Disassembler.lib
-    LLVMAArch64Info.lib
-    LLVMAArch64Utils.lib
-    LLVMAggressiveInstCombine.lib
-    LLVMAMDGPUAsmParser.lib
-    LLVMAMDGPUCodeGen.lib
-    LLVMAMDGPUDesc.lib
-    LLVMAMDGPUDisassembler.lib
-    LLVMAMDGPUInfo.lib
-    LLVMAMDGPUUtils.lib
-    LLVMAnalysis.lib
-    LLVMARMAsmParser.lib
-    LLVMARMCodeGen.lib
-    LLVMARMDesc.lib
-    LLVMARMDisassembler.lib
-    LLVMARMInfo.lib
-    LLVMARMUtils.lib
-    LLVMAsmParser.lib
-    LLVMAsmPrinter.lib
-    LLVMBinaryFormat.lib
-    LLVMBitReader.lib
-    LLVMBitstreamReader.lib
-    LLVMBitWriter.lib
-    LLVMBPFAsmParser.lib
-    LLVMBPFCodeGen.lib
-    LLVMBPFDesc.lib
-    LLVMBPFDisassembler.lib
-    LLVMBPFInfo.lib
-    LLVMCodeGen.lib
-    LLVMCore.lib
-    LLVMCoroutines.lib
-    LLVMCoverage.lib
-    LLVMDebugInfoCodeView.lib
-    LLVMDebugInfoDWARF.lib
-    LLVMDebugInfoGSYM.lib
-    LLVMDebugInfoMSF.lib
-    LLVMDebugInfoPDB.lib
-    LLVMDemangle.lib
-    LLVMDlltoolDriver.lib
-    LLVMExecutionEngine.lib
-    LLVMFuzzMutate.lib
-    LLVMGlobalISel.lib
-    LLVMHexagonAsmParser.lib
-    LLVMHexagonCodeGen.lib
-    LLVMHexagonDesc.lib
-    LLVMHexagonDisassembler.lib
-    LLVMHexagonInfo.lib
-    LLVMInstCombine.lib
-    LLVMInstrumentation.lib
-    LLVMInterpreter.lib
-    LLVMipo.lib
-    LLVMIRReader.lib
-    LLVMJITLink.lib
-    LLVMLanaiAsmParser.lib
-    LLVMLanaiCodeGen.lib
-    LLVMLanaiDesc.lib
-    LLVMLanaiDisassembler.lib
-    LLVMLanaiInfo.lib
-    LLVMLibDriver.lib
-    LLVMLineEditor.lib
-    LLVMLinker.lib
-    LLVMLTO.lib
-    LLVMMC.lib
-    LLVMMCA.lib
-    LLVMMCDisassembler.lib
-    LLVMMCJIT.lib
-    LLVMMCParser.lib
-    LLVMMipsAsmParser.lib
-    LLVMMipsCodeGen.lib
-    LLVMMipsDesc.lib
-    LLVMMipsDisassembler.lib
-    LLVMMipsInfo.lib
-    LLVMMIRParser.lib
-    LLVMMSP430AsmParser.lib
-    LLVMMSP430CodeGen.lib
-    LLVMMSP430Desc.lib
-    LLVMMSP430Disassembler.lib
-    LLVMMSP430Info.lib
-    LLVMNVPTXCodeGen.lib
-    LLVMNVPTXDesc.lib
-    LLVMNVPTXInfo.lib
-    LLVMObjCARCOpts.lib
-    LLVMObject.lib
-    LLVMObjectYAML.lib
-    LLVMOption.lib
-    LLVMOrcJIT.lib
-    LLVMPasses.lib
-    LLVMPowerPCAsmParser.lib
-    LLVMPowerPCCodeGen.lib
-    LLVMPowerPCDesc.lib
-    LLVMPowerPCDisassembler.lib
-    LLVMPowerPCInfo.lib
-    LLVMProfileData.lib
-    LLVMRemarks.lib
-    LLVMRISCVAsmParser.lib
-    LLVMRISCVCodeGen.lib
-    LLVMRISCVDesc.lib
-    LLVMRISCVDisassembler.lib
-    LLVMRISCVInfo.lib
-    LLVMRISCVUtils.lib
-    LLVMRuntimeDyld.lib
-    LLVMScalarOpts.lib
-    LLVMSelectionDAG.lib
-    LLVMSparcAsmParser.lib
-    LLVMSparcCodeGen.lib
-    LLVMSparcDesc.lib
-    LLVMSparcDisassembler.lib
-    LLVMSparcInfo.lib
-    LLVMSupport.lib
-    LLVMSymbolize.lib
-    LLVMSystemZAsmParser.lib
-    LLVMSystemZCodeGen.lib
-    LLVMSystemZDesc.lib
-    LLVMSystemZDisassembler.lib
-    LLVMSystemZInfo.lib
-    LLVMTableGen.lib
-    LLVMTarget.lib
-    LLVMTextAPI.lib
-    LLVMTransformUtils.lib
-    LLVMVectorize.lib
-    LLVMWebAssemblyAsmParser.lib
-    LLVMWebAssemblyCodeGen.lib
-    LLVMWebAssemblyDesc.lib
-    LLVMWebAssemblyDisassembler.lib
-    LLVMWebAssemblyInfo.lib
-    LLVMWindowsManifest.lib
-    LLVMX86AsmParser.lib
-    LLVMX86CodeGen.lib
-    LLVMX86Desc.lib
-    LLVMX86Disassembler.lib
-    LLVMX86Info.lib
-    LLVMX86Utils.lib
-    LLVMXCoreCodeGen.lib
-    LLVMXCoreDesc.lib
-    LLVMXCoreDisassembler.lib
-    LLVMXCoreInfo.lib
-    LLVMXRay.lib
-)
+########################################################
 
-if (${KAPRINO_MONOTONE_LOG})
-    message(WARNING "[WARN] Make stdout monotone")
-    target_compile_definitions(kaprino
-        PUBLIC KAPRINO_MONOTONE_LOG
+target_link_directories(kaprino PUBLIC ${ANTLR4_LibPath})
+target_link_libraries(kaprino antlr4-runtime)
+if(MSVC)
+    add_custom_command(
+        TARGET kaprino POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ANTLR4_LibPath}/antlr4-runtime.dll
+        $<TARGET_FILE_DIR:kaprino>
     )
 endif()
 
+########################################################
 #
-# Optimizer option
+# Link LLVM libraries.
 #
-if (${KAPRINO_OPTIMIZER_ON})
+########################################################
+
+target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
+target_link_libraries(kaprino
+    LLVM-C
+    LLVMAArch64AsmParser
+    LLVMAArch64CodeGen
+    LLVMAArch64Desc
+    LLVMAArch64Disassembler
+    LLVMAArch64Info
+    LLVMAArch64Utils
+    LLVMAggressiveInstCombine
+    LLVMAMDGPUAsmParser
+    LLVMAMDGPUCodeGen
+    LLVMAMDGPUDesc
+    LLVMAMDGPUDisassembler
+    LLVMAMDGPUInfo
+    LLVMAMDGPUUtils
+    LLVMAnalysis
+    LLVMARMAsmParser
+    LLVMARMCodeGen
+    LLVMARMDesc
+    LLVMARMDisassembler
+    LLVMARMInfo
+    LLVMARMUtils
+    LLVMAsmParser
+    LLVMAsmPrinter
+    LLVMBinaryFormat
+    LLVMBitReader
+    LLVMBitstreamReader
+    LLVMBitWriter
+    LLVMBPFAsmParser
+    LLVMBPFCodeGen
+    LLVMBPFDesc
+    LLVMBPFDisassembler
+    LLVMBPFInfo
+    LLVMCodeGen
+    LLVMCore
+    LLVMCoroutines
+    LLVMCoverage
+    LLVMDebugInfoCodeView
+    LLVMDebugInfoDWARF
+    LLVMDebugInfoGSYM
+    LLVMDebugInfoMSF
+    LLVMDebugInfoPDB
+    LLVMDemangle
+    LLVMDlltoolDriver
+    LLVMExecutionEngine
+    LLVMFuzzMutate
+    LLVMGlobalISel
+    LLVMHexagonAsmParser
+    LLVMHexagonCodeGen
+    LLVMHexagonDesc
+    LLVMHexagonDisassembler
+    LLVMHexagonInfo
+    LLVMInstCombine
+    LLVMInstrumentation
+    LLVMInterpreter
+    LLVMipo
+    LLVMIRReader
+    LLVMJITLink
+    LLVMLanaiAsmParser
+    LLVMLanaiCodeGen
+    LLVMLanaiDesc
+    LLVMLanaiDisassembler
+    LLVMLanaiInfo
+    LLVMLibDriver
+    LLVMLineEditor
+    LLVMLinker
+    LLVMLTO
+    LLVMMC
+    LLVMMCA
+    LLVMMCDisassembler
+    LLVMMCJIT
+    LLVMMCParser
+    LLVMMipsAsmParser
+    LLVMMipsCodeGen
+    LLVMMipsDesc
+    LLVMMipsDisassembler
+    LLVMMipsInfo
+    LLVMMIRParser
+    LLVMMSP430AsmParser
+    LLVMMSP430CodeGen
+    LLVMMSP430Desc
+    LLVMMSP430Disassembler
+    LLVMMSP430Info
+    LLVMNVPTXCodeGen
+    LLVMNVPTXDesc
+    LLVMNVPTXInfo
+    LLVMObjCARCOpts
+    LLVMObject
+    LLVMObjectYAML
+    LLVMOption
+    LLVMOrcJIT
+    LLVMPasses
+    LLVMPowerPCAsmParser
+    LLVMPowerPCCodeGen
+    LLVMPowerPCDesc
+    LLVMPowerPCDisassembler
+    LLVMPowerPCInfo
+    LLVMProfileData
+    LLVMRemarks
+    LLVMRISCVAsmParser
+    LLVMRISCVCodeGen
+    LLVMRISCVDesc
+    LLVMRISCVDisassembler
+    LLVMRISCVInfo
+    LLVMRISCVUtils
+    LLVMRuntimeDyld
+    LLVMScalarOpts
+    LLVMSelectionDAG
+    LLVMSparcAsmParser
+    LLVMSparcCodeGen
+    LLVMSparcDesc
+    LLVMSparcDisassembler
+    LLVMSparcInfo
+    LLVMSupport
+    LLVMSymbolize
+    LLVMSystemZAsmParser
+    LLVMSystemZCodeGen
+    LLVMSystemZDesc
+    LLVMSystemZDisassembler
+    LLVMSystemZInfo
+    LLVMTableGen
+    LLVMTarget
+    LLVMTextAPI
+    LLVMTransformUtils
+    LLVMVectorize
+    LLVMWebAssemblyAsmParser
+    LLVMWebAssemblyCodeGen
+    LLVMWebAssemblyDesc
+    LLVMWebAssemblyDisassembler
+    LLVMWebAssemblyInfo
+    LLVMWindowsManifest
+    LLVMX86AsmParser
+    LLVMX86CodeGen
+    LLVMX86Desc
+    LLVMX86Disassembler
+    LLVMX86Info
+    LLVMX86Utils
+    LLVMXCoreCodeGen
+    LLVMXCoreDesc
+    LLVMXCoreDisassembler
+    LLVMXCoreInfo
+    LLVMXRay
+)
+
+########################################################
+#
+# Make output monotone.
+#
+########################################################
+
+if(${KAPRINO_MONOTONE_LOG})
+    message(WARNING "[WARN] Make stdout monotone")
+    target_compile_definitions(kaprino
+        PRIVATE KAPRINO_MONOTONE_LOG
+    )
+endif()
+
+########################################################
+#
+# Define kaprino, the application which we want to get.
+#
+########################################################
+
+if(${KAPRINO_OPTIMIZER_ON})
     message(WARNING "[EXPERIMENTAL] Optimizer on")
     target_compile_definitions(kaprino
-        PUBLIC KAPRINO_OPTIMIZER_ON
+        PRIVATE KAPRINO_OPTIMIZER_ON
     )
 endif()
 
 #
 # LLVM IR option
 #
-if (${KAPRINO_EMIT_LLVM_IR_ONLY})
+if(${KAPRINO_EMIT_LLVM_IR_ONLY})
     message(WARNING "[WARN] The tool will generate only llvm ir")
     target_compile_definitions(kaprino
-        PUBLIC KAPRINO_EMIT_LLVM_IR_ONLY
+        PRIVATE KAPRINO_EMIT_LLVM_IR_ONLY
     )
 endif()

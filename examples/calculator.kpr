@@ -2,8 +2,8 @@
 // Simple calculator
 //
 
-#let x = 0 (<- R).
-#let y = 0 (<- R).
+#let x = 0.0 (<- R).
+#let y = 0.0 (<- R).
 
 #read x.
 #read y.

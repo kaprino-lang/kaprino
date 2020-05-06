@@ -17,8 +17,12 @@ class ReadStatementObject : StatementObject {
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto val = assignee->codegen(builder, module);
         auto scanfFunc = get_scanf(builder, module);
-        if (val->getType() == llvm::Type::getDoublePtrTy(module->getContext())) {
+        if (val->getType() == KAPRINO_DOUBLE_PTR_TY(module)) {
             auto format = builder->CreateGlobalStringPtr("%lf");
+            builder->CreateCall(scanfFunc, { format, val });
+        }
+        else if (val->getType() == KAPRINO_INT64_PTR_TY(module)) {
+            auto format = builder->CreateGlobalStringPtr("%lld");
             builder->CreateCall(scanfFunc, { format, val });
         }
         else {

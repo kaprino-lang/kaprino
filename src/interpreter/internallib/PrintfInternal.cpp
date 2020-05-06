@@ -5,10 +5,10 @@ llvm::Function* internal_printf;
 llvm::Function* get_printf(llvm::IRBuilder<>* builder, llvm::Module* module) {
     if (!internal_printf) {
         std::vector<llvm::Type*> printfFuncArgs;
-        printfFuncArgs.push_back(LLVM_INT8_PTR_TY(module));
+        printfFuncArgs.push_back(KAPRINO_INT8_PTR_TY(module));
 
         auto printfFuncType = llvm::FunctionType::get(
-            LLVM_INT32_TY(module),
+            KAPRINO_INT32_TY(module),
             printfFuncArgs,
             true
         );
