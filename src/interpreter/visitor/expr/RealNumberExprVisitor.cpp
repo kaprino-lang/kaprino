@@ -6,21 +6,21 @@
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
 
-class NumberExprObject : ExprObject {
+class RealNumberExprObject : ExprObject {
    public:
-    long long value;
+    double value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto llVal = llvm::ConstantInt::get(KAPRINO_INT64_TY(module), value);
+        auto doubleVal = llvm::ConstantFP::get(KAPRINO_DOUBLE_TY(module), value);
 
-        return llVal;
+        return doubleVal;
     }
 };
 
-antlrcpp::Any StatementVisitor::visitNumberExpr(KaprinoParser::NumberExprContext* ctx) {
-    auto exprObj = new NumberExprObject();
+antlrcpp::Any StatementVisitor::visitRealNumberExpr(KaprinoParser::RealNumberExprContext* ctx) {
+    auto exprObj = new RealNumberExprObject();
 
-    exprObj->value = atoll(ctx->number()->getText().c_str());
+    exprObj->value = atof(ctx->real_number()->getText().c_str());
 
     KAPRINO_LOG("Static value ditected: " << exprObj->value);
 

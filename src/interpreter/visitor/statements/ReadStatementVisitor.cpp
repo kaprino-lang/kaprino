@@ -21,6 +21,10 @@ class ReadStatementObject : StatementObject {
             auto format = builder->CreateGlobalStringPtr("%lf");
             builder->CreateCall(scanfFunc, { format, val });
         }
+        else if (val->getType() == KAPRINO_INT64_PTR_TY(module)) {
+            auto format = builder->CreateGlobalStringPtr("%lld");
+            builder->CreateCall(scanfFunc, { format, val });
+        }
         else {
             KAPRINO_ERR("An unexpected value was served to read");
             throw -1;

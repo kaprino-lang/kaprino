@@ -65,6 +65,7 @@
 #define KAPRINO_INT8_PTR_TY(mod) llvm::Type::getInt8PtrTy((mod)->getContext())
 #define KAPRINO_INT32_TY(mod) llvm::Type::getInt32Ty((mod)->getContext())
 #define KAPRINO_INT64_TY(mod) llvm::Type::getInt64Ty((mod)->getContext())
+#define KAPRINO_INT64_PTR_TY(mod) llvm::Type::getInt64PtrTy((mod)->getContext())
 #define KAPRINO_DOUBLE_TY(mod) llvm::Type::getDoubleTy((mod)->getContext())
 #define KAPRINO_DOUBLE_PTR_TY(mod) llvm::Type::getDoublePtrTy((mod)->getContext())
 
