@@ -59,8 +59,7 @@ RUN \
     wget https://www.antlr.org/download/antlr-4.8-complete.jar; \
     echo "export CLASSPATH='.:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'" >> ~/.bashrc; \
     echo "alias antlr4='java -jar /tmp/antlr4/antlr-4.8-complete.jar'" >> ~/.bashrc; \
-    echo "alias grun='java org.antlr.v4.gui.TestRig'" >> ~/.bashrc; \
-    source ~/.bashrc;
+    echo "alias grun='java org.antlr.v4.gui.TestRig'" >> ~/.bashrc;
 
 WORKDIR /tmp/antlr4/build
 
@@ -80,8 +79,7 @@ ENV LLVM_LIB_DIR /tmp/llvm-90-install_O_D_A/lib
 WORKDIR /tmp/llvm-90-install_O_D_A
 
 RUN \
-    echo "export PATH='.:${LLVM_BIN_DIR}:$PATH'" >> ~/.bashrc; \
-    source ~/.bashrc;
+    echo "export PATH='.:${LLVM_BIN_DIR}:$PATH'" >> ~/.bashrc;
 
 ########################################################
 #
@@ -92,6 +90,7 @@ RUN \
 WORKDIR /tmp/kaprino/build
 
 RUN \
+    source ~/.bashrc; \
     cmake .. \
         -DANTLR4_IncludePath=${ANTLR4_INCLUDE_DIR} \
         -DANTLR4_LibPath=${ANTLR4_LIB_DIR} \
