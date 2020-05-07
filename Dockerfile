@@ -1,5 +1,7 @@
 FROM klee/llvm:90_O_D_A_ubuntu_bionic-20200112
 
+SHELL ["/bin/bash", "-c"]
+
 COPY . /tmp/kaprino/
 
 ########################################################
@@ -48,8 +50,6 @@ ENV ANTLR4_DOWNLOAD_URL https://www.antlr.org/download/antlr4-cpp-runtime-4.8-so
 ENV ANTLR4_INCLUDE_DIR /tmp/antlr4/runtime/src
 ENV ANTLR4_LIB_DIR /tmp/antlr4/dist
 
-ENV CLASSPATH ".:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}"
-
 WORKDIR /tmp/antlr4
 
 RUN \
@@ -57,9 +57,10 @@ RUN \
     unzip $(basename $ANTLR4_DOWNLOAD_URL); \
     rm $(basename $ANTLR4_DOWNLOAD_URL); \
     wget https://www.antlr.org/download/antlr-4.8-complete.jar; \
-    echo "alias antlr4='java -jar /tmp/antlr4/antlr-4.8-complete.jar'" >> ~/.bash_profile; \
-    echo "alias grun='java org.antlr.v4.gui.TestRig'" >> ~/.bash_profile; \
-    source ~/.bash_profile;
+    echo "export CLASSPATH='.:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'" >> ~/.bashrc; \
+    echo "alias antlr4='java -jar /tmp/antlr4/antlr-4.8-complete.jar'" >> ~/.bashrc; \
+    echo "alias grun='java org.antlr.v4.gui.TestRig'" >> ~/.bashrc; \
+    source ~/.bashrc;
 
 WORKDIR /tmp/antlr4/build
 
@@ -79,7 +80,8 @@ ENV LLVM_LIB_DIR /tmp/llvm-90-install_O_D_A/lib
 WORKDIR /tmp/llvm-90-install_O_D_A
 
 RUN \
-    export PATH=".:${LLVM_BIN_DIR}:$PATH";
+    echo "export PATH='.:${LLVM_BIN_DIR}:$PATH'" >> ~/.bashrc; \
+    source ~/.bashrc;
 
 ########################################################
 #
