@@ -18,6 +18,7 @@ RUN \
         wget \
         zip \
         g++ \
+        clang \
         python3 \
         default-jre \
         pkg-config \
@@ -50,6 +51,8 @@ ENV ANTLR4_DOWNLOAD_URL https://www.antlr.org/download/antlr4-cpp-runtime-4.8-so
 ENV ANTLR4_INCLUDE_DIR /tmp/antlr4/runtime/src
 ENV ANTLR4_LIB_DIR /tmp/antlr4/dist
 
+ENV CLASSPATH '.:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'
+
 WORKDIR /tmp/antlr4
 
 RUN \
@@ -57,9 +60,10 @@ RUN \
     unzip $(basename $ANTLR4_DOWNLOAD_URL); \
     rm $(basename $ANTLR4_DOWNLOAD_URL); \
     wget https://www.antlr.org/download/antlr-4.8-complete.jar; \
-    echo "export CLASSPATH='.:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'" >> ~/.bashrc; \
-    echo "alias antlr4='java -jar /tmp/antlr4/antlr-4.8-complete.jar'" >> ~/.bashrc; \
-    echo "alias grun='java org.antlr.v4.gui.TestRig'" >> ~/.bashrc;
+    printf '#!/bin/bash\njava -jar /tmp/antlr4/antlr-4.8-complete.jar "$@"' > /usr/bin/antlr4 && \
+        chmod +x /usr/bin/antlr4; \
+    printf '#!/bin/bash\njava org.antlr.v4.gui.TestRig "$@"' > /usr/bin/grun && \
+        chmod +x /usr/bin/grun;
 
 WORKDIR /tmp/antlr4/build
 
@@ -79,7 +83,8 @@ ENV LLVM_LIB_DIR /tmp/llvm-90-install_O_D_A/lib
 WORKDIR /tmp/llvm-90-install_O_D_A
 
 RUN \
-    echo "export PATH='.:${LLVM_BIN_DIR}:$PATH'" >> ~/.bashrc;
+    ln ${LLVM_BIN_DIR}/lli /usr/bin/lli; \
+    ln ${LLVM_BIN_DIR}/llvm-as /usr/bin/llvm-as;
 
 ########################################################
 #
@@ -90,7 +95,6 @@ RUN \
 WORKDIR /tmp/kaprino/build
 
 RUN \
-    source ~/.bashrc; \
     cmake .. \
         -DANTLR4_IncludePath=${ANTLR4_INCLUDE_DIR} \
         -DANTLR4_LibPath=${ANTLR4_LIB_DIR} \
