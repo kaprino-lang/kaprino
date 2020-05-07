@@ -1,9 +1,6 @@
 FROM klee/llvm:90_O_D_A_ubuntu_bionic-20200112
 
-COPY ./examples /tmp/kaprino
-COPY ./scripts /tmp/kaprino
-COPY ./src /tmp/kaprino
-COPY ./CMakeLists.txt /tmp/kaprino
+COPY . /tmp/kaprino/
 
 ########################################################
 #
