@@ -16,3 +16,10 @@
 |>
     #print "Not good!".
 |>
+
+#let x = 0.5 (<- R).
+
+#if x >= 0.5
+|>
+    #print "Good job!".
+|>

@@ -28,6 +28,8 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
 
     virtual antlrcpp::Any visitAddExpr(KaprinoParser::AddExprContext* ctx) override;
 
+    virtual antlrcpp::Any visitCompareExpr(KaprinoParser::CompareExprContext* ctx) override;
+
     virtual antlrcpp::Any visitNumberExpr(KaprinoParser::NumberExprContext *ctx) override;
 
     virtual antlrcpp::Any visitRealNumberExpr(KaprinoParser::RealNumberExprContext* ctx) override;
