@@ -141,7 +141,6 @@ endif()
 
 target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
 target_link_libraries(kaprino
-    LLVM-C
     LLVMAArch64AsmParser
     LLVMAArch64CodeGen
     LLVMAArch64Desc
