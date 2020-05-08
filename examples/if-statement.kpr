@@ -1,32 +1,32 @@
 #let a = true (<- B).
 
-#if a
+#if a or false
 |>
-    a := False.
-    #if a
+    #print "Nice!".
+
+    #let x = 0.3 (<- R).
+
+    #if x <= 0.1 and a
     |>
-        #print "Too bad!".
+        #print "Too bad...".
     |>
     #otherwise
     |>
         #print "OK!".
+
+        #let y = 5 (<- Z).
+
+        #if x < y
+        |>
+            #print "All clear!".
+        |>
+        #otherwise
+        |>
+            #print "Oh my gosh...".
+        |>
     |>
 |>
 #otherwise
 |>
-    #print "Not good!".
-|>
-
-#let x = 0.5 (<- R).
-
-#if x >= 0.5
-|>
-    #print "Good job!".
-|>
-
-#let y = 3 (<- Z).
-
-#if x =< y
-|>
-    #print "Good job!".
+    #print "Not good...".
 |>
