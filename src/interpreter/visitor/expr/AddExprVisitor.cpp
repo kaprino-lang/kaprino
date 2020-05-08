@@ -16,35 +16,17 @@ class AddExprObject : ExprObject {
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto l = left->codegen(builder, module);
         auto r = right->codegen(builder, module);
-        if (l->getType() == KAPRINO_INT64_TY(module)) {
-            if (r->getType() == KAPRINO_INT64_TY(module)) {
-                if (isPlus)
-                    return builder->CreateAdd(l, r);
-                else
-                    return builder->CreateSub(l, r);
-            }
-            else {
-                l = builder->CreateSIToFP(l, KAPRINO_DOUBLE_TY(module));
-                if (isPlus)
-                    return builder->CreateFAdd(l, r);
-                else
-                    return builder->CreateFSub(l, r);
-            }
+        if (KAPRINO_CONFIRM_INT64(module, l, r)) {
+            return isPlus
+                ? builder->CreateAdd(l, r)
+                : builder->CreateSub(l, r);
         }
         else {
-            if (r->getType() == KAPRINO_INT64_TY(module)) {
-                r = builder->CreateSIToFP(r, KAPRINO_DOUBLE_TY(module));
-                if (isPlus)
-                    return builder->CreateFAdd(l, r);
-                else
-                    return builder->CreateFSub(l, r);
-            }
-            else {
-                if (isPlus)
-                    return builder->CreateFAdd(l, r);
-                else
-                    return builder->CreateFSub(l, r);
-            }
+            l = KAPRINO_CAST_SI_FP(builder, module, l);
+            r = KAPRINO_CAST_SI_FP(builder, module, r);
+            return isPlus
+                ? builder->CreateFAdd(l, r)
+                : builder->CreateFSub(l, r);
         }
     }
 };
