@@ -1,0 +1,27 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: olegtarasov/get-tag@v2
+        id: tag_name
+      - uses: docker/build-push-action@v1
+        id: buildDocker
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: capra314cabra/kaprino
+          tags: ${{ steps.tag_name.outputs.tag }}
+          push: true
