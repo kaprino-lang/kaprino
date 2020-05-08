@@ -21,7 +21,7 @@ antlrcpp::Any StatementVisitor::visitBooleanExpr(KaprinoParser::BooleanExprConte
     auto exprObj = new BooleanExprObject();
 
     auto boolean = ctx->getText();
-    std::transform(boolean.begin(), boolean.end(), boolean.begin(), std::tolower);
+    std::transform(boolean.begin(), boolean.end(), boolean.begin(), (int (*)(int))std::tolower);
     exprObj->value = boolean == "true";
 
     KAPRINO_LOG("Static value ditected: " << boolean);
