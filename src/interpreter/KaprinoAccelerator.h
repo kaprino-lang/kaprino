@@ -69,6 +69,9 @@
 #define KAPRINO_DOUBLE_TY(mod) llvm::Type::getDoubleTy((mod)->getContext())
 #define KAPRINO_DOUBLE_PTR_TY(mod) llvm::Type::getDoublePtrTy((mod)->getContext())
 
+#define KAPRINO_CONFIRM_INT64(mod, x, y) ((x)->getType() == KAPRINO_INT64_TY(mod)) && ((y)->getType() == KAPRINO_INT64_TY(mod))
+#define KAPRINO_CAST_SI_FP(bldr, mod, x) ((x)->getType() == KAPRINO_INT64_TY(mod)) ? bldr->CreateSIToFP(x, KAPRINO_DOUBLE_TY(mod)) : (x);
+
 //
 // ------ File system ------
 //

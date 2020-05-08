@@ -40,15 +40,36 @@ class CompareExprObject : ExprObject {
 
    private:
     llvm::Value* compare_greater(llvm::IRBuilder<>* builder, llvm::Module* module, llvm::Value* g, llvm::Value* l) {
-        return builder->CreateFCmpOGT(g, l);
+        if (KAPRINO_CONFIRM_INT64(module, g, l)) {
+            return builder->CreateICmpSGT(g, l);
+        }
+        else {
+            g = KAPRINO_CAST_SI_FP(builder, module, g);
+            l = KAPRINO_CAST_SI_FP(builder, module, l);
+            return builder->CreateFCmpOGT(g, l);
+        }
     }
 
     llvm::Value* compare_equal(llvm::IRBuilder<>* builder, llvm::Module* module, llvm::Value* g, llvm::Value* l) {
-        return builder->CreateFCmpOEQ(g, l);
+        if (KAPRINO_CONFIRM_INT64(module, g, l)) {
+            return builder->CreateICmpEQ(g, l);
+        }
+        else {
+            g = KAPRINO_CAST_SI_FP(builder, module, g);
+            l = KAPRINO_CAST_SI_FP(builder, module, l);
+            return builder->CreateFCmpOEQ(g, l);
+        }
     }
 
     llvm::Value* compare_eqgreater(llvm::IRBuilder<>* builder, llvm::Module* module, llvm::Value* g, llvm::Value* l) {
-        return builder->CreateFCmpOGE(g, l);
+        if (KAPRINO_CONFIRM_INT64(module, g, l)) {
+            return builder->CreateICmpSGE(g, l);
+        }
+        else {
+            g = KAPRINO_CAST_SI_FP(builder, module, g);
+            l = KAPRINO_CAST_SI_FP(builder, module, l);
+            return builder->CreateFCmpOGE(g, l);
+        }
     }
 };
 
