@@ -83,8 +83,8 @@ ENV LLVM_LIB_DIR /tmp/llvm-90-install_O_D_A/lib
 WORKDIR /tmp/llvm-90-install_O_D_A
 
 RUN \
-    ln ${LLVM_BIN_DIR}/lli /usr/bin/lli; \
-    ln ${LLVM_BIN_DIR}/llvm-as /usr/bin/llvm-as;
+    ln -s ${LLVM_BIN_DIR}/lli /usr/bin/lli; \
+    ln -s ${LLVM_BIN_DIR}/llvm-as /usr/bin/llvm-as;
 
 ########################################################
 #
@@ -100,4 +100,5 @@ RUN \
         -DANTLR4_LibPath=${ANTLR4_LIB_DIR} \
         -DLLVM_IncludePath=${LLVM_INCLUDE_DIR} \
         -DLLVM_LibPath=${LLVM_LIB_DIR}; \
-    make;
+    make; \
+    ln -s /tmp/kaprino/build/kaprino /usr/bin/kaprino;
