@@ -22,12 +22,14 @@ class IfStatementObject : StatementObject {
 
         auto parent = builder->GetInsertBlock()->getParent();
 
-        auto ifblock = llvm::BasicBlock::Create(module->getContext(), "if" + branch_count, parent);
-        auto mergeblock = llvm::BasicBlock::Create(module->getContext(), "then" + branch_count, parent);
+        auto ifblock = llvm::BasicBlock::Create(module->getContext(), "then" + std::to_string(branch_count), parent);
+        auto mergeblock = llvm::BasicBlock::Create(module->getContext(), "merged" + std::to_string(branch_count), parent);
 
         if (hasOtherwise) {
-            auto owblock = llvm::BasicBlock::Create(module->getContext(), "else" + branch_count, parent);
+            auto owblock = llvm::BasicBlock::Create(module->getContext(), "else" + std::to_string(branch_count), parent);
             builder->CreateCondBr(match, ifblock, owblock);
+
+            branch_count++;
 
             builder->SetInsertPoint(owblock);
             VariableManager::add_scope();
@@ -41,6 +43,8 @@ class IfStatementObject : StatementObject {
         }
         else {
             builder->CreateCondBr(match, ifblock, mergeblock);
+
+            branch_count++;
         }
 
         builder->SetInsertPoint(ifblock);
@@ -52,8 +56,6 @@ class IfStatementObject : StatementObject {
             builder->CreateBr(mergeblock);
         }
         VariableManager::remove_scope();
-
-        branch_count++;
 
         builder->SetInsertPoint(mergeblock);
     }

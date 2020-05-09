@@ -16,35 +16,17 @@ class MulExprObject : ExprObject {
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto l = left->codegen(builder, module);
         auto r = right->codegen(builder, module);
-        if (l->getType() == KAPRINO_INT64_TY(module)) {
-            if (r->getType() == KAPRINO_INT64_TY(module)) {
-                if (isMul)
-                    return builder->CreateMul(l, r);
-                else
-                    return builder->CreateSDiv(l, r);
-            }
-            else {
-                l = builder->CreateSIToFP(l, KAPRINO_DOUBLE_TY(module));
-                if (isMul)
-                    return builder->CreateFMul(l, r);
-                else
-                    return builder->CreateFDiv(l, r);
-            }
+        if (KAPRINO_CONFIRM_INT64(module, l, r)) {
+            return isMul
+                ? builder->CreateMul(l, r)
+                : builder->CreateSDiv(l, r);
         }
         else {
-            if (r->getType() == KAPRINO_INT64_TY(module)) {
-                r = builder->CreateSIToFP(r, KAPRINO_DOUBLE_TY(module));
-                if (isMul)
-                    return builder->CreateFMul(l, r);
-                else
-                    return builder->CreateFDiv(l, r);
-            }
-            else {
-                if (isMul)
-                    return builder->CreateFMul(l, r);
-                else
-                    return builder->CreateFDiv(l, r);
-            }
+            l = KAPRINO_CAST_SI_FP(builder, module, l);
+            r = KAPRINO_CAST_SI_FP(builder, module, r);
+            return isMul
+                ? builder->CreateFMul(l, r)
+                : builder->CreateFDiv(l, r);
         }
     }
 };
