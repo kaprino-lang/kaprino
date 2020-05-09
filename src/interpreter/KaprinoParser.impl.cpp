@@ -1,21 +1,38 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include "../parser/KaprinoLexer.h"
 #include "../parser/KaprinoParser.h"
-#include "abstructs/StatementObject.h"
 #include "ExecutableGenerator.h"
 #include "KaprinoAccelerator.h"
 #include "StatementVisitor.h"
 #include "TypeManager.h"
+#include "abstructs/StatementObject.h"
 
 using namespace antlr4;
 
 std::vector<StatementObject*>* ParseFile(std::string text);
 void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileName);
 
+std::vector<std::string> args;
+
+bool getCompilerFlags(std::string name) {
+    for (auto arg : args) {
+        if (arg == name) return true;
+    }
+    return false;
+}
+
 int main(int argc, const char* argv[]) {
     llvm::InitLLVM X(argc, argv);
+
+    for (int counter = 0; counter < argc; counter++) {
+        args.push_back(argv[counter]);
+    }
+
+    llvm::InitializeNativeTarget();
+    llvm::InitializeNativeTargetAsmPrinter();
+    llvm::InitializeNativeTargetAsmParser();
 
     KAPRINO_LOG_INIT();
 
@@ -23,7 +40,7 @@ int main(int argc, const char* argv[]) {
 
     if (argc <= 1) {
         KAPRINO_ERR("No input");
-        throw -1;
+        throw - 1;
     }
 
     std::string input_file_path = argv[1];
@@ -31,7 +48,7 @@ int main(int argc, const char* argv[]) {
 
     if (!input_file.good()) {
         KAPRINO_ERR("Not found input files: \"" << argv[1] << "\"");
-        throw -1;
+        throw - 1;
     }
 
     std::ostringstream ss;
@@ -76,15 +93,13 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     auto mainFuncType = llvm::FunctionType::get(
         KAPRINO_INT32_TY(module),
         mainFuncArgs,
-        false
-    );
+        false);
 
     auto mainFunc = llvm::Function::Create(
         mainFuncType,
         llvm::GlobalValue::ExternalLinkage,
         "main",
-        module
-    );
+        module);
     mainFunc->setCallingConv(llvm::CallingConv::C);
 
     auto mainBlock = llvm::BasicBlock::Create(context, "entry", module->getFunction("main"));
@@ -95,7 +110,7 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     TypeManager::create(&builder, module, "R", KAPRINO_DOUBLE_TY(module));
     TypeManager::create(&builder, module, "Z", KAPRINO_INT64_TY(module));
 
-    for(auto statement : *programObj) {
+    for (auto statement : *programObj) {
         statement->codegen(&builder, module);
     }
 
@@ -109,7 +124,19 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
 
 #else
 
-    EmitExecutable(module, false);
+    auto optimize = getCompilerFlags("-O");
+    auto llvmir = getCompilerFlags("--emit-llvm");
+    auto afterrun = getCompilerFlags("--run") || getCompilerFlags("-r");
+
+    KAPRINO_LOG("Optimization: " << (optimize ? "Aggressive" : "Default"));
+
+    if (llvmir) {
+        EmitLLVMIR(module, optimize);
+    }
+
+    auto executable_path = EmitExecutable(module, optimize);
+
+    KAPRINO_LOG("Executable generated: " << executable_path);
 
 #endif
 }

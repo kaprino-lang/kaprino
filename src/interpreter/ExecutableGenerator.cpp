@@ -16,26 +16,77 @@ void EmitLLVMIR(llvm::Module* module, bool optimize) {
     KAPRINO_LOG("Outputing file task: " << errorcode.message());
 }
 
-void EmitExecutable(llvm::Module* module, bool optimize) {
-    EmitLLVMIR(module, optimize);
-
+std::string EmitObjectCode(llvm::Module* module, bool optimize) {
     auto llvmir_path = module->getName().str();
-    auto bitcode_path = KAPRINO_RM_FILE_EXT(llvmir_path) + ".bc";
-    auto executable_path = KAPRINO_RM_FILE_EXT(llvmir_path);
 
-    std::ostringstream conv_bitcode_command;
-    conv_bitcode_command << "llvm-as -o ";
-    conv_bitcode_command << bitcode_path;
-    conv_bitcode_command << " ";
-    conv_bitcode_command << llvmir_path;
+#if _WIN32
 
-    KAPRINO_LOG("Execute external tool: " << conv_bitcode_command.str());
+    auto objectcode_path = KAPRINO_RM_FILE_EXT(llvmir_path) + ".obj";
 
-    int error_code = system(conv_bitcode_command.str().c_str());
-    if (error_code) {
-        KAPRINO_ERR("llvm-as faield: " << error_code);
-        throw error_code;
+#else
+
+    auto objectcode_path = KAPRINO_RM_FILE_EXT(llvmir_path) + ".o";
+
+#endif
+
+    remove(objectcode_path.c_str());
+
+    auto target_triple = llvm::sys::getDefaultTargetTriple();
+    module->setTargetTriple(target_triple);
+
+    std::string errormsg;
+    auto target = llvm::TargetRegistry::lookupTarget(target_triple, errormsg);
+
+    if (!target) {
+        KAPRINO_ERR(errormsg);
+        throw -1;
     }
+
+    auto CPU = "generic";
+    auto Features = "";
+
+    llvm::TargetOptions opt;
+    auto RM = llvm::Optional<llvm::Reloc::Model>();
+    auto target_machine = target->createTargetMachine(
+        target_triple, CPU, Features, opt, RM, llvm::None,
+        optimize ? llvm::CodeGenOpt::Aggressive : llvm::CodeGenOpt::Default
+    );
+
+    module->setDataLayout(target_machine->createDataLayout());
+
+    std::error_code error_code;
+    llvm::raw_fd_ostream dest(objectcode_path, error_code, llvm::sys::fs::OF_None);
+
+    if (error_code) {
+        KAPRINO_ERR("Object code generation faield: " << error_code);
+        throw -1;
+    }
+
+    llvm::legacy::PassManager pass;
+
+    if (target_machine->addPassesToEmitFile(pass, dest, nullptr, llvm::TargetMachine::CGFT_ObjectFile)) {
+        KAPRINO_ERR("Object code generation faield");
+        throw -1;
+    }
+
+    pass.run(*module);
+    dest.flush();
+
+    return objectcode_path;
+}
+
+std::string EmitExecutable(llvm::Module* module, bool optimize) {
+    auto objectcode_path = EmitObjectCode(module, optimize);
+
+#if _WIN32
+
+    auto executable_path = KAPRINO_RM_FILE_EXT(module->getName().str()) + ".exe";
+
+#else
+
+    auto executable_path = KAPRINO_RM_FILE_EXT(module->getName().str());
+
+#endif
 
     std::ostringstream compile_command;
     compile_command << "clang -o ";
@@ -43,25 +94,22 @@ void EmitExecutable(llvm::Module* module, bool optimize) {
 
 #if _WIN32
 
-    compile_command << ".exe";
     compile_command << " -llegacy_stdio_definitions.lib ";
 
 #endif
 
     compile_command << " ";
-    compile_command << bitcode_path;
+    compile_command << objectcode_path;
 
     KAPRINO_LOG("Execute external tool: " << compile_command.str());
 
-    error_code = system(compile_command.str().c_str());
+    auto error_code = system(compile_command.str().c_str());
     if (error_code) {
         KAPRINO_ERR("Clang faield: " << error_code);
         throw error_code;
     }
 
     KAPRINO_LOG("Compile complete");
-}
 
-void Interpret(llvm::Module* module, bool optimize) {
-    
+    return executable_path;
 }
