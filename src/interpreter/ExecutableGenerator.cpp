@@ -31,10 +31,6 @@ std::string EmitObjectCode(llvm::Module* module, bool optimize) {
 
     remove(objectcode_path.c_str());
 
-    llvm::InitializeNativeTarget();
-    llvm::InitializeNativeTargetAsmPrinter();
-    llvm::InitializeNativeTargetAsmParser();
-
     auto target_triple = llvm::sys::getDefaultTargetTriple();
     module->setTargetTriple(target_triple);
 
@@ -79,10 +75,18 @@ std::string EmitObjectCode(llvm::Module* module, bool optimize) {
     return objectcode_path;
 }
 
-void EmitExecutable(llvm::Module* module, bool optimize) {
+std::string EmitExecutable(llvm::Module* module, bool optimize) {
     auto objectcode_path = EmitObjectCode(module, optimize);
 
+#if _WIN32
+
+    auto executable_path = KAPRINO_RM_FILE_EXT(module->getName().str()) + ".exe";
+
+#else
+
     auto executable_path = KAPRINO_RM_FILE_EXT(module->getName().str());
+
+#endif
 
     std::ostringstream compile_command;
     compile_command << "clang -o ";
@@ -90,7 +94,6 @@ void EmitExecutable(llvm::Module* module, bool optimize) {
 
 #if _WIN32
 
-    compile_command << ".exe";
     compile_command << " -llegacy_stdio_definitions.lib ";
 
 #endif
@@ -107,8 +110,6 @@ void EmitExecutable(llvm::Module* module, bool optimize) {
     }
 
     KAPRINO_LOG("Compile complete");
-}
 
-void Interpret(llvm::Module* module, bool optimize) {
-
+    return executable_path;
 }
