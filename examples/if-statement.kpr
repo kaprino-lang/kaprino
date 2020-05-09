@@ -1,6 +1,6 @@
 #let a = true (<- B).
 
-#if a or false
+#if (a or not true)
 |>
     #print "Nice!".
 
