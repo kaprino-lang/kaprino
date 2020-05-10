@@ -58,12 +58,12 @@ RUN \
 
 RUN \
     echo '#!/bin/sh' > /usr/bin/antlr4; \
-    echo java -jar /tmp/antlr4/antlr-4.8-complete.jar "$@" >> /usr/bin/antlr4; \
+    echo 'java -jar /tmp/antlr4/antlr-4.8-complete.jar "$@"' >> /usr/bin/antlr4; \
     chmod +x /usr/bin/antlr4;
 
 RUN \
     echo '#!/bin/sh' > /usr/bin/grun; \
-    echo java org.antlr.v4.gui.TestRig "$@" >> /usr/bin/grun; \
+    echo 'java org.antlr.v4.gui.TestRig "$@"' >> /usr/bin/grun; \
     chmod +x /usr/bin/grun;
 
 WORKDIR /tmp/antlr4/build
