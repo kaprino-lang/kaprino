@@ -17,51 +17,25 @@ RUN \
 
 RUN \
     apk add --no-cache --virtual builddep \
-        linux-headers \
         g++ \
-        make \
-        wget \
-        zip \
         openjdk11 \
-        pkgconfig \
-        libuuid;
+        make \
+        cmake \
+        wget \
+        zip;
 
 ########################################################
 #
-# Install CMake by building it from the sources.
+# Install LLVM.
 #
 ########################################################
-WORKDIR /tmp/cmake
+ENV LLVM_INCLUDE_DIR /usr/include/llvm10/
+ENV LLVM_LIB_DIR /usr/lib/llvm10/lib
 
 RUN \
-    wget https://github.com/Kitware/CMake/releases/download/v3.16.5/cmake-3.16.5.tar.gz; \
-    tar -zxvf cmake-3.16.5.tar.gz; \
-    cd cmake-3.16.5; \
-    ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release; \
-    make; \
-    make install;
-
-########################################################
-#
-# Install LLVM libs by building it from the sources.
-#
-########################################################
-ENV LLVM_BIN_DIR /tmp/llvm/build/Release/bin
-ENV LLVM_INCLUDE_DIR /tmp/llvm/include
-ENV LLVM_LIB_DIR /tmp/llvm/build/Release/lib
-
-WORKDIR /tmp/llvm
-
-RUN \
-    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/llvm-10.0.0.src.tar.xz; \
-    tar -xvf llvm-10.0.0.src.tar.xz; \
-    mv /tmp/llvm/llvm-10.0.0.src /tmp/llvm;
-
-WORKDIR /tmp/llvm/build
-
-RUN \
-    cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=FALSE ..; \
-    make;
+    apk add --no-cache --virtual llvm10dep \
+        llvm10-static \
+        llvm10-dev;
 
 ########################################################
 #
@@ -115,4 +89,5 @@ RUN \
 ########################################################
 
 RUN \
-    apk del builddep;
+    apk del builddep; \
+    apk del llvm10dep;
