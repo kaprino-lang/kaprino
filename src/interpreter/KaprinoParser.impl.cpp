@@ -23,7 +23,7 @@ bool getCompilerFlags(std::string name) {
     return false;
 }
 
-int main(int argc, const char* argv[]) {
+int main_internal(int argc, const char* argv[]) {
     llvm::InitLLVM X(argc, argv);
 
     for (int counter = 0; counter < argc; counter++) {
@@ -65,6 +65,19 @@ int main(int argc, const char* argv[]) {
     std::string output_file_path = KAPRINO_RM_FILE_EXT(input_file_path) + ".ll";
 
     GenerateCode(programObject, output_file_path);
+}
+
+int main(int argc, const char* argv[]) {
+    try {
+        main_internal(argc, argv);
+    }
+    catch(int e) {
+        KAPRINO_LOG("Kaprino returns: " << e);
+        return e;
+    }
+
+    KAPRINO_LOG("Kapino returns: 0");
+    return 0;
 }
 
 std::vector<StatementObject*>* ParseFile(std::string text) {
