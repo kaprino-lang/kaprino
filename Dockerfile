@@ -22,6 +22,8 @@ RUN \
         make \
         cmake \
         wget \
+        ossp-uuid-dev \
+        pkgconfig \
         zip;
 
 ########################################################
