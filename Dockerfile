@@ -57,12 +57,12 @@ RUN \
     wget https://www.antlr.org/download/antlr-4.8-complete.jar;
 
 RUN \
-    echo #!/bin/bash > /usr/bin/antlr4; \
+    echo '#!/bin/bash' > /usr/bin/antlr4; \
     echo java -jar /tmp/antlr4/antlr-4.8-complete.jar "$@" >> /usr/bin/antlr4; \
     chmod +x /usr/bin/antlr4;
 
 RUN \
-    echo #!/bin/bash > /usr/bin/grun; \
+    echo '#!/bin/bash' > /usr/bin/grun; \
     echo java org.antlr.v4.gui.TestRig "$@" >> /usr/bin/grun; \
     chmod +x /usr/bin/grun;
 
