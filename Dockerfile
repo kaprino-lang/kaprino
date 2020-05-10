@@ -12,17 +12,14 @@ WORKDIR /
 RUN \
     apk update; \
     apk add --no-cache \
-        build-essential \
+        alpine-sdk \
         wget \
         zip \
-        g++ \
         clang \
-        clang++ \
         python3 \
-        default-jre \
-        pkg-config \
-        libssl-dev \
-        uuid-dev; \
+        openjdk11 \
+        pkgconfig \
+        libuuid; \
     rm -rf /var/cache/apk/*;
 
 ########################################################
