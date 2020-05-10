@@ -1,4 +1,4 @@
-FROM alpine:3.9.6
+FROM alpine:3.11.6
 
 COPY . /tmp/kaprino/
 
@@ -12,15 +12,15 @@ WORKDIR /
 RUN \
     apk update; \
     apk add --no-cache \
-        alpine-sdk \
+        g++ \
+        make \
         wget \
         zip \
         clang \
         python3 \
         openjdk11 \
         pkgconfig \
-        libuuid; \
-    rm -rf /var/cache/apk/*;
+        libuuid;
 
 ########################################################
 #
