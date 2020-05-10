@@ -12,12 +12,16 @@ WORKDIR /
 RUN \
     apk update; \
     apk add --no-cache \
+        clang \
+        python3;
+
+RUN \
+    apk add --no-cache --virtual builddep \
+        linux-headers \
         g++ \
         make \
         wget \
         zip \
-        clang \
-        python3 \
         openjdk11 \
         pkgconfig \
         libuuid;
@@ -103,3 +107,12 @@ RUN \
         -DLLVM_LibPath=${LLVM_LIB_DIR}; \
     make; \
     ln -s /tmp/kaprino/build/kaprino /usr/bin/kaprino;
+
+########################################################
+#
+# Clean workspaces
+#
+########################################################
+
+RUN \
+    apk del builddep;
