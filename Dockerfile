@@ -17,13 +17,12 @@ RUN \
 
 RUN \
     apk add --no-cache --virtual builddep \
-        g++ \
+        build-base \
+        util-linux-dev \
         openjdk11 \
-        make \
         cmake \
         wget \
         ossp-uuid-dev \
-        pkgconfig \
         zip;
 
 ########################################################
@@ -92,4 +91,5 @@ RUN \
 
 RUN \
     apk del builddep; \
-    apk del llvm10dep;
+    apk del llvm10dep; \
+    rm -rf /var/cache/apk/*;
