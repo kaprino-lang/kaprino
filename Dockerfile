@@ -1,6 +1,4 @@
-FROM klee/llvm:90_O_D_A_ubuntu_bionic-20200112
-
-SHELL ["/bin/bash", "-c"]
+FROM alpine:3.9.6
 
 COPY . /tmp/kaprino/
 
@@ -12,20 +10,20 @@ COPY . /tmp/kaprino/
 WORKDIR /
 
 RUN \
-    apt update && apt upgrade -y; \
-    apt install -y \
+    apk update; \
+    apk add --no-cache \
         build-essential \
         wget \
         zip \
         g++ \
         clang \
+        clang++ \
         python3 \
         default-jre \
         pkg-config \
         libssl-dev \
         uuid-dev; \
-    apt clean; \
-    rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/cache/apk/*;
 
 ########################################################
 #
@@ -41,6 +39,28 @@ RUN \
     ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release; \
     make; \
     make install;
+
+########################################################
+#
+# Install LLVM libs by building it from the sources.
+#
+########################################################
+ENV LLVM_BIN_DIR /tmp/llvm/build/Release/bin
+ENV LLVM_INCLUDE_DIR /tmp/llvm/include
+ENV LLVM_LIB_DIR /tmp/llvm/build/Release/lib
+
+WORKDIR /tmp/llvm
+
+RUN \
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/llvm-10.0.0.src.tar.xz; \
+    tar -xvf llvm-10.0.0.src.tar.xz; \
+    mv /tmp/llvm/llvm-10.0.0.src /tmp/llvm;
+
+WORKDIR /tmp/llvm/build
+
+RUN \
+    cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=FALSE ..; \
+    make;
 
 ########################################################
 #
@@ -73,25 +93,9 @@ RUN \
 
 ########################################################
 #
-# Prepare to use LLVM
-#
-########################################################
-ENV LLVM_BIN_DIR /tmp/llvm-90-install_O_D_A/bin
-ENV LLVM_INCLUDE_DIR /tmp/llvm-90-install_O_D_A/include
-ENV LLVM_LIB_DIR /tmp/llvm-90-install_O_D_A/lib
-
-WORKDIR /tmp/llvm-90-install_O_D_A
-
-RUN \
-    ln -s ${LLVM_BIN_DIR}/lli /usr/bin/lli; \
-    ln -s ${LLVM_BIN_DIR}/llvm-as /usr/bin/llvm-as;
-
-########################################################
-#
 # Build Kaprino
 #
 ########################################################
-
 WORKDIR /tmp/kaprino/build
 
 RUN \
