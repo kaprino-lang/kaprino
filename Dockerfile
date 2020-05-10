@@ -29,13 +29,13 @@ RUN \
 # Install LLVM.
 #
 ########################################################
-ENV LLVM_INCLUDE_DIR /usr/include/llvm10/
-ENV LLVM_LIB_DIR /usr/lib/llvm10/lib
+ENV LLVM_INCLUDE_DIR /usr/include/llvm9/
+ENV LLVM_LIB_DIR /usr/lib/llvm9/lib
 
 RUN \
-    apk add --no-cache --virtual llvm10dep \
-        llvm10-static \
-        llvm10-dev;
+    apk add --no-cache --virtual llvmdep \
+        llvm9-static \
+        llvm9-dev;
 
 ########################################################
 #
@@ -96,5 +96,5 @@ RUN \
 
 RUN \
     apk del builddep; \
-    apk del llvm10dep; \
+    apk del llvmdep; \
     rm -rf /var/cache/apk/*;
