@@ -38,7 +38,7 @@ WORKDIR /tmp/llvm
 RUN \
     wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz; \
     tar -xvf llvm-9.0.1.src.tar.xz; \
-    mv /tmp/llvm/llvm-9.0.1.src /tmp && mv /tmp/llvm-9.0.1.src /tmp/llvm;
+    cp -pR llvm-9.0.1.src/* .
 
 WORKDIR /tmp/llvm/build
 
