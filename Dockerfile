@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.11
 
 COPY . /tmp/kaprino/
 
@@ -19,6 +19,7 @@ RUN \
     apk add --no-cache --virtual builddep \
         build-base \
         util-linux-dev \
+        ninja \
         openjdk11 \
         cmake \
         wget \
@@ -69,8 +70,9 @@ RUN \
 WORKDIR /tmp/antlr4/build
 
 RUN \
-    cmake ..; \
-    make;
+    cmake -G Ninja ..; \
+    ninja; \
+    ninja install;
 
 ########################################################
 #
@@ -81,11 +83,13 @@ WORKDIR /tmp/kaprino/build
 
 RUN \
     cmake .. \
+        -G Ninja \
         -DANTLR4_IncludePath=${ANTLR4_INCLUDE_DIR} \
         -DANTLR4_LibPath=${ANTLR4_LIB_DIR} \
         -DLLVM_IncludePath=${LLVM_INCLUDE_DIR} \
         -DLLVM_LibPath=${LLVM_LIB_DIR}; \
-    make; \
+    ninja; \
+    ninja install; \
     ln -s /tmp/kaprino/build/kaprino /usr/bin/kaprino;
 
 ########################################################
