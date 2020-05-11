@@ -119,10 +119,6 @@ add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 target_include_directories(kaprino PRIVATE ${ANTLR4_IncludePath})
 target_include_directories(kaprino PRIVATE ${LLVM_IncludePath})
 
-if(UNIX)
-    target_compile_options(kaprino PRIVATE -Wl)
-endif()
-
 ########################################################
 #
 # Link ANTLR4 libraries.

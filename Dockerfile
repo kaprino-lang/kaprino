@@ -26,16 +26,25 @@ RUN \
 
 ########################################################
 #
-# Install LLVM.
+# Install LLVM by building it from the sources.
 #
 ########################################################
-ENV LLVM_INCLUDE_DIR /usr/include/llvm9/
-ENV LLVM_LIB_DIR /usr/lib/llvm9/lib
+ENV LLVM_BIN_DIR /tmp/llvm/build/Release/bin
+ENV LLVM_INCLUDE_DIR /tmp/llvm/include
+ENV LLVM_LIB_DIR /tmp/llvm/build/Release/lib
+
+WORKDIR /tmp/llvm
 
 RUN \
-    apk add --no-cache --virtual llvmdep \
-        llvm9-static \
-        llvm9-dev;
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz; \
+    tar -xvf llvm-9.0.1.src.tar.xz; \
+    mv /tmp/llvm/llvm-9.0.1.src /tmp/llvm;
+
+WORKDIR /tmp/llvm/build
+
+RUN \
+    cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=FALSE ..; \
+    make;
 
 ########################################################
 #
@@ -96,5 +105,4 @@ RUN \
 
 RUN \
     apk del builddep; \
-    apk del llvmdep; \
     rm -rf /var/cache/apk/*;
