@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM capra314cabra/llvm-alpine:9.0.1
 
 COPY . /tmp/kaprino/
 
@@ -30,13 +30,8 @@ RUN \
 # Install LLVM.
 #
 ########################################################
-ENV LLVM_INCLUDE_DIR /usr/include/llvm9/
-ENV LLVM_LIB_DIR /usr/lib/llvm9/lib
-
-RUN \
-    apk add --no-cache --virtual llvmdep \
-        llvm9-static \
-        llvm9-dev;
+ENV LLVM_INCLUDE_DIR /usr/local/include
+ENV LLVM_LIB_DIR /usr/local/lib
 
 ########################################################
 #
@@ -44,28 +39,28 @@ RUN \
 #
 ########################################################
 ENV ANTLR4_DOWNLOAD_URL https://www.antlr.org/download/antlr4-cpp-runtime-4.8-source.zip
-ENV ANTLR4_INCLUDE_DIR /tmp/antlr4/runtime/src
-ENV ANTLR4_LIB_DIR /tmp/antlr4/dist
+ENV ANTLR4_INCLUDE_DIR /usr/local/include
+ENV ANTLR4_LIB_DIR /usr/local/lib
 
 ENV CLASSPATH '.:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'
+
+WORKDIR /root/antlr4
+
+RUN \
+    wget https://www.antlr.org/download/antlr-4.8-complete.jar; \
+    echo '#!/bin/sh' > /usr/bin/antlr4; \
+    echo 'java -jar /root/antlr4/antlr-4.8-complete.jar "$@"' >> /usr/bin/antlr4; \
+    chmod +x /usr/bin/antlr4 \
+    echo '#!/bin/sh' > /usr/bin/grun; \
+    echo 'java org.antlr.v4.gui.TestRig "$@"' >> /usr/bin/grun; \
+    chmod +x /usr/bin/grun;
 
 WORKDIR /tmp/antlr4
 
 RUN \
     wget $ANTLR4_DOWNLOAD_URL; \
     unzip $(basename $ANTLR4_DOWNLOAD_URL); \
-    rm $(basename $ANTLR4_DOWNLOAD_URL); \
-    wget https://www.antlr.org/download/antlr-4.8-complete.jar;
-
-RUN \
-    echo '#!/bin/sh' > /usr/bin/antlr4; \
-    echo 'java -jar /tmp/antlr4/antlr-4.8-complete.jar "$@"' >> /usr/bin/antlr4; \
-    chmod +x /usr/bin/antlr4;
-
-RUN \
-    echo '#!/bin/sh' > /usr/bin/grun; \
-    echo 'java org.antlr.v4.gui.TestRig "$@"' >> /usr/bin/grun; \
-    chmod +x /usr/bin/grun;
+    rm $(basename $ANTLR4_DOWNLOAD_URL);
 
 WORKDIR /tmp/antlr4/build
 
@@ -89,16 +84,16 @@ RUN \
         -DLLVM_IncludePath=${LLVM_INCLUDE_DIR} \
         -DLLVM_LibPath=${LLVM_LIB_DIR}; \
     ninja; \
-    ninja install; \
-    ln -s /tmp/kaprino/build/kaprino /usr/bin/kaprino;
+    ninja install;
 
 ########################################################
 #
 # Clean workspaces
 #
 ########################################################
+WORKDIR /
 
 RUN \
     apk del builddep; \
-    apk del llvmdep; \
+    rm -rf /tmp; \
     rm -rf /var/cache/apk/*;
