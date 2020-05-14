@@ -10,12 +10,11 @@ COPY . /tmp/kaprino/
 WORKDIR /
 
 RUN \
+    rm -rf /usr/local/bin; \
     apk update; \
     apk add --no-cache \
         clang \
-        python3;
-
-RUN \
+        python3; \
     apk add --no-cache --virtual builddep \
         build-base \
         util-linux-dev \
