@@ -42,7 +42,7 @@ ENV ANTLR4_DOWNLOAD_URL https://www.antlr.org/download/antlr4-cpp-runtime-4.8-so
 ENV ANTLR4_INCLUDE_DIR /usr/local/include
 ENV ANTLR4_LIB_DIR /usr/local/lib
 
-ENV CLASSPATH '.:/tmp/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'
+ENV CLASSPATH '.:/root/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'
 
 WORKDIR /root/antlr4
 
