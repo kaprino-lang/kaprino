@@ -40,7 +40,7 @@ std::string EmitBitcode(llvm::Module* module, bool optimize) {
 }
 
 std::string EmitExecutable(llvm::Module* module, bool optimize) {
-    auto bitcode_path = EmitBitcode(module, optimize);
+    auto llvmir_path = EmitLLVMIR(module, optimize);
 
 #if _WIN32
 
@@ -63,7 +63,7 @@ std::string EmitExecutable(llvm::Module* module, bool optimize) {
 #endif
 
     compile_command << " ";
-    compile_command << bitcode_path;
+    compile_command << llvmir_path;
 
     KAPRINO_LOG("Execute external tool: " << compile_command.str());
 
