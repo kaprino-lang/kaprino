@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.15)
 
 project(kaprino VERSION 1.0)
 
@@ -119,6 +119,10 @@ add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 target_include_directories(kaprino PRIVATE ${ANTLR4_IncludePath})
 target_include_directories(kaprino PRIVATE ${LLVM_IncludePath})
 
+if(UNIX)
+    target_compile_options(kaprino PRIVATE -frtti)
+endif()
+
 ########################################################
 #
 # Link ANTLR4 libraries.
@@ -144,146 +148,146 @@ endif()
 
 target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
 target_link_libraries(kaprino
-    LLVMAArch64AsmParser
-    LLVMAArch64CodeGen
-    LLVMAArch64Desc
-    LLVMAArch64Disassembler
-    LLVMAArch64Info
-    LLVMAArch64Utils
-    LLVMAggressiveInstCombine
-    LLVMAMDGPUAsmParser
-    LLVMAMDGPUCodeGen
-    LLVMAMDGPUDesc
-    LLVMAMDGPUDisassembler
-    LLVMAMDGPUInfo
-    LLVMAMDGPUUtils
-    LLVMAnalysis
-    LLVMARMAsmParser
-    LLVMARMCodeGen
-    LLVMARMDesc
-    LLVMARMDisassembler
-    LLVMARMInfo
-    LLVMARMUtils
-    LLVMAsmParser
-    LLVMAsmPrinter
-    LLVMBinaryFormat
-    LLVMBitReader
-    LLVMBitstreamReader
-    LLVMBitWriter
-    LLVMBPFAsmParser
-    LLVMBPFCodeGen
-    LLVMBPFDesc
-    LLVMBPFDisassembler
-    LLVMBPFInfo
-    LLVMCodeGen
-    LLVMCore
-    LLVMCoroutines
-    LLVMCoverage
-    LLVMDebugInfoCodeView
-    LLVMDebugInfoDWARF
-    LLVMDebugInfoGSYM
-    LLVMDebugInfoMSF
-    LLVMDebugInfoPDB
-    LLVMDemangle
-    LLVMDlltoolDriver
-    LLVMExecutionEngine
-    LLVMFuzzMutate
-    LLVMGlobalISel
-    LLVMHexagonAsmParser
-    LLVMHexagonCodeGen
-    LLVMHexagonDesc
-    LLVMHexagonDisassembler
-    LLVMHexagonInfo
-    LLVMInstCombine
-    LLVMInstrumentation
-    LLVMInterpreter
-    LLVMipo
-    LLVMIRReader
-    LLVMJITLink
-    LLVMLanaiAsmParser
-    LLVMLanaiCodeGen
-    LLVMLanaiDesc
-    LLVMLanaiDisassembler
-    LLVMLanaiInfo
-    LLVMLibDriver
-    LLVMLineEditor
-    LLVMLinker
-    LLVMLTO
-    LLVMMC
-    LLVMMCA
-    LLVMMCDisassembler
-    LLVMMCJIT
-    LLVMMCParser
-    LLVMMipsAsmParser
-    LLVMMipsCodeGen
-    LLVMMipsDesc
-    LLVMMipsDisassembler
-    LLVMMipsInfo
-    LLVMMIRParser
-    LLVMMSP430AsmParser
-    LLVMMSP430CodeGen
-    LLVMMSP430Desc
-    LLVMMSP430Disassembler
-    LLVMMSP430Info
-    LLVMNVPTXCodeGen
-    LLVMNVPTXDesc
-    LLVMNVPTXInfo
-    LLVMObjCARCOpts
-    LLVMObject
-    LLVMObjectYAML
-    LLVMOption
-    LLVMOrcJIT
-    LLVMPasses
-    LLVMPowerPCAsmParser
-    LLVMPowerPCCodeGen
-    LLVMPowerPCDesc
-    LLVMPowerPCDisassembler
-    LLVMPowerPCInfo
-    LLVMProfileData
-    LLVMRemarks
-    LLVMRISCVAsmParser
-    LLVMRISCVCodeGen
-    LLVMRISCVDesc
-    LLVMRISCVDisassembler
-    LLVMRISCVInfo
-    LLVMRISCVUtils
-    LLVMRuntimeDyld
-    LLVMScalarOpts
-    LLVMSelectionDAG
-    LLVMSparcAsmParser
-    LLVMSparcCodeGen
-    LLVMSparcDesc
-    LLVMSparcDisassembler
-    LLVMSparcInfo
-    LLVMSupport
-    LLVMSymbolize
-    LLVMSystemZAsmParser
-    LLVMSystemZCodeGen
-    LLVMSystemZDesc
-    LLVMSystemZDisassembler
-    LLVMSystemZInfo
-    LLVMTableGen
-    LLVMTarget
-    LLVMTextAPI
-    LLVMTransformUtils
-    LLVMVectorize
-    LLVMWebAssemblyAsmParser
-    LLVMWebAssemblyCodeGen
-    LLVMWebAssemblyDesc
-    LLVMWebAssemblyDisassembler
-    LLVMWebAssemblyInfo
+    LLVMXRay
     LLVMWindowsManifest
+    LLVMTextAPI
+    LLVMTableGen
+    LLVMSymbolize
+    LLVMDebugInfoPDB
+    LLVMOrcJIT
+    LLVMJITLink
+    LLVMObjectYAML
+    LLVMMCA
+    LLVMLTO
+    LLVMPasses
+    LLVMObjCARCOpts
+    LLVMLineEditor
+    LLVMLibDriver
+    LLVMInterpreter
+    LLVMFuzzMutate
+    LLVMMCJIT
+    LLVMExecutionEngine
+    LLVMRuntimeDyld
+    LLVMDlltoolDriver
+    LLVMOption
+    LLVMDebugInfoGSYM
+    LLVMCoverage
+    LLVMCoroutines
+    LLVMXCoreDisassembler
+    LLVMXCoreCodeGen
+    LLVMXCoreDesc
+    LLVMXCoreInfo
+    LLVMX86Disassembler
     LLVMX86AsmParser
     LLVMX86CodeGen
     LLVMX86Desc
-    LLVMX86Disassembler
-    LLVMX86Info
     LLVMX86Utils
-    LLVMXCoreCodeGen
-    LLVMXCoreDesc
-    LLVMXCoreDisassembler
-    LLVMXCoreInfo
-    LLVMXRay
+    LLVMX86Info
+    LLVMWebAssemblyDisassembler
+    LLVMWebAssemblyCodeGen
+    LLVMWebAssemblyDesc
+    LLVMWebAssemblyAsmParser
+    LLVMWebAssemblyInfo
+    LLVMSystemZDisassembler
+    LLVMSystemZCodeGen
+    LLVMSystemZAsmParser
+    LLVMSystemZDesc
+    LLVMSystemZInfo
+    LLVMSparcDisassembler
+    LLVMSparcCodeGen
+    LLVMSparcAsmParser
+    LLVMSparcDesc
+    LLVMSparcInfo
+    LLVMRISCVDisassembler
+    LLVMRISCVCodeGen
+    LLVMRISCVAsmParser
+    LLVMRISCVDesc
+    LLVMRISCVUtils
+    LLVMRISCVInfo
+    LLVMPowerPCDisassembler
+    LLVMPowerPCCodeGen
+    LLVMPowerPCAsmParser
+    LLVMPowerPCDesc
+    LLVMPowerPCInfo
+    LLVMNVPTXCodeGen
+    LLVMNVPTXDesc
+    LLVMNVPTXInfo
+    LLVMMSP430Disassembler
+    LLVMMSP430CodeGen
+    LLVMMSP430AsmParser
+    LLVMMSP430Desc
+    LLVMMSP430Info
+    LLVMMipsDisassembler
+    LLVMMipsCodeGen
+    LLVMMipsAsmParser
+    LLVMMipsDesc
+    LLVMMipsInfo
+    LLVMLanaiDisassembler
+    LLVMLanaiCodeGen
+    LLVMLanaiAsmParser
+    LLVMLanaiDesc
+    LLVMLanaiInfo
+    LLVMHexagonDisassembler
+    LLVMHexagonCodeGen
+    LLVMHexagonAsmParser
+    LLVMHexagonDesc
+    LLVMHexagonInfo
+    LLVMBPFDisassembler
+    LLVMBPFCodeGen
+    LLVMBPFAsmParser
+    LLVMBPFDesc
+    LLVMBPFInfo
+    LLVMARMDisassembler
+    LLVMARMCodeGen
+    LLVMARMAsmParser
+    LLVMARMDesc
+    LLVMARMUtils
+    LLVMARMInfo
+    LLVMAMDGPUDisassembler
+    LLVMAMDGPUCodeGen
+    LLVMMIRParser
+    LLVMipo
+    LLVMInstrumentation
+    LLVMVectorize
+    LLVMLinker
+    LLVMIRReader
+    LLVMAsmParser
+    LLVMAMDGPUAsmParser
+    LLVMAMDGPUDesc
+    LLVMAMDGPUUtils
+    LLVMAMDGPUInfo
+    LLVMAArch64Disassembler
+    LLVMMCDisassembler
+    LLVMAArch64CodeGen
+    LLVMGlobalISel
+    LLVMSelectionDAG
+    LLVMAsmPrinter
+    LLVMDebugInfoDWARF
+    LLVMCodeGen
+    LLVMTarget
+    LLVMScalarOpts
+    LLVMInstCombine
+    LLVMAggressiveInstCombine
+    LLVMTransformUtils
+    LLVMBitWriter
+    LLVMAnalysis
+    LLVMProfileData
+    LLVMObject
+    LLVMBitReader
+    LLVMBitstreamReader
+    LLVMCore
+    LLVMRemarks
+    LLVMAArch64AsmParser
+    LLVMMCParser
+    LLVMAArch64Desc
+    LLVMMC
+    LLVMDebugInfoCodeView
+    LLVMDebugInfoMSF
+    LLVMBinaryFormat
+    LLVMAArch64Utils
+    LLVMAArch64Info
+    LLVMSupport
+    LLVMDemangle
 )
 
 ########################################################
@@ -321,3 +325,11 @@ if(${KAPRINO_EMIT_LLVM_IR_ONLY})
         PRIVATE KAPRINO_EMIT_LLVM_IR_ONLY
     )
 endif()
+
+########################################################
+#
+# Create install rule
+#
+########################################################
+
+install(TARGETS kaprino)

@@ -64,7 +64,7 @@ std::string EmitObjectCode(llvm::Module* module, bool optimize) {
 
     llvm::legacy::PassManager pass;
 
-    if (target_machine->addPassesToEmitFile(pass, dest, nullptr, llvm::TargetMachine::CGFT_ObjectFile)) {
+    if (target_machine->addPassesToEmitFile(pass, dest, nullptr, llvm::TargetMachine::CodeGenFileType::CGFT_ObjectFile)) {
         KAPRINO_ERR("Object code generation faield");
         throw -1;
     }
