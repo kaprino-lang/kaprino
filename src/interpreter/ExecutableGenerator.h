@@ -2,7 +2,7 @@
 
 #include "llvm/IR/Module.h"
 
-void EmitLLVMIR(llvm::Module* module, bool optimize);
+std::string EmitLLVMIR(llvm::Module* module, bool optimize);
 
 std::string EmitBitcode(llvm::Module* module, bool optimize);
 
