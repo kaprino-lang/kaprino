@@ -13,7 +13,7 @@ RUN \
     apk update; \
     apk add --no-cache \
         clang \
-        python3; \
+        python3 \
         build-base \
         util-linux-dev \
         ninja \
