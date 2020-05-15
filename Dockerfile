@@ -1,4 +1,4 @@
-FROM capra314cabra/llvm-alpine:9.0.1
+FROM capra314cabra/llvm-alpine-libs:9.0.1 AS build-env
 
 COPY . /tmp/kaprino/
 
@@ -10,12 +10,10 @@ COPY . /tmp/kaprino/
 WORKDIR /
 
 RUN \
-    rm -rf /usr/local/bin; \
     apk update; \
     apk add --no-cache \
         clang \
         python3; \
-    apk add --no-cache --virtual builddep \
         build-base \
         util-linux-dev \
         ninja \
@@ -87,12 +85,31 @@ RUN \
 
 ########################################################
 #
-# Clean workspaces
+# Deploy stage
 #
 ########################################################
-WORKDIR /
+
+FROM capra314cabra/llvm-alpine-libs:9.0.1
+
+COPY --from=build-env /usr/local/bin/kaprino /usr/local/bin/kaprino
+
+ENV CLASSPATH '.:/root/antlr4/antlr-4.8-complete.jar:${CLASSPATH}'
+
+WORKDIR /root/antlr4
 
 RUN \
+    apk update; \
+    apk add --no-cache --virtual builddep \
+        wget; \
+    apk add --no-cache \
+        clang \
+        python3; \
+    wget https://www.antlr.org/download/antlr-4.8-complete.jar; \
+    echo '#!/bin/sh' > /usr/bin/antlr4; \
+    echo 'java -jar /root/antlr4/antlr-4.8-complete.jar "$@"' >> /usr/bin/antlr4; \
+    chmod +x /usr/bin/antlr4 \
+    echo '#!/bin/sh' > /usr/bin/grun; \
+    echo 'java org.antlr.v4.gui.TestRig "$@"' >> /usr/bin/grun; \
+    chmod +x /usr/bin/grun; \
     apk del builddep; \
-    rm -rf /tmp; \
     rm -rf /var/cache/apk/*;
