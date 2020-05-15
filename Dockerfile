@@ -102,6 +102,9 @@ RUN \
         wget; \
     apk add --no-cache \
         binutils \
-        clang; \
+        clang \
+        musl-dev \
+        gcc; \
     apk del builddep; \
+    mkdir /tmp; \
     rm -rf /var/cache/apk/*;
