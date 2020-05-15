@@ -325,3 +325,11 @@ if(${KAPRINO_EMIT_LLVM_IR_ONLY})
         PRIVATE KAPRINO_EMIT_LLVM_IR_ONLY
     )
 endif()
+
+########################################################
+#
+# Create install rule
+#
+########################################################
+
+install(TARGETS kaprino)
