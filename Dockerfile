@@ -101,7 +101,7 @@ RUN \
     apk add --no-cache --virtual builddep \
         wget; \
     apk add --no-cache \
-        clang \
-        python3; \
+        binutils \
+        clang; \
     apk del builddep; \
     rm -rf /var/cache/apk/*;
