@@ -22,7 +22,7 @@ statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT
                 | LOOP codeblock # LoopStatement
                 | CLASS name=ID codeblock # ClassStatement
                 | SUBMIT expr? finisher # SubmitStatement
-                | BREAK finisher # BreakStatement
+                | EXIT finisher # ExitStatement
                 | PRINT expr (COMMA expr)* finisher # PrintStatement
                 | READ assignee finisher # ReadStatement
                 ;

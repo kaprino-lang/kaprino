@@ -34,7 +34,7 @@ WHILE           : COMMAND ('while' | 'While' | 'WHILE')
                 ;
 LOOP            : COMMAND ('loop' | 'Loop' | 'LOOP')
                 ;
-BREAK           : COMMAND ('break' | 'Break' | 'BREAK')
+EXIT            : COMMAND ('exit' | 'Exit' | 'EXIT')
                 ;
 CLASS           : COMMAND ('class' | 'Class' | 'CLASS')
                 ;

@@ -1,11 +1,10 @@
-#let a (<- Z).
-a := 0.
+#let a = 0 (<- Z).
 
 #loop
 |>
     #if a = 5
     |>
-        #break.
+        #exit.
     |>
 
     #print a.
