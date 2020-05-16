@@ -84,8 +84,10 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ExitStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/IfStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LetStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LoopStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
 )
