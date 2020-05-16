@@ -5,15 +5,20 @@
 #include "ExecutableGenerator.h"
 #include "KaprinoAccelerator.h"
 
-void EmitLLVMIR(llvm::Module* module, bool optimize) {
-    KAPRINO_LOG("Emit LLVM IR file to: " << module->getName().str());
+std::string EmitLLVMIR(llvm::Module* module, bool optimize) {
+    auto llvmir_path = module->getName().str();
 
-    std::error_code errorcode;
-    auto stream = new llvm::raw_fd_ostream(module->getName(), errorcode);
+    std::error_code error_code;
+    llvm::raw_fd_ostream dest(llvmir_path, error_code, llvm::sys::fs::OF_None);
 
-    module->print(*stream, nullptr);
+    module->print(dest, nullptr);
 
-    KAPRINO_LOG("Outputing file task: " << errorcode.message());
+    if (error_code) {
+        KAPRINO_ERR("LLVM IR generation faield: " << error_code);
+        throw error_code.value();
+    }
+
+    return llvmir_path;
 }
 
 std::string EmitBitcode(llvm::Module* module, bool optimize) {
@@ -28,14 +33,14 @@ std::string EmitBitcode(llvm::Module* module, bool optimize) {
 
     if (error_code) {
         KAPRINO_ERR("Bitcode generation faield: " << error_code);
-        throw -1;
+        throw error_code.value();
     }
 
-     return bitcode_path;
+    return bitcode_path;
 }
 
 std::string EmitExecutable(llvm::Module* module, bool optimize) {
-    auto bitcode_path = EmitBitcode(module, optimize);
+    auto llvmir_path = EmitLLVMIR(module, optimize);
 
 #if _WIN32
 
@@ -58,7 +63,7 @@ std::string EmitExecutable(llvm::Module* module, bool optimize) {
 #endif
 
     compile_command << " ";
-    compile_command << bitcode_path;
+    compile_command << llvmir_path;
 
     KAPRINO_LOG("Execute external tool: " << compile_command.str());
 
