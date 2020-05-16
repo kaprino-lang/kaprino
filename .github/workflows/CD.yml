@@ -23,5 +23,5 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: capra314cabra/kaprino
-          tags: ${{ steps.tag_name.outputs.tag }}
+          tags: ${{ steps.tag_name.outputs.tag }},latest
           push: true
