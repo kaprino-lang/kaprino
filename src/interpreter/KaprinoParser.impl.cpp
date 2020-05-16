@@ -151,5 +151,22 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
 
     KAPRINO_LOG("Executable generated: " << executable_path);
 
+    if (afterrun) {
+        KAPRINO_LOG("------ STARTING ------");
+
+#if _WIN32
+
+        int retval = system(("call \"" + executable_path + "\"").c_str());
+
+#else
+
+        int retval = system(executable_path.c_str());
+
+#endif
+
+        KAPRINO_LOG("------ FINISHING ------");
+        KAPRINO_LOG("Executable returns: " << retval);
+    }
+
 #endif
 }
