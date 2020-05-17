@@ -3,7 +3,7 @@
 </div>
 
 [![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
-[![CI](https://github.com/kaprino-lang/kaprino.git/workflows/CI/badge.svg)](https://github.com/kaprino-lang/kaprino/actions?query=workflow%3ACI)
+[![CI](https://github.com/kaprino-lang/kaprino/workflows/CI/badge.svg)](https://github.com/kaprino-lang/kaprino/actions?query=workflow%3ACI)
 
 This is a programming language that tastes like a mathematics.  
 I hope this project may have changed your coding life.
