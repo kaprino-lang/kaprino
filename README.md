@@ -11,13 +11,13 @@ I hope this project may have changed your coding life.
 ## Example code
 
 ```
-// A integer variable
+// An integer variable
 #let i = 0 (<- Z).
 
 // A real number variable
 #let r = 0.0 (<- R).
 
-// Assign the values to the variables
+// Assign numbers to the variables
 i := 5.
 r := 4.3.
 
@@ -64,7 +64,37 @@ $ kprc test.kpr
 
 kprc will generate an executable.
 
+## Requirements
+
+- Clang (>=9.0.1)
+- ANTLR4 C++ runtime (>= 4.8)
+
 ## Installation
+
+### Build from sources
+
+Requirements:
+
+- CMake (>=3.15)
+- LLVM (9.0.0,9.0.1)
+- ANTLR4 (>=4.8)
+- ANTLR4 C++ runtime (>= 4.8)
+
+Note that you have to make sure able to use `antlr4` command.
+
+How to build:
+
+Replace `[path]`s to the pathes in your environment and run it.
+
+```
+$ git clone https://github.com/capra314cabra/kaprino.git
+$ cd kaprino
+$ mkdir build
+$ cd build
+$ cmake .. -DANTLR4_IncludePath=[path] -DANTLR4_LibPath=[path] -DLLVM_IncludePath=[path] -DLLVM_LibPath=[path]
+$ make
+$ make install
+```
 
 ### Run kaprino using Docker
 
