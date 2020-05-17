@@ -103,3 +103,7 @@ You can use a docker image which is already installed kaprino.
 ```
 docker run --rm -it capra314cabra/kaprino:latest
 ```
+
+## License
+
+[MIT license](https://github.com/capra314cabra/kaprino/blob/master/LICENSE)
