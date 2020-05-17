@@ -73,7 +73,7 @@ kprc will generate an executable.
 
 ### Build from sources
 
-Requirements:
+#### Build requirements
 
 - CMake (>=3.15)
 - LLVM (9.0.0,9.0.1)
@@ -82,7 +82,7 @@ Requirements:
 
 Note that you have to make sure able to use `antlr4` command.
 
-How to build:
+#### How to build
 
 Replace `[path]`s to the pathes in your environment and run it.
 
@@ -97,6 +97,8 @@ $ make install
 ```
 
 ### Run kaprino using Docker
+
+You can use a docker image which is already installed kaprino.
 
 ```
 docker run --rm -it capra314cabra/kaprino:latest
