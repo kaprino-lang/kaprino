@@ -116,13 +116,13 @@ add_custom_command(
 #
 ########################################################
 
-add_executable(kaprino ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
+add_executable(kprc ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 
-target_include_directories(kaprino PRIVATE ${ANTLR4_IncludePath})
-target_include_directories(kaprino PRIVATE ${LLVM_IncludePath})
+target_include_directories(kprc PRIVATE ${ANTLR4_IncludePath})
+target_include_directories(kprc PRIVATE ${LLVM_IncludePath})
 
 if(UNIX)
-    target_compile_options(kaprino PRIVATE -frtti)
+    target_compile_options(kprc PRIVATE -frtti)
 endif()
 
 ########################################################
@@ -131,14 +131,14 @@ endif()
 #
 ########################################################
 
-target_link_directories(kaprino PUBLIC ${ANTLR4_LibPath})
-target_link_libraries(kaprino antlr4-runtime)
+target_link_directories(kprc PUBLIC ${ANTLR4_LibPath})
+target_link_libraries(kprc antlr4-runtime)
 if(MSVC)
     add_custom_command(
-        TARGET kaprino POST_BUILD
+        TARGET kprc POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${ANTLR4_LibPath}/antlr4-runtime.dll
-        $<TARGET_FILE_DIR:kaprino>
+        $<TARGET_FILE_DIR:kprc>
     )
 endif()
 
@@ -148,8 +148,8 @@ endif()
 #
 ########################################################
 
-target_link_directories(kaprino PUBLIC ${LLVM_LibPath})
-target_link_libraries(kaprino
+target_link_directories(kprc PUBLIC ${LLVM_LibPath})
+target_link_libraries(kprc
     LLVMXRay
     LLVMWindowsManifest
     LLVMTextAPI
@@ -300,7 +300,7 @@ target_link_libraries(kaprino
 
 if(${KAPRINO_MONOTONE_LOG})
     message(WARNING "[WARN] Make stdout monotone")
-    target_compile_definitions(kaprino
+    target_compile_definitions(kprc
         PRIVATE KAPRINO_MONOTONE_LOG
     )
 endif()
@@ -313,7 +313,7 @@ endif()
 
 if(${KAPRINO_OPTIMIZER_ON})
     message(WARNING "[EXPERIMENTAL] Optimizer on")
-    target_compile_definitions(kaprino
+    target_compile_definitions(kprc
         PRIVATE KAPRINO_OPTIMIZER_ON
     )
 endif()
@@ -323,7 +323,7 @@ endif()
 #
 if(${KAPRINO_EMIT_LLVM_IR_ONLY})
     message(WARNING "[WARN] The tool will generate only llvm ir")
-    target_compile_definitions(kaprino
+    target_compile_definitions(kprc
         PRIVATE KAPRINO_EMIT_LLVM_IR_ONLY
     )
 endif()
@@ -334,4 +334,4 @@ endif()
 #
 ########################################################
 
-install(TARGETS kaprino)
+install(TARGETS kprc)
