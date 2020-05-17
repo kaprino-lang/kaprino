@@ -2,8 +2,8 @@
   <h1>Kaprino <i>- A language of mathematical thinking</i></h1>
 </div>
 
-[![Latest release](https://img.shields.io/github/v/release/capra314cabra/kaprino?include_prereleases)](https://hub.docker.com/r/capra314cabra/kaprino)
-[![CI](https://github.com/capra314cabra/kaprino/workflows/CI/badge.svg)](https://github.com/capra314cabra/kaprino/actions?query=workflow%3ACI)
+[![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
+[![CI](https://github.com/kaprino-lang/kaprino.git/workflows/CI/badge.svg)](https://github.com/kaprino-lang/kaprino/actions?query=workflow%3ACI)
 
 This is a programming language that tastes like a mathematics.  
 I hope this project may have changed your coding life.
@@ -87,7 +87,7 @@ Note that you have to make sure able to use `antlr4` command.
 Replace `[path]`s to the pathes in your environment and run it.
 
 ```
-$ git clone https://github.com/capra314cabra/kaprino.git
+$ git clone https://github.com/kaprino-lang/kaprino.git
 $ cd kaprino
 $ mkdir build
 $ cd build
@@ -101,9 +101,9 @@ $ make install
 You can use a docker image which is already installed kaprino.
 
 ```
-docker run --rm -it capra314cabra/kaprino:latest
+docker run --rm -it kaprino/kaprino:latest
 ```
 
 ## License
 
-[MIT license](https://github.com/capra314cabra/kaprino/blob/master/LICENSE)
+[MIT license](https://github.com/kaprino-lang/kaprino/blob/master/LICENSE)
