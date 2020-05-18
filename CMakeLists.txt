@@ -60,6 +60,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/ExecutableGenerator.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/FunctionManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/KaprinoParser.impl.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/PackagePathManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/TypeManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/VariableManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/PowInternal.cpp"
