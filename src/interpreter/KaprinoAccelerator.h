@@ -78,3 +78,9 @@
 //
 
 #define KAPRINO_RM_FILE_EXT(file_path) (file_path).substr(0, (file_path).find_last_of("."))
+
+//
+// ------ Cast ------
+//
+
+#define KAPRINO_TO_STR(ptr) [](char* p) { std::string str(p); return str; }(ptr)
