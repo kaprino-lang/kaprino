@@ -57,6 +57,7 @@ set(PARSER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserVisitor.cpp"
 )
 set(INTERPRETER_SOURCES
+    "${CMAKE_SOURCE_DIR}/src/interpreter/ArgsManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/ExecutableGenerator.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/FunctionManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/KaprinoParser.impl.cpp"
