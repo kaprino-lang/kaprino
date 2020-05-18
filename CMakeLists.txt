@@ -91,6 +91,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LoopStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/RequireStatementVisitor.cpp"
 )
 set(GRAMMER_FILES
     "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.g4"
