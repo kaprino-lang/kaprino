@@ -21,5 +21,4 @@ class PackagePathManager {
 
     std::string checkdirs(std::string env_name);
     std::vector<std::string> getdirs(std::string env);
-    inline bool exists (std::string name);
 };

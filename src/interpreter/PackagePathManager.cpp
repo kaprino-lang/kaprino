@@ -1,3 +1,5 @@
+#include "ArgsManager.h"
+#include "KaprinoAccelerator.h"
 #include "PackagePathManager.h"
 
 PackagePathManager::PackagePathManager(std::string name) {
@@ -5,7 +7,18 @@ PackagePathManager::PackagePathManager(std::string name) {
 }
 
 std::string PackagePathManager::find() {
-    auto file = checkdirs(PackagePathManager::KAPRINO_PATH_ENV);
+    auto executable_file = ArgsManager::getFile();
+
+    auto project_dir = std::filesystem::path(executable_file)
+        .parent_path()
+        .string();
+    auto file = project_dir + "/" + package_name + ".kpr";
+    if (std::filesystem::exists(file)) {
+        KAPRINO_LOG("Package found: " << file);
+        return file;
+    }
+
+    file = checkdirs(PackagePathManager::KAPRINO_PATH_ENV);
     if (file != "")
     {
         return file;
@@ -34,7 +47,7 @@ std::string PackagePathManager::checkdirs(std::string env_name) {
     auto envdirs = getdirs(env);
     for (auto dir : envdirs) {
         auto file = dir + "/" + package_name + ".kpr";
-        if (exists(file)) {
+        if (std::filesystem::exists(file)) {
             KAPRINO_LOG("Package found: " << file);
             return file;
         }
@@ -51,9 +64,4 @@ std::vector<std::string> PackagePathManager::getdirs(std::string env) {
         env.erase(0, pos + 1);
     }
     return pathes;
-}
-
-inline bool PackagePathManager::exists(std::string name) {
-    std::ifstream f(name.c_str());
-    return f.good();
 }
