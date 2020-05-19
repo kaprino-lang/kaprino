@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(kaprino VERSION 1.0)
+project(kaprino VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -129,6 +129,10 @@ target_include_directories(kprc PRIVATE ${LLVM_IncludePath})
 if(UNIX)
     target_compile_options(kprc PRIVATE -frtti)
 endif()
+
+target_compile_definitions(kprc
+    PRIVATE KAPRINO_VERSION=\"${kaprino_VERSION}\"
+)
 
 ########################################################
 #

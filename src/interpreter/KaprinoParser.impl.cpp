@@ -12,6 +12,10 @@
 
 using namespace antlr4;
 
+#ifndef KAPRINO_VERSION
+#define KAPRINO_VERSION "0.0.0"
+#endif
+
 std::vector<StatementObject*>* ParseFile(std::string text);
 void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileName);
 
@@ -28,12 +32,17 @@ int main_internal(int argc, const char* argv[]) {
 
     ArgsManager::setArgs(argc, argv);
 
+    if (ArgsManager::getFlag("--version") || ArgsManager::getFlag("-v")) {
+        KAPRINO_LOG("kprc - Kaprino Compiler version: " << KAPRINO_VERSION);
+        return 0;
+    }
+
     std::string input_file_path = ArgsManager::getFile();
     std::ifstream input_file(input_file_path);
 
     if (!input_file.good()) {
         KAPRINO_ERR("Not found input files: \"" << ArgsManager::getFile() << "\"");
-        throw - 1;
+        throw -1;
     }
 
     std::ostringstream ss;
