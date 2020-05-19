@@ -44,6 +44,8 @@ PRINT           : COMMAND ('print' | 'Print' | 'PRINT')
                 ;
 READ            : COMMAND ('read' | 'Read' | 'READ')
                 ;
+REQUIRE         : COMMAND ('require' | 'Require' | 'REQUIRE')
+                ;
 AND             : 'and'
                 ;
 OR              : 'or'

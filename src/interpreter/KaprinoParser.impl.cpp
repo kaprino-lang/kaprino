@@ -3,32 +3,20 @@
 
 #include "../parser/KaprinoLexer.h"
 #include "../parser/KaprinoParser.h"
+#include "abstructs/StatementObject.h"
+#include "ArgsManager.h"
 #include "ExecutableGenerator.h"
 #include "KaprinoAccelerator.h"
 #include "StatementVisitor.h"
 #include "TypeManager.h"
-#include "abstructs/StatementObject.h"
 
 using namespace antlr4;
 
 std::vector<StatementObject*>* ParseFile(std::string text);
 void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileName);
 
-std::vector<std::string> args;
-
-bool getCompilerFlags(std::string name) {
-    for (auto arg : args) {
-        if (arg == name) return true;
-    }
-    return false;
-}
-
 int main_internal(int argc, const char* argv[]) {
     llvm::InitLLVM X(argc, argv);
-
-    for (int counter = 0; counter < argc; counter++) {
-        args.push_back(argv[counter]);
-    }
 
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
@@ -38,16 +26,13 @@ int main_internal(int argc, const char* argv[]) {
 
     KAPRINO_LOG("Kaprino started");
 
-    if (argc <= 1) {
-        KAPRINO_ERR("No input");
-        throw - 1;
-    }
+    ArgsManager::setArgs(argc, argv);
 
-    std::string input_file_path = argv[1];
+    std::string input_file_path = ArgsManager::getFile();
     std::ifstream input_file(input_file_path);
 
     if (!input_file.good()) {
-        KAPRINO_ERR("Not found input files: \"" << argv[1] << "\"");
+        KAPRINO_ERR("Not found input files: \"" << ArgsManager::getFile() << "\"");
         throw - 1;
     }
 
@@ -56,7 +41,7 @@ int main_internal(int argc, const char* argv[]) {
     std::string input_text;
     input_text = ss.str();
 
-    KAPRINO_LOG("Read input files succeeded \"" << argv[1] << "\"");
+    KAPRINO_LOG("Read input files succeeded \"" << ArgsManager::getFile() << "\"");
 
     auto programObject = ParseFile(input_text);
 
@@ -137,9 +122,9 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
 
 #else
 
-    auto optimize = getCompilerFlags("-O");
-    auto llvmir = getCompilerFlags("--emit-llvm");
-    auto afterrun = getCompilerFlags("--run") || getCompilerFlags("-r");
+    auto optimize = ArgsManager::getFlag("-O");
+    auto llvmir = ArgsManager::getFlag("--emit-llvm");
+    auto afterrun = ArgsManager::getFlag("--run") || ArgsManager::getFlag("-r");
 
     KAPRINO_LOG("Optimization: " << (optimize ? "Aggressive" : "Default"));
 

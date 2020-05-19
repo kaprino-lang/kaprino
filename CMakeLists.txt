@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 project(kaprino VERSION 1.0)
 
+set(CMAKE_CXX_STANDARD 17)
+
 ########################################################
 #
 # Dependencies pathes
@@ -57,9 +59,11 @@ set(PARSER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParserVisitor.cpp"
 )
 set(INTERPRETER_SOURCES
+    "${CMAKE_SOURCE_DIR}/src/interpreter/ArgsManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/ExecutableGenerator.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/FunctionManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/KaprinoParser.impl.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/PackagePathManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/TypeManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/VariableManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/internallib/PowInternal.cpp"
@@ -90,6 +94,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LoopStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/RequireStatementVisitor.cpp"
 )
 set(GRAMMER_FILES
     "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.g4"
