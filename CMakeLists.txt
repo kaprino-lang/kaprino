@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(kaprino VERSION 1.0)
+project(kaprino VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -10,13 +10,13 @@ set(CMAKE_CXX_STANDARD 17)
 #
 ########################################################
 
+find_package(LLVM 9.0.0 REQUIRED)
+
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
 set(KAPRINO_EMIT_LLVM_IR_ONLY OFF CACHE BOOL "Generate LLVM IR and finish program")
 set(ANTLR4_IncludePath "" CACHE STRING "ANTLR4 include files")
 set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
-set(LLVM_IncludePath "" CACHE STRING "LLVM include files")
-set(LLVM_LibPath "" CACHE STRING "LLVM library files")
 
 ########################################################
 #
@@ -31,16 +31,6 @@ endif()
 
 if ("" STREQUAL "${ANTLR4_LibPath}")
     message(FATAL_ERROR "[Error] Required \${ANTLR4_LibPath} but not applied")
-    return()
-endif()
-
-if ("" STREQUAL "${LLVM_IncludePath}")
-    message(FATAL_ERROR "[Error] Required \${LLVM_IncludePath} but not applied")
-    return()
-endif()
-
-if ("" STREQUAL "${LLVM_LibPath}")
-    message(FATAL_ERROR "[Error] Required \${LLVM_LibPath} but not applied")
     return()
 endif()
 
@@ -124,11 +114,15 @@ add_custom_command(
 add_executable(kprc ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
 
 target_include_directories(kprc PRIVATE ${ANTLR4_IncludePath})
-target_include_directories(kprc PRIVATE ${LLVM_IncludePath})
+target_include_directories(kprc PRIVATE ${LLVM_INCLUDE_DIRS})
 
 if(UNIX)
     target_compile_options(kprc PRIVATE -frtti)
 endif()
+
+target_compile_definitions(kprc
+    PRIVATE KAPRINO_VERSION=\"${kaprino_VERSION}\"
+)
 
 ########################################################
 #
@@ -153,149 +147,9 @@ endif()
 #
 ########################################################
 
-target_link_directories(kprc PUBLIC ${LLVM_LibPath})
-target_link_libraries(kprc
-    LLVMXRay
-    LLVMWindowsManifest
-    LLVMTextAPI
-    LLVMTableGen
-    LLVMSymbolize
-    LLVMDebugInfoPDB
-    LLVMOrcJIT
-    LLVMJITLink
-    LLVMObjectYAML
-    LLVMMCA
-    LLVMLTO
-    LLVMPasses
-    LLVMObjCARCOpts
-    LLVMLineEditor
-    LLVMLibDriver
-    LLVMInterpreter
-    LLVMFuzzMutate
-    LLVMMCJIT
-    LLVMExecutionEngine
-    LLVMRuntimeDyld
-    LLVMDlltoolDriver
-    LLVMOption
-    LLVMDebugInfoGSYM
-    LLVMCoverage
-    LLVMCoroutines
-    LLVMXCoreDisassembler
-    LLVMXCoreCodeGen
-    LLVMXCoreDesc
-    LLVMXCoreInfo
-    LLVMX86Disassembler
-    LLVMX86AsmParser
-    LLVMX86CodeGen
-    LLVMX86Desc
-    LLVMX86Utils
-    LLVMX86Info
-    LLVMWebAssemblyDisassembler
-    LLVMWebAssemblyCodeGen
-    LLVMWebAssemblyDesc
-    LLVMWebAssemblyAsmParser
-    LLVMWebAssemblyInfo
-    LLVMSystemZDisassembler
-    LLVMSystemZCodeGen
-    LLVMSystemZAsmParser
-    LLVMSystemZDesc
-    LLVMSystemZInfo
-    LLVMSparcDisassembler
-    LLVMSparcCodeGen
-    LLVMSparcAsmParser
-    LLVMSparcDesc
-    LLVMSparcInfo
-    LLVMRISCVDisassembler
-    LLVMRISCVCodeGen
-    LLVMRISCVAsmParser
-    LLVMRISCVDesc
-    LLVMRISCVUtils
-    LLVMRISCVInfo
-    LLVMPowerPCDisassembler
-    LLVMPowerPCCodeGen
-    LLVMPowerPCAsmParser
-    LLVMPowerPCDesc
-    LLVMPowerPCInfo
-    LLVMNVPTXCodeGen
-    LLVMNVPTXDesc
-    LLVMNVPTXInfo
-    LLVMMSP430Disassembler
-    LLVMMSP430CodeGen
-    LLVMMSP430AsmParser
-    LLVMMSP430Desc
-    LLVMMSP430Info
-    LLVMMipsDisassembler
-    LLVMMipsCodeGen
-    LLVMMipsAsmParser
-    LLVMMipsDesc
-    LLVMMipsInfo
-    LLVMLanaiDisassembler
-    LLVMLanaiCodeGen
-    LLVMLanaiAsmParser
-    LLVMLanaiDesc
-    LLVMLanaiInfo
-    LLVMHexagonDisassembler
-    LLVMHexagonCodeGen
-    LLVMHexagonAsmParser
-    LLVMHexagonDesc
-    LLVMHexagonInfo
-    LLVMBPFDisassembler
-    LLVMBPFCodeGen
-    LLVMBPFAsmParser
-    LLVMBPFDesc
-    LLVMBPFInfo
-    LLVMARMDisassembler
-    LLVMARMCodeGen
-    LLVMARMAsmParser
-    LLVMARMDesc
-    LLVMARMUtils
-    LLVMARMInfo
-    LLVMAMDGPUDisassembler
-    LLVMAMDGPUCodeGen
-    LLVMMIRParser
-    LLVMipo
-    LLVMInstrumentation
-    LLVMVectorize
-    LLVMLinker
-    LLVMIRReader
-    LLVMAsmParser
-    LLVMAMDGPUAsmParser
-    LLVMAMDGPUDesc
-    LLVMAMDGPUUtils
-    LLVMAMDGPUInfo
-    LLVMAArch64Disassembler
-    LLVMMCDisassembler
-    LLVMAArch64CodeGen
-    LLVMGlobalISel
-    LLVMSelectionDAG
-    LLVMAsmPrinter
-    LLVMDebugInfoDWARF
-    LLVMCodeGen
-    LLVMTarget
-    LLVMScalarOpts
-    LLVMInstCombine
-    LLVMAggressiveInstCombine
-    LLVMTransformUtils
-    LLVMBitWriter
-    LLVMAnalysis
-    LLVMProfileData
-    LLVMObject
-    LLVMBitReader
-    LLVMBitstreamReader
-    LLVMCore
-    LLVMRemarks
-    LLVMAArch64AsmParser
-    LLVMMCParser
-    LLVMAArch64Desc
-    LLVMMC
-    LLVMDebugInfoCodeView
-    LLVMDebugInfoMSF
-    LLVMBinaryFormat
-    LLVMAArch64Utils
-    LLVMAArch64Info
-    LLVMSupport
-    LLVMDemangle
-)
+llvm_map_components_to_libnames(LLVM_LIBS all)
+target_link_directories(kprc PUBLIC ${LLVM_LIBRARY_DIRS})
+target_link_libraries(kprc ${LLVM_LIBS})
 
 ########################################################
 #
