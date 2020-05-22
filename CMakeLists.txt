@@ -78,6 +78,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/UpArrowExprVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/AssignStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/DefineFunctionStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/DefineProcessStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ExitStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/IfStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/LetStatementVisitor.cpp"
@@ -85,6 +86,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/PrintStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/ReadStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/RequireStatementVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/statements/SubmitStatementVisitor.cpp"
 )
 set(GRAMMER_FILES
     "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.g4"
