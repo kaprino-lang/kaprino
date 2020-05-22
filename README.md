@@ -64,6 +64,8 @@ $ kprc test.kpr
 
 kprc will generate an executable.
 
+If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino.herokuapp.com/).
+
 ## Requirements
 
 - Clang (>=9.0.1)
