@@ -4,7 +4,7 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 #print f(2.0, 2.0).
 #print f(3.0, 1.0).
 
-#process intpow(x, y) (Z, Z -> Z)
+#func intpow(x, y) (Z, Z -> Z)
 |>
     #let a = 1 (<- Z).
     #let b = 0 (<- Z).
@@ -22,7 +22,7 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 #print intpow(3, 4).
 #print intpow(5, 2).
 
-#process test() (Nil -> R)
+#func test() (Nil -> R)
 |>
     #let a = 0 (<- Z).
     #loop

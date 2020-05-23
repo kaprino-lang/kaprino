@@ -24,7 +24,7 @@ fragment COMMAND: '#'
                 ;
 LET             : COMMAND ('let' | 'Let' | 'LET')
                 ;
-PROCESS         : COMMAND ('process' | 'Process' | 'PROCESS')
+FUNC            : COMMAND ('func' | 'Func' | 'FUNC')
                 ;
 IF              : COMMAND ('if' | 'If' | 'IF')
                 ;
