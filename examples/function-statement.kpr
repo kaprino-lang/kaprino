@@ -3,3 +3,34 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 #print f(1.0, 3.0).
 #print f(2.0, 2.0).
 #print f(3.0, 1.0).
+
+#func intpow(x, y) (Z, Z -> Z)
+|>
+    #let a = 1 (<- Z).
+    #let b = 0 (<- Z).
+    #loop
+    |>
+        #if  b = y
+        |>
+            #submit a.
+        |>
+        a := a * x.
+        b := b + 1.
+    |>
+|>
+
+#print intpow(3, 4).
+#print intpow(5, 2).
+
+#func test() (Nil -> R)
+|>
+    #let a = 0 (<- Z).
+    #print "Hey!".
+    #submit 3.14.
+|>
+
+#print test().
+
+#func sin(x) (R -> R) extern.
+
+#print sin(1.57).

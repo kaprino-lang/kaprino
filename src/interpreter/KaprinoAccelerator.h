@@ -63,6 +63,7 @@
 // ------ LLVM type ------
 //
 
+#define KAPRINO_VOID_TY(mod) llvm::Type::getVoidTy((mod)->getContext())
 #define KAPRINO_BOOL_TY(mod) llvm::Type::getInt1Ty((mod)->getContext())
 #define KAPRINO_INT8_PTR_TY(mod) llvm::Type::getInt8PtrTy((mod)->getContext())
 #define KAPRINO_INT32_TY(mod) llvm::Type::getInt32Ty((mod)->getContext())

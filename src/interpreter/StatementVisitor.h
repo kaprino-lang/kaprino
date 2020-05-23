@@ -12,9 +12,13 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
 
     virtual antlrcpp::Any visitDefineFunctionStatement(KaprinoParser::DefineFunctionStatementContext* ctx) override;
 
+    virtual antlrcpp::Any visitDefineProcessStatement(KaprinoParser::DefineProcessStatementContext* ctx) override;
+
     virtual antlrcpp::Any visitIfStatement(KaprinoParser::IfStatementContext* ctx) override;
 
     virtual antlrcpp::Any visitLoopStatement(KaprinoParser::LoopStatementContext* ctx) override;
+
+    virtual antlrcpp::Any visitSubmitStatement(KaprinoParser::SubmitStatementContext* ctx) override;
 
     virtual antlrcpp::Any visitExitStatement(KaprinoParser::ExitStatementContext* ctx) override;
 

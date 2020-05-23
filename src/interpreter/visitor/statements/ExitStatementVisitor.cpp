@@ -18,7 +18,6 @@ class ExitStatementObject : StatementObject {
    public:
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto block = LoopStatementObject::comebackpos.top();
-        LoopStatementObject::comebackpos.pop();
         builder->CreateBr(block);
         builder->SetInsertPoint((llvm::BasicBlock*)nullptr);
     }

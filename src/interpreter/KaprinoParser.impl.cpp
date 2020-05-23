@@ -88,6 +88,18 @@ std::vector<StatementObject*>* ParseFile(std::string text) {
     return programObject;
 }
 
+void ProcessDeadCode(llvm::IRBuilder<>& builder, llvm::Module* module) {
+    for (auto& func_it : *module) {
+        for (auto& basic_block : func_it) {
+            auto size = basic_block.size();
+            if (size == 0) {
+                builder.SetInsertPoint(&basic_block);
+                builder.CreateUnreachable();
+            }
+        }
+    }
+}
+
 void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileName) {
     llvm::LLVMContext context;
     llvm::IRBuilder<> builder(context);
@@ -112,6 +124,7 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     auto mainBlock = llvm::BasicBlock::Create(context, "entry", module->getFunction("main"));
     builder.SetInsertPoint(mainBlock);
 
+    TypeManager::create(&builder, module, "Nil", KAPRINO_VOID_TY(module));
     TypeManager::create(&builder, module, "Text", KAPRINO_INT8_PTR_TY(module));
     TypeManager::create(&builder, module, "B", KAPRINO_BOOL_TY(module));
     TypeManager::create(&builder, module, "R", KAPRINO_DOUBLE_TY(module));
@@ -122,6 +135,8 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     }
 
     builder.CreateRet(llvm::ConstantInt::get(KAPRINO_INT32_TY(module), 0));
+
+    ProcessDeadCode(builder, module);
 
     llvm::verifyModule(*module);
 

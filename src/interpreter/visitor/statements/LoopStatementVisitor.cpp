@@ -39,6 +39,10 @@ class LoopStatementObject : StatementObject {
         }
         VariableManager::remove_scope();
 
+        if (!comebackpos.empty()) {
+            comebackpos.pop();
+        }
+
         builder->SetInsertPoint(mergeblock);
     }
 };
