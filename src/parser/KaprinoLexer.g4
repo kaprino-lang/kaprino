@@ -46,6 +46,8 @@ READ            : COMMAND ('read' | 'Read' | 'READ')
                 ;
 REQUIRE         : COMMAND ('require' | 'Require' | 'REQUIRE')
                 ;
+EXTERN          : ('extern' | 'Extern' | 'EXTERN')
+                ;
 AND             : 'and'
                 ;
 OR              : 'or'

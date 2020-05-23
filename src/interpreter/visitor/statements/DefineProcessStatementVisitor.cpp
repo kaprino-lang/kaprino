@@ -45,28 +45,33 @@ class DefineProcessStatementObject : StatementObject {
             );
             userdefinedFunc->setCallingConv(llvm::CallingConv::C);
 
-            auto funcBody = llvm::BasicBlock::Create(module->getContext(), "", userdefinedFunc);
-            builder->SetInsertPoint(funcBody);
+            if (statements != nullptr) {
+                auto funcBody = llvm::BasicBlock::Create(module->getContext(), "", userdefinedFunc);
+                builder->SetInsertPoint(funcBody);
 
-            int size = inputParamNames.size();
-            std::vector<llvm::Value*> args;
-            for (auto& arg : userdefinedFunc->args()) {
-                args.push_back(&arg);
-            }
-            for (int counter = 0; counter < size; counter++) {
-                auto arg = args[counter];
-                auto allocated = builder->CreateAlloca(arg->getType());
-                builder->CreateStore(arg, allocated);
-                VariableManager::create(
-                    builder,
-                    module,
-                    inputParamNames[counter],
-                    allocated
-                );
-            }
+                int size = inputParamNames.size();
+                std::vector<llvm::Value*> args;
+                for (auto& arg : userdefinedFunc->args()) {
+                    args.push_back(&arg);
+                }
+                for (int counter = 0; counter < size; counter++) {
+                    auto arg = args[counter];
+                    auto allocated = builder->CreateAlloca(arg->getType());
+                    builder->CreateStore(arg, allocated);
+                    VariableManager::create(
+                        builder,
+                        module,
+                        inputParamNames[counter],
+                        allocated
+                    );
+                }
 
-            for (auto st : *statements) {
-                st->codegen(builder, module);
+                for (auto st : *statements) {
+                    st->codegen(builder, module);
+                }
+            }
+            else {
+                KAPRINO_LOG("Extern func" << funcName);
             }
 
             FunctionManager::create(builder, module, funcName, userdefinedFunc);
@@ -86,7 +91,13 @@ antlrcpp::Any StatementVisitor::visitDefineProcessStatement(KaprinoParser::Defin
         statementObj->inputParamNames.push_back(names[counter]->getText());
     }
     statementObj->functionType = visit(ctx->function_type()).as<FunctionTypeObject*>();
-    statementObj->statements = visit(ctx->codeblock()).as<std::vector<StatementObject*>*>();
+    auto codeblock = ctx->codeblock();
+    if (codeblock != nullptr) {
+        statementObj->statements = visit(codeblock).as<std::vector<StatementObject*>*>();
+    }
+    else {
+        statementObj->statements = nullptr;
+    }
 
     return (StatementObject*)statementObj;
 }

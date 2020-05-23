@@ -30,3 +30,7 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 |>
 
 #print test().
+
+#func sin(x) (R -> R) extern.
+
+#print sin(1.57).
