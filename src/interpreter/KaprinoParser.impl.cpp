@@ -88,6 +88,18 @@ std::vector<StatementObject*>* ParseFile(std::string text) {
     return programObject;
 }
 
+void ProcessDeadCode(llvm::IRBuilder<>& builder, llvm::Module* module) {
+    for (auto& func_it : *module) {
+        for (auto& basic_block : func_it) {
+            auto size = basic_block.size();
+            if (size == 0) {
+                builder.SetInsertPoint(&basic_block);
+                builder.CreateUnreachable();
+            }
+        }
+    }
+}
+
 void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileName) {
     llvm::LLVMContext context;
     llvm::IRBuilder<> builder(context);
@@ -122,6 +134,8 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     }
 
     builder.CreateRet(llvm::ConstantInt::get(KAPRINO_INT32_TY(module), 0));
+
+    ProcessDeadCode(builder, module);
 
     llvm::verifyModule(*module);
 
