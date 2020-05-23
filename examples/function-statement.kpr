@@ -3,3 +3,16 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 #print f(1.0, 3.0).
 #print f(2.0, 2.0).
 #print f(3.0, 1.0).
+
+#process test(x) (R -> R)
+|>
+    #let a = 0 (<- Z).
+    #loop
+    |>
+        #print "Dummy loop".
+        #submit 0.0.
+    |>
+|>
+
+#print test(5.0).
+#print test(0 - 5.0).

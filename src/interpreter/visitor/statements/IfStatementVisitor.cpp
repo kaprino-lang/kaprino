@@ -47,6 +47,8 @@ class IfStatementObject : StatementObject {
             branch_count++;
         }
 
+        auto ow_reachable = !(hasOtherwise && builder->GetInsertBlock() == nullptr);
+
         builder->SetInsertPoint(ifblock);
         VariableManager::add_scope();
         {
@@ -57,7 +59,13 @@ class IfStatementObject : StatementObject {
         }
         VariableManager::remove_scope();
 
+        auto if_reachable = builder->GetInsertBlock() != nullptr;
+
         builder->SetInsertPoint(mergeblock);
+
+        if (!if_reachable && !ow_reachable) {
+            builder->CreateUnreachable();
+        }
     }
 };
 
