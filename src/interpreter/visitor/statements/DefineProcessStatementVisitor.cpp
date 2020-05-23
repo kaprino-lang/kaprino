@@ -25,7 +25,10 @@ class DefineProcessStatementObject : StatementObject {
             auto types = functionType->inputTypes;
             std::vector<llvm::Type*> inputTypes;
             for (auto type : types) {
-                inputTypes.push_back(TypeManager::gettype(builder, module, type));
+                auto ty = TypeManager::gettype(builder, module, type);
+                if (ty != KAPRINO_VOID_TY(module)) {
+                    inputTypes.push_back(ty);
+                }
             }
 
             auto userdefinedType = llvm::FunctionType::get(

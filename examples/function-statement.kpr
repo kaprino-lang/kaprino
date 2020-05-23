@@ -22,7 +22,7 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 #print intpow(3, 4).
 #print intpow(5, 2).
 
-#process test(x) (R -> R)
+#process test() (Nil -> R)
 |>
     #let a = 0 (<- Z).
     #loop
@@ -32,4 +32,4 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
     |>
 |>
 
-#print test(0.0).
+#print test().

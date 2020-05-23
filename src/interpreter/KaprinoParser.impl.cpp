@@ -124,6 +124,7 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     auto mainBlock = llvm::BasicBlock::Create(context, "entry", module->getFunction("main"));
     builder.SetInsertPoint(mainBlock);
 
+    TypeManager::create(&builder, module, "Nil", KAPRINO_VOID_TY(module));
     TypeManager::create(&builder, module, "Text", KAPRINO_INT8_PTR_TY(module));
     TypeManager::create(&builder, module, "B", KAPRINO_BOOL_TY(module));
     TypeManager::create(&builder, module, "R", KAPRINO_DOUBLE_TY(module));
