@@ -25,11 +25,8 @@ f(x, y) = x * y + x + y + 1.0 (R, R -> R).
 #func test() (Nil -> R)
 |>
     #let a = 0 (<- Z).
-    #loop
-    |>
-        #print "Dummy loop".
-        #submit 0.0.
-    |>
+    #print "Hey!".
+    #submit 3.14.
 |>
 
 #print test().

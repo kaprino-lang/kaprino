@@ -39,13 +39,11 @@ class LoopStatementObject : StatementObject {
         }
         VariableManager::remove_scope();
 
-        auto loop_reachable = builder->GetInsertBlock() != nullptr;
+        if (!comebackpos.empty()) {
+            comebackpos.pop();
+        }
 
         builder->SetInsertPoint(mergeblock);
-
-        if (!loop_reachable) {
-            builder->CreateUnreachable();
-        }
     }
 };
 
