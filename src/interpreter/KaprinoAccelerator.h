@@ -69,6 +69,12 @@
 //
 
 #define KAPRINO_RM_FILE_EXT(file_path) (file_path).substr(0, (file_path).find_last_of("."))
+#define KAPRINO_PATH_ENV "KAPRINOPKG"
+#ifdef _WIN32
+#   define KAPRINO_ENV_SPLIT_CHAR ";"
+#else
+#   define KAPRINO_ENV_SPLIT_CHAR ":"
+#endif
 
 //
 // ------ Cast ------

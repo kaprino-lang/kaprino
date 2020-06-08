@@ -3,8 +3,8 @@
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
+#include "../../DependencySolver.h"
 #include "../../KaprinoAccelerator.h"
-#include "../../PackagePathManager.h"
 #include "../../StatementVisitor.h"
 
 std::vector<StatementObject*>* ParseFile(std::string text);
@@ -28,18 +28,7 @@ antlrcpp::Any StatementVisitor::visitRequireStatement(KaprinoParser::RequireStat
 
     KAPRINO_LOG("Begin reading package: " << package_name);
 
-    PackagePathManager pm(package_name);
-
-    auto filename = pm.find();
-
-    std::ifstream input_file(filename);
-
-    std::ostringstream ss;
-    ss << input_file.rdbuf();
-    std::string input_text;
-    input_text = ss.str();
-
-    statementObj->statements = ParseFile(input_text);
+    statementObj->statements = DependencySolver::importRequirePackage(package_name);
 
     KAPRINO_LOG("End reading package: " << package_name);
 
