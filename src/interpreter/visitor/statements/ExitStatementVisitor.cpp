@@ -3,11 +3,8 @@
 #include <stack>
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
-#include "../../abstructs/ExprObject.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../StatementVisitor.h"
-#include "../../TypeManager.h"
-#include "../../VariableManager.h"
 
 class LoopStatementObject : StatementObject {
    public:
