@@ -88,8 +88,13 @@ std::string DependencySolver::checkdirs(std::string package_name, std::string en
 }
 
 std::vector<std::string> DependencySolver::getdirs(std::string env) {
-    size_t pos = 0;
     std::vector<std::string> pathes;
+    if (env.find(KAPRINO_ENV_SPLIT_CHAR) == std::string::npos) {
+        pathes.push_back(env);
+        return pathes;
+    }
+
+    size_t pos = 0;
     while ((pos = env.find(KAPRINO_ENV_SPLIT_CHAR)) != std::string::npos) {
         pathes.push_back(env.substr(0, pos));
         env.erase(0, pos + 1);
