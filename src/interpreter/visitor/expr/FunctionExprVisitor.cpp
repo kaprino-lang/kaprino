@@ -2,9 +2,7 @@
 
 #include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../FunctionManager.h"
-#include "../../internallib/InternalFuncs.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
 

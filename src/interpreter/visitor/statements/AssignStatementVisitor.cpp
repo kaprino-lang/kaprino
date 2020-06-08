@@ -4,13 +4,9 @@
 #include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/AssigneeObject.h"
 #include "../../abstructs/ExprObject.h"
-#include "../../abstructs/FunctionTypeObject.h"
 #include "../../abstructs/StatementObject.h"
-#include "../../FunctionManager.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
-#include "../../TypeManager.h"
-#include "../../VariableManager.h"
 
 class AssignStatementObject : StatementObject {
    public:
