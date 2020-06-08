@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 
+#include "DependencySolver.h"
 #include "ExecutableGenerator.h"
 #include "KaprinoAccelerator.h"
 
@@ -64,6 +65,11 @@ std::string EmitExecutable(llvm::Module* module, bool optimize) {
 
     compile_command << " ";
     compile_command << llvmir_path;
+
+    for(auto link_file : DependencySolver::linkFiles) {
+        compile_command << " ";
+        compile_command << link_file;
+    }
 
     KAPRINO_LOG("Execute external tool: " << compile_command.str());
 
