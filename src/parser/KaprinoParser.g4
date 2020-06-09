@@ -16,6 +16,7 @@ program         : statement*
 statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetStatement
                 | LET name=ID LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
                 | assignee ASSIGN assigner=expr finisher # AssignStatement
+                | expr finisher # ExprStatement
                 | ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
                 | FUNC ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET (codeblock | (EXTERN finisher)) # DefineProcessStatement
                 | IF expr codeblock (OTHERWISE codeblock)? # IfStatement
