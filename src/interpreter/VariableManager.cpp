@@ -19,10 +19,8 @@ llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* m
         }
     }
 
-    if (found == nullptr) {
-        KAPRINO_ERR("Try to access a variable which doesn't exist");
-        throw -1;
-    }
+    KAPRINO_ERR("Try to access a variable which doesn't exist");
+    throw -1;
 }
 
 void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value) {
