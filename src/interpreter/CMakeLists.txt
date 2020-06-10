@@ -52,10 +52,12 @@ set(INTERPRETER_SOURCES
 #
 ########################################################
 
-add_executable(kprc ${INTERPRETER_SOURCES} ${PARSER_SOURCES})
+add_executable(kprc ${INTERPRETER_SOURCES} ${ANTLR_KaprinoLexer_CXX_OUTPUTS} ${ANTLR_KaprinoParser_CXX_OUTPUTS})
 
-target_include_directories(kprc PRIVATE ${ANTLR4_IncludePath})
 target_include_directories(kprc PRIVATE ${LLVM_INCLUDE_DIRS})
+
+target_include_directories(kprc PRIVATE ${ANTLR_KaprinoLexer_OUTPUT_DIR})
+target_include_directories(kprc PRIVATE ${ANTLR_KaprinoParser_OUTPUT_DIR})
 
 if(UNIX)
     target_compile_options(kprc PRIVATE -frtti)
@@ -72,15 +74,7 @@ target_compile_definitions(kprc
 ########################################################
 
 target_link_directories(kprc PUBLIC ${ANTLR4_LibPath})
-target_link_libraries(kprc antlr4-runtime)
-if(MSVC)
-    add_custom_command(
-        TARGET kprc POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${ANTLR4_LibPath}/antlr4-runtime.dll
-        $<TARGET_FILE_DIR:kprc>
-    )
-endif()
+target_link_libraries(kprc antlr4_static)
 
 ########################################################
 #

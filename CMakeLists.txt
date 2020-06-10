@@ -6,17 +6,38 @@ set(CMAKE_CXX_STANDARD 17)
 
 ########################################################
 #
-# Dependencies pathes
+# Dependencies LLVM
 #
 ########################################################
 
 find_package(LLVM 9.0.0 REQUIRED)
 
+########################################################
+#
+# Dependencies: Antlr4
+#
+########################################################
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+add_definitions(-DANTLR4CPP_STATIC)
+set(ANTLR4_WITH_STATIC_CRT OFF)
+set(ANTLR_EXECUTABLE "${CMAKE_SOURCE_DIR}/antlr-4.8-complete.jar")
+
+include(ExternalAntlr4Cpp)
+include_directories(${ANTLR4_INCLUDE_DIRS})
+
+find_package(ANTLR REQUIRED)
+
+########################################################
+#
+# Variables to build
+#
+########################################################
+
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
 set(KAPRINO_EMIT_LLVM_IR_ONLY OFF CACHE BOOL "Generate LLVM IR and finish program")
-set(ANTLR4_IncludePath "" CACHE STRING "ANTLR4 include files")
-set(ANTLR4_LibPath "" CACHE STRING "ANTLR4 library files")
 
 ########################################################
 #
