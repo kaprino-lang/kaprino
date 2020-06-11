@@ -56,6 +56,7 @@ add_executable(kprc ${INTERPRETER_SOURCES} ${ANTLR_KaprinoLexer_CXX_OUTPUTS} ${A
 
 target_include_directories(kprc PRIVATE ${LLVM_INCLUDE_DIRS})
 
+target_include_directories(kprc PRIVATE ${ANTLR4_INCLUDE_DIRS})
 target_include_directories(kprc PRIVATE ${ANTLR_KaprinoLexer_OUTPUT_DIR})
 target_include_directories(kprc PRIVATE ${ANTLR_KaprinoParser_OUTPUT_DIR})
 
@@ -73,7 +74,6 @@ target_compile_definitions(kprc
 #
 ########################################################
 
-target_link_directories(kprc PUBLIC ${ANTLR4_LibPath})
 target_link_libraries(kprc antlr4_static)
 
 ########################################################

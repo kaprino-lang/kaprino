@@ -21,11 +21,11 @@ find_package(LLVM 9.0.0 REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 add_definitions(-DANTLR4CPP_STATIC)
+
 set(ANTLR4_WITH_STATIC_CRT OFF)
-set(ANTLR_EXECUTABLE "${CMAKE_SOURCE_DIR}/antlr-4.8-complete.jar")
+set(ANTLR_EXECUTABLE "${CMAKE_SOURCE_DIR}/antlr-4.8-complete.jar" CACHE FILEPATH "A path to antlr4 executable")
 
 include(ExternalAntlr4Cpp)
-include_directories(${ANTLR4_INCLUDE_DIRS})
 
 find_package(ANTLR REQUIRED)
 
@@ -36,8 +36,7 @@ find_package(ANTLR REQUIRED)
 ########################################################
 
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
-set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "Optimize output")
-set(KAPRINO_EMIT_LLVM_IR_ONLY OFF CACHE BOOL "Generate LLVM IR and finish program")
+set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "[Experimental] Optimize output")
 
 ########################################################
 #
