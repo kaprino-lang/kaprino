@@ -2,10 +2,10 @@
 #include <vector>
 #include <stack>
 
-#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../StatementVisitor.h"
 #include "../../VariableManager.h"
+#include "KaprinoParserBaseVisitor.h"
 
 class LoopStatementObject : StatementObject {
    public:
