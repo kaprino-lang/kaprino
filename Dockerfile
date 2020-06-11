@@ -31,7 +31,7 @@ RUN \
 WORKDIR /tmp/kaprino/build
 
 RUN \
-    cmake .. -G Ninja \
+    cmake .. -G Ninja; \
     ninja; \
     ninja install;
 
