@@ -25,7 +25,9 @@ std::string EmitLLVMIR(llvm::Module* module, bool optimize) {
 std::string EmitBitcode(llvm::Module* module, bool optimize) {
     auto llvmir_path = module->getName().str();
 
-    auto bitcode_path = KAPRINO_RM_FILE_EXT(llvmir_path) + ".bc";
+    auto bitcode_path = std::filesystem::path(llvmir_path)
+        .replace_extension(".bc")
+        .string();
 
     std::error_code error_code;
     llvm::raw_fd_ostream dest(bitcode_path, error_code, llvm::sys::fs::OF_None);
@@ -45,17 +47,21 @@ std::string EmitExecutable(llvm::Module* module, bool optimize) {
 
 #if _WIN32
 
-    auto executable_path = KAPRINO_RM_FILE_EXT(module->getName().str()) + ".exe";
+    auto executable_path = std::filesystem::path(llvmir_path)
+        .replace_extension(".exe")
+        .string();
 
 #else
 
-    auto executable_path = KAPRINO_RM_FILE_EXT(module->getName().str());
+    auto executable_path = std::filesystem::path(llvmir_path)
+        .replace_extension("")
+        .string();
 
 #endif
 
     std::ostringstream compile_command;
     compile_command << "clang -o ";
-    compile_command << executable_path;
+    compile_command << "\"" << executable_path << "\"";
 
 #if _WIN32
 
@@ -64,11 +70,11 @@ std::string EmitExecutable(llvm::Module* module, bool optimize) {
 #endif
 
     compile_command << " ";
-    compile_command << llvmir_path;
+    compile_command << "\"" << llvmir_path << "\"";
 
     for(auto link_file : DependencySolver::linkFiles) {
         compile_command << " ";
-        compile_command << link_file;
+        compile_command << "\"" << link_file << "\"";
     }
 
     KAPRINO_LOG("Execute external tool: " << compile_command.str());

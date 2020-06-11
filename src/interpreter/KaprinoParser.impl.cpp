@@ -56,7 +56,9 @@ int main_internal(int argc, const char* argv[]) {
 
     KAPRINO_LOG("Parsing succeeded");
 
-    std::string output_file_path = KAPRINO_RM_FILE_EXT(input_file_path) + ".ll";
+    auto output_file_path = std::filesystem::path(input_file_path)
+        .replace_extension(".ll")
+        .string();
 
     GenerateCode(programObject, output_file_path);
 }

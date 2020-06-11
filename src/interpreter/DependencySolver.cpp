@@ -16,7 +16,9 @@ std::vector<StatementObject*>* DependencySolver::importRequirePackage(std::strin
     auto file_name = findPackageFile(require_package);
     statements = readFile(file_name);
 
-    auto llvmir_name = KAPRINO_RM_FILE_EXT(file_name) + ".impl.ll";
+    auto llvmir_name = std::filesystem::path(file_name)
+        .replace_extension(".impl.ll")
+        .string();
     if (std::filesystem::exists(llvmir_name)) {
         linkFiles.push_back(llvmir_name);
     }
