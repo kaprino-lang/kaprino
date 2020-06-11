@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../parser/KaprinoParserBaseVisitor.h"
+#include "KaprinoParserBaseVisitor.h"
 
 class StatementVisitor : public KaprinoParserBaseVisitor {
    public:

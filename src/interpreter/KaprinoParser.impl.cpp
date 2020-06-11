@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "../parser/KaprinoLexer.h"
-#include "../parser/KaprinoParser.h"
+#include "KaprinoLexer.h"
+#include "KaprinoParser.h"
 #include "abstructs/StatementObject.h"
 #include "ArgsManager.h"
 #include "ExecutableGenerator.h"
