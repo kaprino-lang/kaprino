@@ -1,3 +1,8 @@
-#require "function-statement".
+#require "stdlib/terminal".
 
-#print f(3.0, 5.0).
+#let x = "Hey!" (<- Text).
+
+printText(x).
+
+x := readText().
+printText(x).

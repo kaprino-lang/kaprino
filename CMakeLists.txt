@@ -53,3 +53,11 @@ include(${CMAKE_SOURCE_DIR}/src/parser/CMakeLists.txt)
 ########################################################
 
 include(${CMAKE_SOURCE_DIR}/src/interpreter/CMakeLists.txt)
+
+########################################################
+#
+# Build standard libraries
+#
+########################################################
+
+include(${CMAKE_SOURCE_DIR}/src/stdlib/CMakeLists.txt)
