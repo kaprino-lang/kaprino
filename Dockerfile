@@ -55,6 +55,7 @@ RUN \
         clang \
         musl-dev \
         gcc; \
+    mkdir /tmp; \
     rm -rf /var/cache/apk/*;
 
 ENV KAPRINOPKG /usr/local/include
