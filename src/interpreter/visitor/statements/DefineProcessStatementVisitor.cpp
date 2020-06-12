@@ -1,7 +1,6 @@
 #include <memory>
 #include <vector>
 
-#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/FunctionTypeObject.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../FunctionManager.h"
@@ -9,6 +8,7 @@
 #include "../../StatementVisitor.h"
 #include "../../TypeManager.h"
 #include "../../VariableManager.h"
+#include "KaprinoParserBaseVisitor.h"
 
 class DefineProcessStatementObject : StatementObject {
    public:

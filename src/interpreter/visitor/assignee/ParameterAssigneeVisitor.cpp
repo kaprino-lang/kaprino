@@ -1,10 +1,10 @@
 #include <stdlib.h>
 
-#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/AssigneeObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
 #include "../../VariableManager.h"
+#include "KaprinoParserBaseVisitor.h"
 
 class ParameterAssigneeObject : AssigneeObject {
    public:

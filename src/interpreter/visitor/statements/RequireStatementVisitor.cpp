@@ -1,11 +1,11 @@
 #include <memory>
 #include <vector>
 
-#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../DependencySolver.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "KaprinoParserBaseVisitor.h"
 
 std::vector<StatementObject*>* ParseFile(std::string text);
 

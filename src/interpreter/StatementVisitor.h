@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../parser/KaprinoParserBaseVisitor.h"
+#include "KaprinoParserBaseVisitor.h"
 
 class StatementVisitor : public KaprinoParserBaseVisitor {
    public:
@@ -9,6 +9,8 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
     virtual antlrcpp::Any visitLetStatement(KaprinoParser::LetStatementContext* ctx) override;
 
     virtual antlrcpp::Any visitAssignStatement(KaprinoParser::AssignStatementContext* ctx) override;
+
+    virtual antlrcpp::Any visitExprStatement(KaprinoParser::ExprStatementContext* ctx) override;
 
     virtual antlrcpp::Any visitDefineFunctionStatement(KaprinoParser::DefineFunctionStatementContext* ctx) override;
 

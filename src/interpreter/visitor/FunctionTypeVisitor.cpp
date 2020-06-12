@@ -1,10 +1,10 @@
 #include <memory>
 #include <vector>
 
-#include "../../parser/KaprinoParserBaseVisitor.h"
 #include "../abstructs/FunctionTypeObject.h"
 #include "../KaprinoAccelerator.h"
 #include "../StatementVisitor.h"
+#include "KaprinoParserBaseVisitor.h"
 
 antlrcpp::Any StatementVisitor::visitFunctionType(KaprinoParser::FunctionTypeContext *ctx) {
     auto obj = new FunctionTypeObject();

@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "../parser/KaprinoLexer.h"
-#include "../parser/KaprinoParser.h"
+#include "KaprinoLexer.h"
+#include "KaprinoParser.h"
 #include "abstructs/StatementObject.h"
 #include "ArgsManager.h"
 #include "ExecutableGenerator.h"
@@ -56,7 +56,9 @@ int main_internal(int argc, const char* argv[]) {
 
     KAPRINO_LOG("Parsing succeeded");
 
-    std::string output_file_path = KAPRINO_RM_FILE_EXT(input_file_path) + ".ll";
+    auto output_file_path = std::filesystem::path(input_file_path)
+        .replace_extension(".ll")
+        .string();
 
     GenerateCode(programObject, output_file_path);
 }
@@ -140,14 +142,8 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
 
     llvm::verifyModule(*module);
 
-#ifdef KAPRINO_EMIT_LLVM_IR_ONLY
-
-    EmitLLVMIR(module, false);
-
-#else
-
     auto optimize = ArgsManager::getFlag("-O");
-    auto llvmir = ArgsManager::getFlag("--emit-llvm");
+    auto llvmir = ArgsManager::getFlag("--llvm-ir");
     auto afterrun = ArgsManager::getFlag("--run") || ArgsManager::getFlag("-r");
 
     KAPRINO_LOG("Optimization: " << (optimize ? "Aggressive" : "Default"));
@@ -155,27 +151,20 @@ void GenerateCode(std::vector<StatementObject*>* programObj, std::string fileNam
     if (llvmir) {
         EmitLLVMIR(module, optimize);
     }
+    else {
+        auto executable_path = EmitExecutable(module, optimize);
 
-    auto executable_path = EmitExecutable(module, optimize);
+        KAPRINO_LOG("Executable generated: " << executable_path);
 
-    KAPRINO_LOG("Executable generated: " << executable_path);
-
-    if (afterrun) {
-        KAPRINO_LOG("------ STARTING ------");
-
+        if (afterrun) {
+            KAPRINO_LOG("------ STARTING ------");
 #if _WIN32
-
-        int retval = system(("call \"" + executable_path + "\"").c_str());
-
+            int retval = system(("call \"" + executable_path + "\"").c_str());
 #else
-
-        int retval = system(executable_path.c_str());
-
+            int retval = system(executable_path.c_str());
 #endif
-
-        KAPRINO_LOG("------ FINISHING ------");
-        KAPRINO_LOG("Executable returns: " << retval);
+            KAPRINO_LOG("------ FINISHING ------");
+            KAPRINO_LOG("Executable returns: " << retval);
+        }
     }
-
-#endif
 }

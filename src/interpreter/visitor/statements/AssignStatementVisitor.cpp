@@ -1,12 +1,12 @@
 #include <memory>
 #include <vector>
 
-#include "../../../parser/KaprinoParserBaseVisitor.h"
 #include "../../abstructs/AssigneeObject.h"
 #include "../../abstructs/ExprObject.h"
 #include "../../abstructs/StatementObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "KaprinoParserBaseVisitor.h"
 
 class AssignStatementObject : StatementObject {
    public:
