@@ -44,18 +44,17 @@ RUN \
 FROM capra314cabra/llvm-alpine-libs:9.0.1
 
 COPY --from=build-env /usr/local/bin/kprc /usr/local/bin/kprc
+COPY --from=build-env /usr/local/include/stdlib /usr/local/include/stdlib
 
 WORKDIR /
 
 RUN \
     apk update; \
-    apk add --no-cache --virtual builddep \
-        wget; \
     apk add --no-cache \
         binutils \
         clang \
         musl-dev \
         gcc; \
-    apk del builddep; \
-    mkdir /tmp; \
     rm -rf /var/cache/apk/*;
+
+ENV KAPRINOPKG /usr/local/include
