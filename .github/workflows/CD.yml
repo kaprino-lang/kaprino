@@ -6,7 +6,7 @@ on:
       - "*"
 
 jobs:
-  test:
+  pushdocker:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -25,3 +25,27 @@ jobs:
           repository: kaprino/kaprino
           tags: ${{ steps.tag_name.outputs.tag }},latest
           push: true
+  build-win:
+    runs-on: "windows-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          git clone https://github.com/llvm/llvm-project.git --depth 1 -b release/9.x
+          cd llvm-project/llvm
+          mkdir build
+          cd build
+          cmake .. -G "MinGW Makefiles" -DLLVM_BUILD_TOOLS=OFF
+          mingw32-make
+          mingw32-make install
+        name: Install LLVM
+      - run: |
+          mkdir build
+          cd build
+          cmake .. -G "MinGW Makefiles"
+          mingw32-make
+        name: Build Kaprino
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "kprc for Windows"
+          path: "./build/**/*"
