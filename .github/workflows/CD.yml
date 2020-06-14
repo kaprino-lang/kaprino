@@ -43,6 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
+          apt install util-linux -y
           chmod +x ./build.sh
           ./build.sh
         name: Build
