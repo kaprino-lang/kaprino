@@ -30,8 +30,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: ./build.ps1
-        name: Build
+      - run: |
+          Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz" -OutFile "llvm-9.0.1.src.tar.xz"
+          7z x ./llvm-9.0.1.src.tar.xz
+          7z x ./llvm-9.0.1.src.tar
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          mingw32-make
+          mingw32-make install
+        name: Install LLVM
+      - run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          mingw32-make
+        name: Build kprc
       - uses: actions/upload-artifact@v2
         name: Publish artifact
         with:
@@ -43,10 +58,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          sudo apt install util-linux -y
-          chmod +x ./build.sh
-          ./build.sh
-        name: Build
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
+          tar xJf llvm-9.0.1.src.tar.xz
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          make
+          make install
+        name: Install LLVM
+      - run: |
+          sudo apt-get install uuid
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          make
+        name: Build kprc
       - uses: actions/upload-artifact@v2
         name: Publish artifact
         with:
