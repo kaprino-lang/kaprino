@@ -30,22 +30,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          git clone https://github.com/llvm/llvm-project.git --depth 1 -b release/9.x
-          cd llvm-project/llvm
-          mkdir build
-          cd build
-          cmake .. -G "MinGW Makefiles" -DLLVM_BUILD_TOOLS=OFF
-          mingw32-make
-          mingw32-make install
-        name: Install LLVM
-      - run: |
-          mkdir build
-          cd build
-          cmake .. -G "MinGW Makefiles"
-          mingw32-make
-        name: Build Kaprino
+      - run: ./build.ps1
+        name: Build
       - uses: actions/upload-artifact@v2
+        name: Publish artifact
         with:
           name: "kprc for Windows"
+          path: "./build/**/*"
+  build-linux:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./build.sh
+        name: Build
+      - uses: actions/upload-artifact@v2
+        name: Publish artifact
+        with:
+          name: "kprc for Ubuntu"
           path: "./build/**/*"
