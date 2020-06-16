@@ -37,21 +37,21 @@ jobs:
           cd llvm-9.0.1.src
           mkdir build
           cd build
-          cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
-          mingw32-make
-          mingw32-make install
+          cmake .. -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          msbuild ALL_BUILD.vcxproj -p:Configuration=Release
+          msbuild INSTALL.vcxproj -p:Configuration=Release
         name: Install LLVM
       - run: |
           mkdir build
           cd build
-          cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
-          mingw32-make
+          cmake .. -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+          msbuild ALL_BUILD.vcxproj -p:Configuration=Release
         name: Build kprc
       - uses: actions/upload-artifact@v2
         name: Publish artifact
         with:
           name: "kprc for Windows"
-          path: "./build/**/*"
+          path: "./build/Release/**/*"
   build-linux:
     runs-on: "ubuntu-latest"
 
@@ -68,7 +68,7 @@ jobs:
           sudo make install
         name: Install LLVM
       - run: |
-          sudo apt-get install uuid
+          sudo apt-get install uuid uuid-dev
           mkdir build
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release
