@@ -57,6 +57,10 @@ jobs:
   build-linux:
     runs-on: "ubuntu-latest"
 
+    env:
+      CXX: g++-8
+      CC: gcc-8
+
     steps:
       - uses: actions/checkout@v2
       - run: |
@@ -65,7 +69,6 @@ jobs:
           cd llvm-9.0.1.src
           mkdir build
           cd build
-          export CXX="g++-8" CC="gcc-8"
           cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
           make
           sudo make install
