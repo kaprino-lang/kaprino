@@ -7,11 +7,11 @@
 
 This is a strongly-typed programming language that tastes like a mathematics.
 
-## Code snippets
+## Code snippets :memo:
 
 Generate squared numbers.
 
-``` C++
+```
 #require "stdlib/terminal".
 
 // Declare and initialize a variable.
@@ -45,7 +45,7 @@ square(a) = a ^ 2.0 (R -> R).
 // 25.000000
 ```
 
-## How to run
+## How to run :computer:
 
 Write a code and save it with the extension, `.kpr`.  
 Now, you can compile it by executing the following command:  
@@ -59,9 +59,9 @@ kprc will generate an executable.
 
 If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino.herokuapp.com/).
 
-## Installation
+## Installation :cd:
 
-### :floppy_disk: Download from release page
+### Download from release page :floppy_disk:
 
 Download achievements from [Release Page](https://github.com/kaprino-lang/kaprino/releases) and add the directory path put it into to PATH.  
 Here is the table of available environments.
@@ -72,11 +72,11 @@ Here is the table of available environments.
 |Windows x64| :heavy_check_mark: |
 |MacOS x64| Coming soon |
 
-### :hammer: Build from sources
+### Build from sources :hammer:
 
-Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/HowtoBuild.md).
+Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/HowToBuild.md).
 
-### :whale: Run kaprino using Docker
+### Run kaprino using Docker :whale:
 
 You can use a docker image which is already installed kaprino.
 
