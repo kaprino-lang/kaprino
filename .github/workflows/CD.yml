@@ -6,17 +6,22 @@ on:
       - "*"
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+  #
+  # Push a docker image.
+  #
+  pushdocker:
+    runs-on: "ubuntu-latest"
 
     steps:
       - uses: actions/checkout@v2
+      #
+      # Get a tag name which is used to release achievements.
+      #
       - uses: olegtarasov/get-tag@v2
         id: tag_name
+      #
+      # Build the sources on a docker image.
+      #
       - uses: docker/build-push-action@v1
         id: buildDocker
         with:
@@ -25,3 +30,102 @@ jobs:
           repository: kaprino/kaprino
           tags: ${{ steps.tag_name.outputs.tag }},latest
           push: true
+  #
+  # Build the sources for windows and publish achievements.
+  #
+  build-win:
+    runs-on: "windows-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      #
+      # Get a tag name which is used to release achievements.
+      #
+      - uses: olegtarasov/get-tag@v2
+        id: tag_name
+      #
+      # Make msbuild avaiable to use from command line.
+      #
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.0
+      #
+      # Install LLVM.
+      #
+      - run: |
+          Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz" -OutFile "llvm-9.0.1.src.tar.xz"
+          7z x ./llvm-9.0.1.src.tar.xz
+          7z x ./llvm-9.0.1.src.tar
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          msbuild ALL_BUILD.vcxproj -p:Configuration=Release
+          msbuild INSTALL.vcxproj -p:Configuration=Release
+        name: Install LLVM
+      #
+      # Build the sources.
+      #
+      - run: |
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DKAPRINO_BUILD_STDLIB=OFF
+          msbuild ALL_BUILD.vcxproj -p:Configuration=Release
+        name: Build kprc
+      #
+      # Publish them.
+      #
+      - uses: actions/upload-artifact@v2
+        name: Publish artifact
+        with:
+          name: "kprc-${{ steps.tag_name.outputs.tag }}-win-x64"
+          path: "./build/Release/**/*"
+  #
+  # Build the sources for Linux and publish achievements.
+  #
+  build-linux:
+    runs-on: "ubuntu-latest"
+    #
+    # Specify the version of the compilers.
+    #
+    env:
+      CXX: g++-8
+      CC: gcc-8
+
+    steps:
+      - uses: actions/checkout@v2
+      #
+      # Get a tag name which is used to release achievements.
+      #
+      - uses: olegtarasov/get-tag@v2
+        id: tag_name
+      #
+      # Install LLVM.
+      #
+      - run: |
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
+          tar xJf llvm-9.0.1.src.tar.xz
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          make
+          sudo make install
+        name: Install LLVM
+      #
+      # Build the sources.
+      #
+      - run: |
+          sudo apt-get install uuid uuid-dev
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DKAPRINO_BUILD_STDLIB=OFF
+          make
+        name: Build kprc
+      #
+      # Publish them.
+      #
+      - uses: actions/upload-artifact@v2
+        name: Publish artifact
+        with:
+          name: "kprc-${{ steps.tag_name.outputs.tag }}-linux-x64"
+          path: "./build/**/*"

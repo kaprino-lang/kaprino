@@ -35,6 +35,7 @@ find_package(ANTLR REQUIRED)
 #
 ########################################################
 
+set(KAPRINO_BUILD_STDLIB ON CACHE BOOL "Build stdlib")
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "[Experimental] Optimize output")
 
@@ -60,4 +61,8 @@ include(${CMAKE_SOURCE_DIR}/src/interpreter/CMakeLists.txt)
 #
 ########################################################
 
-include(${CMAKE_SOURCE_DIR}/src/stdlib/CMakeLists.txt)
+if(KAPRINO_BUILD_STDLIB)
+    include(${CMAKE_SOURCE_DIR}/src/stdlib/CMakeLists.txt)
+else()
+    message(WARNING "[WARN] Disable building stdlib")
+endif()
