@@ -5,106 +5,88 @@
 [![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
 [![CI](https://github.com/kaprino-lang/kaprino/workflows/CI/badge.svg)](https://github.com/kaprino-lang/kaprino/actions?query=workflow%3ACI)
 
-This is a programming language that tastes like a mathematics.  
-I hope this project may have changed your coding life.
+This is a strongly-typed programming language that tastes like a mathematics.
 
-## Example code
+## Code snippets
 
-```
-// An integer variable
-#let i = 0 (<- Z).
+Generate squared numbers.
 
-// A real number variable
-#let r = 0.0 (<- R).
+``` C++
+#require "stdlib/terminal".
 
-// Assign numbers to the variables
-i := 5.
-r := 4.3.
+// Declare and initialize a variable.
+#let x = 1.0 (<- R).
 
-// Print the value.
-#print i + r.
+// Define a function which square a number.
+square(a) = a ^ 2.0 (R -> R).
 
-// Create a branch
-#if i > 3.0 or r > 4
-|>
-    #print "OK!".
-|>
-#otherwise
-|>
-    #print "Error...".
-|>
-
-// Define a function
-f(x, y) = x ^ 2 + y ^ 2 (R, R -> R).
-
-// Run a function.
-#print f(5.1, 6.7).
-
-// Loop
-#let counter = 0 (<- Z).
 #loop
 |>
-    #if counter = 5
+    // Print a squared number.
+    printR(square(x)).
+
+    // Finish the loop.
+    #if x = 5.0
     |>
-        #print "Exit loop".
         #exit.
     |>
-    #print counter.
-    counter := counter + 1.
+    #otherwise
+    |>
+        // Increment the value.
+        x := x + 1.0.
+    |>
 |>
+
+// Output:
+// 1.000000
+// 4.000000
+// 9.000000
+// 16.000000
+// 25.000000
 ```
 
-Write a code and save as `test.kpr`.  
+## How to run
+
+Write a code and save it with the extension, `.kpr`.  
 Now, you can compile it by executing the following command:  
 ("kprc" is the shorteness of "kaprino compiler".)
 
 ```
-$ kprc test.kpr
+$ kprc some-source.kpr
 ```
 
 kprc will generate an executable.
 
 If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino.herokuapp.com/).
 
-## Requirements
-
-- Clang (>=9.0.1)
-- ANTLR4 C++ runtime (>= 4.8)
-
 ## Installation
 
-### Build from sources
+### :floppy_disk: Download from release page
 
-#### Build requirements
+Download achievements from [Release Page](https://github.com/kaprino-lang/kaprino/releases) and add the directory path put it into to PATH.  
+Here is the table of available environments.
 
-- CMake (>=3.15)
-- LLVM (9.0.0,9.0.1)
-- ANTLR4 (>=4.8)
-- ANTLR4 C++ runtime (>= 4.8)
+|OS|Available|
+|---|:---:|
+|Linux x64| :heavy_check_mark: |
+|Windows x64| :heavy_check_mark: |
+|MacOS x64| Coming soon |
 
-Note that you have to make sure able to use `antlr4` command.
+### :hammer: Build from sources
 
-#### How to build
+Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/HowtoBuild.md).
 
-Replace `[path]`s to the pathes in your environment and run it.
-
-```
-$ git clone https://github.com/kaprino-lang/kaprino.git
-$ cd kaprino
-$ mkdir build
-$ cd build
-$ cmake .. -DANTLR4_IncludePath=[path] -DANTLR4_LibPath=[path] -DLLVM_IncludePath=[path] -DLLVM_LibPath=[path]
-$ make
-$ make install
-```
-
-### Run kaprino using Docker
+### :whale: Run kaprino using Docker
 
 You can use a docker image which is already installed kaprino.
 
 ```
 docker run --rm -it kaprino/kaprino:latest
 ```
+
+## Requirements
+
+- Clang (>=9.0.1)
 
 ## License
 
