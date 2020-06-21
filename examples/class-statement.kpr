@@ -1,29 +1,5 @@
 #class Vector2
 |>
-    #let x = 0 (<- R).
-    #let y = 0 (<- R).
-
-    distance() = sqrt(x * x + y * y) (void -> R).
-
-    #process normalized() (void -> void)
-    |>
-        #let dist = distance() (<- R).
-
-        #if dist = 0
-        |>
-            #print "Ops!".
-        |>
-        #otherwise
-        |>
-            x := x / dist.
-            y := y / dist.
-        |>
-    |>
+    #let x (<- R).
+    #let y (<- R).
 |>
-
-#let vec (<- Vector2).
-
-vec_x := 3.
-vec_y := 4.
-
-#print vec_normalized().

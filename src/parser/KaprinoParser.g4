@@ -14,19 +14,23 @@ program         : statement*
                 ;
 
 statement       : LET name=ID (EQUAL expr)? LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetStatement
-                | LET name=ID LEFT_BRACKET function_type RIGHT_BRACKET finisher # LetFuncStatement
                 | assignee ASSIGN assigner=expr finisher # AssignStatement
                 | expr finisher # ExprStatement
                 | ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # DefineFunctionStatement
                 | FUNC ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET (codeblock | (EXTERN finisher)) # DefineProcessStatement
                 | IF expr codeblock (OTHERWISE codeblock)? # IfStatement
                 | LOOP codeblock # LoopStatement
-                | CLASS name=ID codeblock # ClassStatement
+                | CLASS name=ID CLOSER classstatement* CLOSER # ClassStatement
                 | SUBMIT expr? finisher # SubmitStatement
                 | EXIT finisher # ExitStatement
                 | PRINT expr (COMMA expr)* finisher # PrintStatement
                 | READ assignee finisher # ReadStatement
                 | REQUIRE text finisher # RequireStatement
+                ;
+
+classstatement  : LET name=ID LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET finisher # LetCStatement
+                | ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET EQUAL expr LEFT_BRACKET function_type RIGHT_BRACKET finisher # FunctionCStatement
+                | FUNC ID LEFT_BRACKET (ID (COMMA ID)*)? RIGHT_BRACKET LEFT_BRACKET function_type RIGHT_BRACKET (codeblock | (EXTERN finisher)) # ProcessCStatement
                 ;
 
 codeblock       : CLOSER statement* CLOSER # CodeBlockStatement
