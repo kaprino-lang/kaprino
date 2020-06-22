@@ -32,7 +32,9 @@ antlrcpp::Any StatementVisitor::visitLetStatement(KaprinoParser::LetStatementCon
 
     statementObj->name = ctx->name->getText();
     statementObj->type = ctx->types->getText();
-    statementObj->initVal = visit(ctx->expr()).as<ExprObject*>();
+    if (ctx->expr()) {
+        statementObj->initVal = visit(ctx->expr()).as<ExprObject*>();
+    }
 
     return (StatementObject*)statementObj;
 }
