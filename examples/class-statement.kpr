@@ -3,3 +3,12 @@
     #let x (<- R).
     #let y (<- R).
 |>
+
+#let vec (<- Vector2).
+
+vec_x := 3.0.
+vec_y := 4.0.
+
+squaredlength(x, y) = x * x +  y * y (R, R -> R).
+
+#print squaredlength(vec_x, vec_y).

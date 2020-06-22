@@ -9,13 +9,10 @@ void VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, s
     params.push_back({ paramName, allocated });
 }
 
-llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName) {
-    llvm::Value* found;
-
+llvm::AllocaInst* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName) {
     for (auto param : params) {
         if (param.name == paramName) {
-            found = param.alloca_ptr;
-            return found;
+            return param.alloca_ptr;
         }
     }
 

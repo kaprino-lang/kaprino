@@ -13,7 +13,7 @@ struct ParamInfo {
 class VariableManager {
    public:
     static void create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::AllocaInst* allocated);
-    static llvm::Value* getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName);
+    static llvm::AllocaInst* getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName);
     static void store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value);
     static void add_scope();
     static void remove_scope();

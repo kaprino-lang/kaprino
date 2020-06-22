@@ -18,6 +18,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/CodeBlockStatementVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/FunctionTypeVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/ProgramVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/assignee/AccessAssigneeVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/AccessExprVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/AddExprVisitor.cpp"
