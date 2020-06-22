@@ -11,6 +11,7 @@ class ClassPrameterObject {
 class ClassStructureObject {
    public:
     std::vector<ClassPrameterObject*> params;
+    int getIndex(std::string id);
     std::vector<llvm::Type*>* getMemberTypes();
 };
 

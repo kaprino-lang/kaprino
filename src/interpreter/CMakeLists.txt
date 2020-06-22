@@ -19,6 +19,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/FunctionTypeVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/ProgramVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/assignee/ParameterAssigneeVisitor.cpp"
+    "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/AccessExprVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/AddExprVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/BooleanExprVisitor.cpp"
     "${CMAKE_SOURCE_DIR}/src/interpreter/visitor/expr/BooleanOpExprVisitor.cpp"

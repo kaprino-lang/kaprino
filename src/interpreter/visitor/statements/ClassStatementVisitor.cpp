@@ -27,12 +27,13 @@ class ClassStatementObject : StatementObject {
         auto struct_obj = llvm::StructType::create(module->getContext(), name);
         struct_obj->setBody(*structure->getMemberTypes());
 
-        TypeManager::create(builder, module, name, struct_obj);
+        TypeManager::create(builder, module, name, struct_obj, structure);
     }
 };
 
 antlrcpp::Any StatementVisitor::visitClassStatement(KaprinoParser::ClassStatementContext* ctx) {
     auto statementObj = new ClassStatementObject();
+    statementObj->name = ctx->ID()->getText();
     statementObj->statements = new std::vector<CStatementObject*>();
 
     auto statements = ctx->classstatement();

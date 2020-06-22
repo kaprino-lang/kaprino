@@ -60,6 +60,8 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
 
     virtual antlrcpp::Any visitParameterExpr(KaprinoParser::ParameterExprContext* ctx) override;
 
+    virtual antlrcpp::Any visitAccessExpr(KaprinoParser::AccessExprContext* ctx) override;
+
     virtual antlrcpp::Any visitFunctionExpr(KaprinoParser::FunctionExprContext* ctx) override;
 
     virtual antlrcpp::Any visitFunctionType(KaprinoParser::FunctionTypeContext* ctx) override;
