@@ -34,11 +34,11 @@ ClassStructureObject* TypeManager::getstructure(llvm::IRBuilder<>* builder, llvm
     return found->second.second;
 }
 
- bool TypeManager::isDefaultType(llvm::IRBuilder<>* builder, llvm::Module* module, llvm::Value* val) {
+ bool TypeManager::isDefaultType(llvm::IRBuilder<>* builder, llvm::Module* module, llvm::Type* type) {
     return
-        val->getType() == KAPRINO_BOOL_PTR_TY(module) ||
-        val->getType() == KAPRINO_INT64_PTR_TY(module) ||
-        val->getType() == KAPRINO_DOUBLE_PTR_TY(module);
+        type == KAPRINO_BOOL_PTR_TY(module) ||
+        type == KAPRINO_INT64_PTR_TY(module) ||
+        type == KAPRINO_DOUBLE_PTR_TY(module);
 }
 
 std::unordered_map<std::string, std::pair<llvm::Type*, ClassStructureObject*>> TypeManager::types;
