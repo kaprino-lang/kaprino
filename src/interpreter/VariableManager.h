@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "KaprinoAccelerator.h"
+#include "TypeManager.h"
 
 struct ParamInfo {
     std::string name;
@@ -12,6 +13,7 @@ struct ParamInfo {
 
 class VariableManager {
    public:
+    static llvm::Value* create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Type* type);
     static void create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* allocated);
     static llvm::Value* getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName);
     static void store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value);

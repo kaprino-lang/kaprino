@@ -3,6 +3,20 @@
 #include "VariableManager.h"
 #include "KaprinoAccelerator.h"
 
+llvm::Value* VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Type* type) {
+    llvm::AllocaInst* allocated;
+    if (TypeManager::isDefaultType(builder, module, type->getPointerTo())) {
+        allocated = builder->CreateAlloca(type);
+    }
+    else {
+        auto content = builder->CreateAlloca(type->getPointerElementType());
+        allocated = builder->CreateAlloca(type);
+        builder->CreateStore(content, allocated);
+    }
+    VariableManager::create(builder, module, paramName, allocated);
+    return allocated;
+}
+
 void VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* allocated) {
     KAPRINO_LOG("Allocated " << paramName);
 
