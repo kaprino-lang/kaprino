@@ -37,6 +37,7 @@ codeblock       : CLOSER statement* CLOSER # CodeBlockStatement
                 ;
 
 expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
+                | expr UNDERBAR ID # AccessExpr
                 | expr uparrow_op expr # UpArrowExpr
                 | expr mul_op expr # MulExpr
                 | expr add_op expr # AddExpr
@@ -48,7 +49,6 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | text # TextExpr
                 | const_bool # BooleanExpr
                 | name=ID # ParameterExpr
-                | expr UNDERBAR ID # AccessExpr
                 | ID LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionExpr
                 ;
 
