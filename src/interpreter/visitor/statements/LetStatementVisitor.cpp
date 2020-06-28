@@ -15,14 +15,11 @@ class LetStatementObject : StatementObject {
     ExprObject* initVal;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        llvm::AllocaInst* allocated;
-        allocated = builder->CreateAlloca(
-            TypeManager::gettype(builder, module, type)
-        );
-        VariableManager::create(builder, module, name, allocated);
+        auto ty = TypeManager::gettype(builder, module, type);
+        auto allocated = VariableManager::create(builder, module, name, ty);
         if (initVal) {
             auto init_val = initVal->codegen(builder, module);
-            VariableManager::store(builder, module, name, init_val);
+            builder->CreateStore(init_val, allocated);
         }
     }
 };
@@ -32,7 +29,9 @@ antlrcpp::Any StatementVisitor::visitLetStatement(KaprinoParser::LetStatementCon
 
     statementObj->name = ctx->name->getText();
     statementObj->type = ctx->types->getText();
-    statementObj->initVal = visit(ctx->expr()).as<ExprObject*>();
+    if (ctx->expr()) {
+        statementObj->initVal = visit(ctx->expr()).as<ExprObject*>();
+    }
 
     return (StatementObject*)statementObj;
 }

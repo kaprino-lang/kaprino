@@ -55,14 +55,13 @@ class DefineFunctionStatementObject : StatementObject {
             }
             for (int counter = 0; counter < size; counter++) {
                 auto arg = args[counter];
-                auto allocated = builder->CreateAlloca(arg->getType());
-                builder->CreateStore(arg, allocated);
-                VariableManager::create(
+                auto allocated = VariableManager::create(
                     builder,
                     module,
                     inputParamNames[counter],
-                    allocated
+                    arg->getType()
                 );
+                builder->CreateStore(arg, allocated);
             }
 
             builder->CreateRet(expr->codegen(builder, module));

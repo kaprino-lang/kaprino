@@ -3,6 +3,7 @@
 #include "../../abstructs/ExprObject.h"
 #include "../../StatementVisitor.h"
 #include "../../VariableManager.h"
+#include "../../TypeManager.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class ParameterExprObject : ExprObject {
@@ -10,9 +11,8 @@ class ParameterExprObject : ExprObject {
     std::string name;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto valuePtr = VariableManager::getptr(builder, module, name);
-        auto value = builder->CreateLoad(valuePtr);
-        return value;
+        auto val = VariableManager::getptr(builder, module, name);
+        return builder->CreateLoad(val);
     }
 };
 

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <filesystem>
 #include <iostream>
 #include <random>
 #include <string>
-#include <filesystem>
+#include <unordered_map>
 
 #include "antlr4-runtime.h"
 
@@ -54,8 +55,11 @@
 
 #define KAPRINO_VOID_TY(mod) llvm::Type::getVoidTy((mod)->getContext())
 #define KAPRINO_BOOL_TY(mod) llvm::Type::getInt1Ty((mod)->getContext())
+#define KAPRINO_BOOL_PTR_TY(mod) llvm::Type::getInt1PtrTy((mod)->getContext())
+#define KAPRINO_INT8_TY(mod) llvm::Type::getInt8Ty((mod)->getContext())
 #define KAPRINO_INT8_PTR_TY(mod) llvm::Type::getInt8PtrTy((mod)->getContext())
 #define KAPRINO_INT32_TY(mod) llvm::Type::getInt32Ty((mod)->getContext())
+#define KAPRINO_INT32_PTR_TY(mod) llvm::Type::getInt32PtrTy((mod)->getContext())
 #define KAPRINO_INT64_TY(mod) llvm::Type::getInt64Ty((mod)->getContext())
 #define KAPRINO_INT64_PTR_TY(mod) llvm::Type::getInt64PtrTy((mod)->getContext())
 #define KAPRINO_DOUBLE_TY(mod) llvm::Type::getDoubleTy((mod)->getContext())

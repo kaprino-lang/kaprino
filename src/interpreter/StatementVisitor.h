@@ -20,6 +20,8 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
 
     virtual antlrcpp::Any visitLoopStatement(KaprinoParser::LoopStatementContext* ctx) override;
 
+    virtual antlrcpp::Any visitClassStatement(KaprinoParser::ClassStatementContext* ctx) override;
+
     virtual antlrcpp::Any visitSubmitStatement(KaprinoParser::SubmitStatementContext* ctx) override;
 
     virtual antlrcpp::Any visitExitStatement(KaprinoParser::ExitStatementContext* ctx) override;
@@ -32,7 +34,11 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
 
     virtual antlrcpp::Any visitCodeBlockStatement(KaprinoParser::CodeBlockStatementContext* ctx) override;
 
+    virtual antlrcpp::Any visitLetCStatement(KaprinoParser::LetCStatementContext* ctx) override;
+
     virtual antlrcpp::Any visitBracketExpr(KaprinoParser::BracketExprContext* ctx) override;
+
+    virtual antlrcpp::Any visitAccessExpr(KaprinoParser::AccessExprContext* ctx) override;
 
     virtual antlrcpp::Any visitUpArrowExpr(KaprinoParser::UpArrowExprContext* ctx) override;
 
@@ -61,4 +67,6 @@ class StatementVisitor : public KaprinoParserBaseVisitor {
     virtual antlrcpp::Any visitFunctionType(KaprinoParser::FunctionTypeContext* ctx) override;
 
     virtual antlrcpp::Any visitParameterAssignee(KaprinoParser::ParameterAssigneeContext* ctx) override;
+
+    virtual antlrcpp::Any visitAccessAssignee(KaprinoParser::AccessAssigneeContext* ctx) override;
 };

@@ -4,15 +4,17 @@
 #include <unordered_map>
 
 #include "KaprinoAccelerator.h"
+#include "TypeManager.h"
 
 struct ParamInfo {
     std::string name;
-    llvm::AllocaInst* alloca_ptr;
+    llvm::Value* alloca_ptr;
 };
 
 class VariableManager {
    public:
-    static void create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::AllocaInst* allocated);
+    static llvm::Value* create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Type* type);
+    static void create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* allocated);
     static llvm::Value* getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName);
     static void store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value);
     static void add_scope();

@@ -3,19 +3,30 @@
 #include "VariableManager.h"
 #include "KaprinoAccelerator.h"
 
-void VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::AllocaInst* allocated) {
+llvm::Value* VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Type* type) {
+    llvm::AllocaInst* allocated;
+    if (TypeManager::isDefaultType(builder, module, type->getPointerTo())) {
+        allocated = builder->CreateAlloca(type);
+    }
+    else {
+        auto content = builder->CreateAlloca(type->getPointerElementType());
+        allocated = builder->CreateAlloca(type);
+        builder->CreateStore(content, allocated);
+    }
+    VariableManager::create(builder, module, paramName, allocated);
+    return allocated;
+}
+
+void VariableManager::create(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* allocated) {
     KAPRINO_LOG("Allocated " << paramName);
 
     params.push_back({ paramName, allocated });
 }
 
 llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName) {
-    llvm::Value* found;
-
     for (auto param : params) {
         if (param.name == paramName) {
-            found = param.alloca_ptr;
-            return found;
+            return param.alloca_ptr;
         }
     }
 
