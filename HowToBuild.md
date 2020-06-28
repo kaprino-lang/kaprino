@@ -4,8 +4,9 @@
 
 - CMake (>=3.15)
 - LLVM (9.0.0,9.0.1)
-- JDK (latest)
-- A compiler which supports C++17
+- Open JDK (>=11)
+
+Note that you should prepare a compiler which supports C++17.
 
 ## Build commands
 
