@@ -9,6 +9,6 @@
 vec_x := 3.0.
 vec_y := 4.0.
 
-squaredlength(x, y) = x * x +  y * y (R, R -> R).
+squaredlength(v) = v_x ^ 2 + v_y ^ 2 (Vector2 -> R).
 
-#print squaredlength(vec_x, vec_y).
+#print squaredlength(vec).

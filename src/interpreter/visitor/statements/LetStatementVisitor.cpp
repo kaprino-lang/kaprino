@@ -15,17 +15,8 @@ class LetStatementObject : StatementObject {
     ExprObject* initVal;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        llvm::AllocaInst* allocated;
         auto ty = TypeManager::gettype(builder, module, type);
-        if (TypeManager::isDefaultType(builder, module, ty->getPointerTo())) {
-            allocated = builder->CreateAlloca(ty);
-        }
-        else {
-            auto content = builder->CreateAlloca(ty->getPointerElementType());
-            allocated = builder->CreateAlloca(ty);
-            builder->CreateStore(content, allocated);
-        }
-        VariableManager::create(builder, module, name, allocated);
+        auto allocated = VariableManager::create(builder, module, name, ty);
         if (initVal) {
             auto init_val = initVal->codegen(builder, module);
             builder->CreateStore(init_val, allocated);
