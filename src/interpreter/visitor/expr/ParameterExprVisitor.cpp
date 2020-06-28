@@ -12,12 +12,7 @@ class ParameterExprObject : ExprObject {
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto val = VariableManager::getptr(builder, module, name);
-        if (TypeManager::isDefaultType(builder, module, val)) {
-            return builder->CreateLoad(val);
-        }
-        else {
-            return val;
-        }
+        return builder->CreateLoad(val);
     }
 };
 

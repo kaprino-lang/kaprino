@@ -16,13 +16,19 @@ class LetStatementObject : StatementObject {
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         llvm::AllocaInst* allocated;
-        allocated = builder->CreateAlloca(
-            TypeManager::gettype(builder, module, type)
-        );
+        auto ty = TypeManager::gettype(builder, module, type);
+        if (TypeManager::isDefaultType(builder, module, ty->getPointerTo())) {
+            allocated = builder->CreateAlloca(ty);
+        }
+        else {
+            auto content = builder->CreateAlloca(ty->getPointerElementType());
+            allocated = builder->CreateAlloca(ty);
+            builder->CreateStore(content, allocated);
+        }
         VariableManager::create(builder, module, name, allocated);
         if (initVal) {
             auto init_val = initVal->codegen(builder, module);
-            VariableManager::store(builder, module, name, init_val);
+            builder->CreateStore(init_val, allocated);
         }
     }
 };

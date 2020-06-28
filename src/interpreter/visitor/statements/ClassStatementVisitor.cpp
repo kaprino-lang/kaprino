@@ -27,7 +27,7 @@ class ClassStatementObject : StatementObject {
         auto struct_obj = llvm::StructType::create(module->getContext(), name);
         struct_obj->setBody(*structure->getMemberTypes());
 
-        TypeManager::create(builder, module, name, struct_obj, structure);
+        TypeManager::create(builder, module, name, struct_obj->getPointerTo(), structure);
     }
 };
 

@@ -17,12 +17,7 @@ class AccessExprObject : ExprObject {
         auto structure = TypeManager::getstructure(builder, module, type_name);
         auto index = structure->getIndex(name);
         auto out = builder->CreateStructGEP(val, index);
-        if (TypeManager::isDefaultType(builder, module, out)) {
-            return builder->CreateLoad(out);
-        }
-        else {
-            return out;
-        }
+        return builder->CreateLoad(out);
     }
 };
 

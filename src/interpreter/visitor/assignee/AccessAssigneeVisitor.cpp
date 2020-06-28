@@ -14,10 +14,15 @@ class AccessAssigneeObject : AssigneeObject {
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto ptr = assignee->codegen(builder, module);
         auto type = ptr->getType();
-        auto type_name = type->getPointerElementType()->getStructName().str();
-        auto structure = TypeManager::getstructure(builder, module, type_name);
-        auto index = structure->getIndex(name);
-        auto out = builder->CreateStructGEP(ptr, index);
+        if (TypeManager::isDefaultType(builder, module, type))
+        {
+            KAPRINO_ERR("You cannot use access operator to");
+            throw -1;
+        }
+        auto type_name = type->getPointerElementType()->getPointerElementType()->getStructName().str();
+        auto index = TypeManager::getstructure(builder, module, type_name)->getIndex(name);
+
+        auto out = builder->CreateStructGEP(builder->CreateLoad(ptr), index);
         return out;
     }
 };
