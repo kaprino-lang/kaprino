@@ -152,7 +152,7 @@ jobs:
       # Install LLVM.
       #
       - run: |
-          brew install LLVM
+          brew install LLVM@9.0.0
         name: Install LLVM
       #
       # Build the sources.
