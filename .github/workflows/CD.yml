@@ -152,7 +152,14 @@ jobs:
       # Install LLVM.
       #
       - run: |
-          brew install LLVM@9.0.0
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
+          tar xJf llvm-9.0.1.src.tar.xz
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          make
+          sudo make install
         name: Install LLVM
       #
       # Build the sources.
