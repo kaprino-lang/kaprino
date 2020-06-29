@@ -62,6 +62,7 @@ int main_internal(int argc, const char* argv[]) {
         .string();
 
     GenerateCode(programObject, output_file_path);
+    return 0;
 }
 
 int main(int argc, const char* argv[]) {
