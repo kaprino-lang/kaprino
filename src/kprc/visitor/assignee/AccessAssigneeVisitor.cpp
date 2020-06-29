@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "../../abstructs/AssigneeObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
 #include "../../TypeManager.h"
+#include "AssigneeObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class AccessAssigneeObject : AssigneeObject {

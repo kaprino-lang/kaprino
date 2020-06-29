@@ -1,10 +1,10 @@
 #include <memory>
 #include <vector>
 
-#include "../../abstructs/ExprObject.h"
 #include "../../StatementVisitor.h"
 #include "../../TypeManager.h"
 #include "../../VariableManager.h"
+#include "../expr/ExprObject.h"
 #include "CStatementObject.h"
 #include "ClassStructureObject.h"
 #include "KaprinoParserBaseVisitor.h"

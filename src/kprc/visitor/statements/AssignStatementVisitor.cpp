@@ -1,11 +1,11 @@
 #include <memory>
 #include <vector>
 
-#include "../../abstructs/AssigneeObject.h"
-#include "../../abstructs/ExprObject.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "../assignee/AssigneeObject.h"
+#include "../expr/ExprObject.h"
+#include "StatementObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class AssignStatementObject : StatementObject {

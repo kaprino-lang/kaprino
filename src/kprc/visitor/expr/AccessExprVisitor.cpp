@@ -1,8 +1,8 @@
-#include "../../abstructs/ExprObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
 #include "../../TypeManager.h"
 #include "../cstatements/ClassStructureObject.h"
+#include "ExprObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class AccessExprObject : ExprObject {

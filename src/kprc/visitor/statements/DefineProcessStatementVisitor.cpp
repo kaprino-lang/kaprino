@@ -1,13 +1,13 @@
 #include <memory>
 #include <vector>
 
-#include "../../abstructs/FunctionTypeObject.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../FunctionManager.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
 #include "../../TypeManager.h"
 #include "../../VariableManager.h"
+#include "../FunctionTypeObject.h"
+#include "StatementObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class DefineProcessStatementObject : StatementObject {

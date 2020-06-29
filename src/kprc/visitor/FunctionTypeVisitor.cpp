@@ -1,9 +1,9 @@
 #include <memory>
 #include <vector>
 
-#include "../abstructs/FunctionTypeObject.h"
 #include "../KaprinoAccelerator.h"
 #include "../StatementVisitor.h"
+#include "FunctionTypeObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 antlrcpp::Any StatementVisitor::visitFunctionType(KaprinoParser::FunctionTypeContext *ctx) {

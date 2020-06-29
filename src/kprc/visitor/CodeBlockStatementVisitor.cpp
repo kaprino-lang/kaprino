@@ -1,10 +1,10 @@
 #include <memory>
 #include <vector>
 
-#include "../abstructs/StatementObject.h"
 #include "../KaprinoAccelerator.h"
 #include "../StatementVisitor.h"
 #include "KaprinoParserBaseVisitor.h"
+#include "statements/StatementObject.h"
 
 antlrcpp::Any StatementVisitor::visitCodeBlockStatement(KaprinoParser::CodeBlockStatementContext* ctx) {
     auto statementObj = new std::vector<StatementObject*>();

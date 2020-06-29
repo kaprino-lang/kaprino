@@ -2,8 +2,8 @@
 #include <vector>
 #include <stack>
 
-#include "../../abstructs/StatementObject.h"
 #include "../../StatementVisitor.h"
+#include "StatementObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class LoopStatementObject : StatementObject {

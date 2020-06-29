@@ -1,10 +1,10 @@
 #include <memory>
 #include <vector>
 
-#include "../../abstructs/ExprObject.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "../expr/ExprObject.h"
+#include "StatementObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class LoopStatementObject : StatementObject {

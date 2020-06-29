@@ -3,12 +3,13 @@
 
 #include "KaprinoLexer.h"
 #include "KaprinoParser.h"
-#include "abstructs/StatementObject.h"
+
 #include "ArgsManager.h"
 #include "ExecutableGenerator.h"
 #include "KaprinoAccelerator.h"
 #include "StatementVisitor.h"
 #include "TypeManager.h"
+#include "visitor/statements/StatementObject.h"
 
 using namespace antlr4;
 

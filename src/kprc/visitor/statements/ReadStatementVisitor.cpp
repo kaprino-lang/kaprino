@@ -1,11 +1,11 @@
 #include <memory>
 #include <vector>
 
-#include "../../abstructs/AssigneeObject.h"
-#include "../../abstructs/StatementObject.h"
 #include "../../internallib/InternalFuncs.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "../assignee/AssigneeObject.h"
+#include "StatementObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class ReadStatementObject : StatementObject {

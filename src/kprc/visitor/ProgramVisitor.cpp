@@ -1,9 +1,9 @@
 #include <memory>
 #include <vector>
 
-#include "../abstructs/StatementObject.h"
 #include "../KaprinoAccelerator.h"
 #include "../StatementVisitor.h"
+#include "statements/StatementObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 antlrcpp::Any StatementVisitor::visitProgram(KaprinoParser::ProgramContext *ctx) {

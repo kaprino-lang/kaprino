@@ -1,5 +1,5 @@
-#include "abstructs/StatementObject.h"
 #include "KaprinoAccelerator.h"
+#include "visitor/statements/StatementObject.h"
 
 class DependencySolver {
    public:

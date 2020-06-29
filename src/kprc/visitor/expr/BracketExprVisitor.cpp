@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
-#include "../../abstructs/ExprObject.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "ExprObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class BracketExprObject : ExprObject {

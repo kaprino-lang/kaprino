@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "../../abstructs/ExprObject.h"
 #include "../../FunctionManager.h"
 #include "../../KaprinoAccelerator.h"
 #include "../../StatementVisitor.h"
+#include "ExprObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class FunctionExprObject : ExprObject {

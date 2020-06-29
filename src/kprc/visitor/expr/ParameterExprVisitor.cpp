@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "../../abstructs/ExprObject.h"
 #include "../../StatementVisitor.h"
 #include "../../VariableManager.h"
 #include "../../TypeManager.h"
+#include "ExprObject.h"
 #include "KaprinoParserBaseVisitor.h"
 
 class ParameterExprObject : ExprObject {
