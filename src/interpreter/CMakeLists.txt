@@ -67,7 +67,8 @@ target_include_directories(kprc PRIVATE ${ANTLR_KaprinoParser_OUTPUT_DIR})
 
 if(UNIX)
     target_compile_options(kprc PRIVATE -frtti)
-    target_compile_options(kprc PRIVATE -lstdc++fs)
+
+    target_link_libraries(kprc stdc++fs)
 endif()
 
 target_compile_definitions(kprc
