@@ -50,11 +50,11 @@ include(${CMAKE_SOURCE_DIR}/src/parser/CMakeLists.txt)
 
 ########################################################
 #
-# Build interpreter
+# Build compiler
 #
 ########################################################
 
-include(${CMAKE_SOURCE_DIR}/src/interpreter/CMakeLists.txt)
+include(${CMAKE_SOURCE_DIR}/src/kprc/CMakeLists.txt)
 
 ########################################################
 #
