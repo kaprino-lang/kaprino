@@ -9,6 +9,7 @@ set(INTERPRETER_SOURCES
     "${CMAKE_SOURCE_DIR}/src/kprc/DependencySolver.cpp"
     "${CMAKE_SOURCE_DIR}/src/kprc/ExecutableGenerator.cpp"
     "${CMAKE_SOURCE_DIR}/src/kprc/FunctionManager.cpp"
+    "${CMAKE_SOURCE_DIR}/src/kprc/KaprinoErrorListener.cpp"
     "${CMAKE_SOURCE_DIR}/src/kprc/KaprinoParser.impl.cpp"
     "${CMAKE_SOURCE_DIR}/src/kprc/TypeManager.cpp"
     "${CMAKE_SOURCE_DIR}/src/kprc/VariableManager.cpp"

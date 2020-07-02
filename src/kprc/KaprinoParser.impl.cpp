@@ -7,6 +7,7 @@
 #include "ArgsManager.h"
 #include "ExecutableGenerator.h"
 #include "KaprinoAccelerator.h"
+#include "KaprinoErrorListener.h"
 #include "StatementVisitor.h"
 #include "TypeManager.h"
 #include "visitor/statements/StatementObject.h"
@@ -83,6 +84,13 @@ std::vector<StatementObject*>* ParseFile(std::string text) {
     KaprinoLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
     KaprinoParser parser(&tokens);
+    KaprinoErrorListener errorListener;
+
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(&errorListener);
+
+    parser.removeErrorListeners();
+    parser.addErrorListener(&errorListener);
 
     auto program = parser.program();
 
