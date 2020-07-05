@@ -46,7 +46,7 @@ set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "[Experimental] Optimize output")
 #
 ########################################################
 
-include(${CMAKE_SOURCE_DIR}/src/parser/CMakeLists.txt)
+include(${CMAKE_SOURCE_DIR}/kast/CMakeLists.txt)
 
 ########################################################
 #

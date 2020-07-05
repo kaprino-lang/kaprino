@@ -15,9 +15,9 @@
 #
 # Antlr4
 #
-/src/parser/*
-!/src/parser/*.g4
-!/src/parser/CMakeLists.txt
+/kast/*
+!/kast/*.g4
+!/kast/CMakeLists.txt
 
 ################################################################################################################
 
