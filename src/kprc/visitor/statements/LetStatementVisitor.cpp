@@ -19,6 +19,13 @@ class LetStatementObject : StatementObject {
         auto allocated = VariableManager::create(builder, module, name, ty);
         if (initVal) {
             auto init_val = initVal->codegen(builder, module);
+
+            KAPRINO_ASSERT (
+                allocated->getType()->getPointerTo() == init_val->getType(),
+                "Types are not matched",
+                1
+            );
+
             builder->CreateStore(init_val, allocated);
         }
     }

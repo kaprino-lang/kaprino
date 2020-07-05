@@ -16,6 +16,13 @@ class AssignStatementObject : StatementObject {
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
         auto ptr = assignee->codegen(builder, module);
         auto val = expr->codegen(builder, module);
+
+        KAPRINO_ASSERT(
+            ptr->getType()->getPointerTo() == val->getType(),
+            "Types are not matched",
+            1
+        );
+
         builder->CreateStore(val, ptr);
     }
 };

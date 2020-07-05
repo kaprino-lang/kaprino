@@ -49,6 +49,8 @@
 #   define KAPRINO_LOG_INIT()
 #endif
 
+#define KAPRINO_ASSERT(check, msg, ex) if(!(check)) { KAPRINO_ERR(msg); throw (ex); }
+
 //
 // ------ LLVM type ------
 //
