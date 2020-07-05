@@ -54,7 +54,7 @@ include(${CMAKE_SOURCE_DIR}/src/parser/CMakeLists.txt)
 #
 ########################################################
 
-include(${CMAKE_SOURCE_DIR}/src/kprc/CMakeLists.txt)
+include(${CMAKE_SOURCE_DIR}/kprc/CMakeLists.txt)
 
 ########################################################
 #
