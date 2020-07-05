@@ -5,11 +5,11 @@
 ########################################################
 
 antlr_target(KaprinoLexer
-    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoLexer.g4"
+    "${CMAKE_SOURCE_DIR}/src/kast/src/KaprinoLexer.g4"
     LEXER
 )
 antlr_target(KaprinoParser
-    "${CMAKE_SOURCE_DIR}/src/parser/KaprinoParser.g4"
+    "${CMAKE_SOURCE_DIR}/src/kast/src/KaprinoParser.g4"
     PARSER
     VISITOR
     DEPENDS_ANTLR KaprinoLexer
