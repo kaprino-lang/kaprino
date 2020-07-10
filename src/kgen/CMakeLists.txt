@@ -21,6 +21,7 @@ set(KGEN_SOURCE
 
     "${KGEN_SOURCE_DIR}/visitors/CodeBlockStatementVisitor.cpp"
     "${KGEN_SOURCE_DIR}/visitors/FunctionTypeVisitor.cpp"
+    "${KGEN_SOURCE_DIR}/visitors/KgenErrorListener.cpp"
     "${KGEN_SOURCE_DIR}/visitors/ProgramVisitor.cpp"
     "${KGEN_SOURCE_DIR}/visitors/assignee/AccessAssigneeVisitor.cpp"
     "${KGEN_SOURCE_DIR}/visitors/assignee/ParameterAssigneeVisitor.cpp"

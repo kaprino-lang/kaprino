@@ -5,6 +5,7 @@ namespace kaprino::kgen {
 
 class DependencySolver {
    public:
+    static std::vector<StatementObject*>* parseFile(std::string text);
     static std::vector<StatementObject*>* importRequirePackage(std::string require_package);
     static std::string findPackageFile(std::string package_name);
     static std::vector<std::string> linkFiles;

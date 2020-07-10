@@ -28,6 +28,9 @@
 #include "llvm/Target/TargetOptions.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
+#include "KaprinoLexer.h"
+#include "KaprinoParser.h"
+
 #include "kgen/NotificationManager.h"
 
 namespace kaprino::kgen {
