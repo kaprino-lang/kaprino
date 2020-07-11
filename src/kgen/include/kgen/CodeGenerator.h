@@ -10,6 +10,7 @@ namespace kaprino::kgen
        public:
         void generate(std::string file_path, llvm::IRBuilder<>* builder, llvm::Module* module);
         void generate(std::vector<StatementObject*>* statements, llvm::IRBuilder<>* builder, llvm::Module* module);
+        std::string getOutFileName(std::string file_path);
 
        private:
         std::string getText(std::string file_path);

@@ -48,6 +48,13 @@ void CodeGenerator::generate(std::vector<StatementObject*>* statements, llvm::IR
     llvm::verifyModule(*module);
 }
 
+std::string CodeGenerator::getOutFileName(std::string file_path) {
+    auto output_file_path = std::filesystem::path(file_path)
+        .replace_extension(".ll")
+        .string();
+    return output_file_path;
+}
+
 std::string CodeGenerator::getText(std::string file_path) {
     std::ifstream input_file(file_path);
 
@@ -55,6 +62,12 @@ std::string CodeGenerator::getText(std::string file_path) {
     ss << input_file.rdbuf();
     std::string input_text;
     input_text = ss.str();
+
+    logger->asrt(
+        !input_file.good(),
+        "Not found input files: \"" + file_path + "\"",
+        file_path, 0, 0
+    );
 
     return input_text;
 }
