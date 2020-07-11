@@ -3,7 +3,9 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <ostream>
 #include <random>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <unordered_map>
