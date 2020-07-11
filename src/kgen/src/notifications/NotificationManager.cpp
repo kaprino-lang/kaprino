@@ -1,19 +1,9 @@
-#if defined(_WIN32) & !defined(KAPRINO_MONOTONE_LOG)
-#   include <windows.h>
-#endif
-
 #include "kgen/KgenAccelerator.h"
 
 namespace kaprino::kgen {
 
 NotificationManager::NotificationManager() {
     handlers = new std::vector<NotificationHandler*>();
-
-#if _WIN32 & !defined(KAPRINO_MONOTONE_LOG)
-
-    SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-
-#endif
 }
 
 void NotificationManager::add_handler(NotificationHandler* handler) {

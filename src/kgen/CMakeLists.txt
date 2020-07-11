@@ -102,32 +102,6 @@ target_link_libraries(kgen ${LLVM_LIBS})
 
 ########################################################
 #
-# Make output monotone.
-#
-########################################################
-
-if(${KAPRINO_MONOTONE_LOG})
-    message(WARNING "[WARN] Make stdout monotone")
-    target_compile_definitions(kgen
-        PRIVATE KAPRINO_MONOTONE_LOG
-    )
-endif()
-
-########################################################
-#
-# Define kaprino, the application which we want to get.
-#
-########################################################
-
-if(${KAPRINO_OPTIMIZER_ON})
-    message(WARNING "[EXPERIMENTAL] Optimizer on")
-    target_compile_definitions(kgen
-        PRIVATE KAPRINO_OPTIMIZER_ON
-    )
-endif()
-
-########################################################
-#
 # Create install rule
 #
 ########################################################
