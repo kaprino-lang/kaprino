@@ -8,6 +8,8 @@ set(KGEN_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/kgen/include")
 set(KGEN_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/kgen/src")
 
 set(KGEN_SOURCE
+    "${KGEN_SOURCE_DIR}/CodeGenerator.cpp"
+
     "${KGEN_SOURCE_DIR}/internallib/PowInternal.cpp"
     "${KGEN_SOURCE_DIR}/internallib/PrintfInternal.cpp"
     "${KGEN_SOURCE_DIR}/internallib/ScanfInternal.cpp"
