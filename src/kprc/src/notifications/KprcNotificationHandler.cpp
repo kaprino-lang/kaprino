@@ -20,19 +20,20 @@ KprcNotificationHandler::KprcNotificationHandler() { }
 #endif
 
 void KprcNotificationHandler::log(std::string message, std::string file, int line, int pos) {
-    std::cout << "[LOG] " << message << "(" << file << " line:" << line << " pos:" << pos << ")" << std::endl;
+    std::cout << "[LOG] " << message << " (" << file << " line:" << line << " pos:" << pos << ")" << std::endl;
 }
 
 void KprcNotificationHandler::warn(std::string message, std::string file, int line, int pos) {
-    std::cerr << ANSI_YELLOW_CODE << "[WARNING] " << message << "(" << file << " line:" << line << " pos:" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
+    std::cerr << ANSI_YELLOW_CODE << "[WARNING] " << message << " (" << file << " line:" << line << " pos:" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
 }
 
 void KprcNotificationHandler::error(std::string message, std::string file, int line, int pos) {
-    std::cerr << ANSI_RED_CODE << "[ERROR] " << message << "(" << file << " line:" << line << " pos:" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
+    std::cerr << ANSI_RED_CODE << "[ERROR] " << message << " (" << file << " line:" << line << " pos:" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
 }
 
 void KprcNotificationHandler::use() {
-    auto handler = (kaprino::kgen::NotificationHandler*)new KprcNotificationHandler();
+    auto kprc_handler = new KprcNotificationHandler();
+    auto handler = dynamic_cast<kaprino::kgen::NotificationHandler*>(kprc_handler);
 
     kaprino::kgen::logger->add_handler(handler);
 }

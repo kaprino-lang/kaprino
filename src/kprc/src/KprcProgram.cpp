@@ -95,6 +95,7 @@ int main_internal(int argc, const char* argv[]) {
 };  // namespace kaprino::kprc
 
 int main(int argc, const char* argv[]) {
+    kaprino::kgen::logger = new kaprino::kgen::NotificationManager();
     kaprino::kprc::KprcNotificationHandler::use();
 
     int ret_code = 0;

@@ -45,7 +45,7 @@ namespace kaprino::kgen {
 #define ANSI_RED_CODE "\u001b[31;1m"
 #define ANSI_CLEAN_CODE "\u001b[0m"
 
-    static NotificationManager* logger;
+    extern NotificationManager* logger;
 
 //
 // ------ LLVM type ------

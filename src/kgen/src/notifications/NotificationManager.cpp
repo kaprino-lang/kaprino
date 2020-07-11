@@ -2,6 +2,8 @@
 
 namespace kaprino::kgen {
 
+NotificationManager* logger;
+
 void NotificationHandler::log(std::string message, std::string file, int line, int pos) { }
 void NotificationHandler::warn(std::string message, std::string file, int line, int pos) { }
 void NotificationHandler::error(std::string message, std::string file, int line, int pos) { }
