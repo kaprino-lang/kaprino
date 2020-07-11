@@ -1,3 +1,5 @@
+#pragma once
+
 #include "kgen/KgenAccelerator.h"
 #include "kgen/visitors/StatementObject.h"
 

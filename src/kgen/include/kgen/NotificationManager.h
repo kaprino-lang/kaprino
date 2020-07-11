@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -8,9 +10,9 @@ namespace kaprino::kgen {
 //
 class NotificationHandler {
    public:
-    void log(std::string message, std::string file, int line, int pos);
-    void warn(std::string message, std::string file, int line, int pos);
-    void error(std::string message, std::string file, int line, int pos);
+    virtual void log(std::string message, std::string file, int line, int pos);
+    virtual void warn(std::string message, std::string file, int line, int pos);
+    virtual void error(std::string message, std::string file, int line, int pos);
 };
 
 //
