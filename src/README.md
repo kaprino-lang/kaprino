@@ -2,7 +2,7 @@
 
 Tools or libraries which are produced by kaprino-lang are here.
 
-![Library relationships](https://github.com/kaprino-lang/kaprino/img/tool_description.svg)
+![Library relationships](https://github.com/kaprino-lang/kaprino/blob/master/img/tool_description.svg)
 
 ## kast (Kaprino AST generator)
 
