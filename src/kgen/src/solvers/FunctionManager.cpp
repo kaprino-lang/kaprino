@@ -1,5 +1,5 @@
-#include "kgen/solvers/FunctionManager.h"
 #include "kgen/KgenAccelerator.h"
+#include "kgen/solvers/FunctionManager.h"
 
 namespace kaprino::kgen {
 

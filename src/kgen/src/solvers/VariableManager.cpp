@@ -1,5 +1,6 @@
-#include "kgen/solvers/VariableManager.h"
 #include "kgen/KgenAccelerator.h"
+#include "kgen/solvers/TypeManager.h"
+#include "kgen/solvers/VariableManager.h"
 
 namespace kaprino::kgen {
 

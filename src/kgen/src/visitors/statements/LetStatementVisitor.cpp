@@ -1,6 +1,7 @@
-#include "kgen/visitors/StatementObject.h"
+#include "kgen/solvers/TypeManager.h"
 #include "kgen/solvers/VariableManager.h"
 #include "kgen/visitors/ExprObject.h"
+#include "kgen/visitors/StatementObject.h"
 #include "kgen/visitors/StatementVisitor.h"
 
 namespace kaprino::kgen {

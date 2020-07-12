@@ -1,10 +1,6 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-
 #include "kgen/KgenAccelerator.h"
-#include "kgen/solvers/TypeManager.h"
 
 namespace kaprino::kgen {
 

@@ -1,5 +1,5 @@
-#include "kprc/ExecutableGenerator.h"
 #include "kgen/solvers/DependencySolver.h"
+#include "kprc/ExecutableGenerator.h"
 
 namespace kaprino::kprc {
 

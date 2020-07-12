@@ -1,7 +1,7 @@
 #pragma once
 
-#include "kgen/visitors/StatementObject.h"
 #include "kgen/KgenAccelerator.h"
+#include "kgen/visitors/StatementObject.h"
 
 namespace kaprino::kgen
 {

@@ -1,5 +1,5 @@
-#include "kgen/KgenAccelerator.h"
 #include "kgen/CodeGenerator.h"
+#include "kgen/KgenAccelerator.h"
 #include "kprc/ArgsManager.h"
 #include "kprc/ExecutableGenerator.h"
 #include "kprc/notifications/KprcNotificationHandler.h"

@@ -1,7 +1,7 @@
 #include "kgen/KgenAccelerator.h"
 #include "kgen/solvers/TypeManager.h"
-#include "kgen/visitors/CStatementObject.h"
 #include "kgen/visitors/ClassStructureObject.h"
+#include "kgen/visitors/CStatementObject.h"
 #include "kgen/visitors/StatementObject.h"
 #include "kgen/visitors/StatementVisitor.h"
 

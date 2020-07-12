@@ -1,6 +1,6 @@
 #include "kgen/KgenAccelerator.h"
-#include "kgen/visitors/StatementVisitor.h"
 #include "kgen/visitors/ExprObject.h"
+#include "kgen/visitors/StatementVisitor.h"
 
 namespace kaprino::kgen {
 

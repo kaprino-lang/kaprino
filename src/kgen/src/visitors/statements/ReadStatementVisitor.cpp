@@ -1,8 +1,8 @@
 #include "kgen/KgenAccelerator.h"
-#include "kgen/visitors/StatementVisitor.h"
 #include "kgen/internallib/InternalFuncs.h"
 #include "kgen/visitors/AssigneeObject.h"
 #include "kgen/visitors/StatementObject.h"
+#include "kgen/visitors/StatementVisitor.h"
 
 namespace kaprino::kgen {
 

@@ -1,7 +1,7 @@
 #include "kgen/KgenAccelerator.h"
 #include "kgen/solvers/FunctionManager.h"
-#include "kgen/solvers/VariableManager.h"
 #include "kgen/solvers/TypeManager.h"
+#include "kgen/solvers/VariableManager.h"
 #include "kgen/visitors/ExprObject.h"
 #include "kgen/visitors/FunctionTypeObject.h"
 #include "kgen/visitors/StatementObject.h"

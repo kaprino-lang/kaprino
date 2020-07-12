@@ -1,5 +1,5 @@
-#include "kgen/solvers/TypeManager.h"
 #include "kgen/KgenAccelerator.h"
+#include "kgen/solvers/TypeManager.h"
 
 namespace kaprino::kgen {
 

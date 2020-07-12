@@ -1,6 +1,6 @@
 #pragma once
 
-#include "llvm/IR/IRBuilder.h"
+#include "kgen/KgenAccelerator.h"
 
 namespace kaprino::kgen {
 

@@ -1,8 +1,8 @@
 #include "kgen/KgenAccelerator.h"
 #include "kgen/solvers/DependencySolver.h"
 #include "kgen/visitors/KgenErrorListener.h"
-#include "kgen/visitors/StatementVisitor.h"
 #include "kgen/visitors/StatementObject.h"
+#include "kgen/visitors/StatementVisitor.h"
 
 using namespace antlr4;
 
