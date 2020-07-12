@@ -16,7 +16,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="tool_description.svg">
+   sodipodi:docname="tool_description.svg"
+   inkscape:export-filename="./tool_description.png"
+   inkscape:export-xdpi="38.099998"
+   inkscape:export-ydpi="38.099998">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,9 +29,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.95975414"
-     inkscape:cx="523.61538"
-     inkscape:cy="167.52968"
+     inkscape:zoom="0.8135416"
+     inkscape:cx="472.29655"
+     inkscape:cy="241.28129"
      inkscape:document-units="mm"
      inkscape:current-layer="layer4"
      showgrid="false"
@@ -76,18 +79,7 @@
          id="path966"
          inkscape:connector-curvature="0" />
     </g>
-    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-20.736683,-159.6054)"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       id="flowRoot972"
-       xml:space="preserve"><flowRegion
-         id="flowRegion974"><rect
-           y="69.013512"
-           x="431.44174"
-           height="58.986176"
-           width="128.08426"
-           id="rect976" /></flowRegion><flowPara
-         id="flowPara978">kast</flowPara></flowRoot>    <g
+    <g
        transform="matrix(0.68328053,0,0,1.0120724,134.25191,-170.74458)"
        style="display:inline;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
        id="g970-24">
@@ -103,18 +95,7 @@
          id="path966-04"
          inkscape:connector-curvature="0" />
     </g>
-    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,98.384101,-160.32987)"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none"
-       id="flowRoot972-9"
-       xml:space="preserve"><flowRegion
-         id="flowRegion974-8"><rect
-           y="69.013512"
-           x="431.44174"
-           height="58.986176"
-           width="128.08426"
-           id="rect976-6" /></flowRegion><flowPara
-         id="flowPara978-6">kgen</flowPara></flowRoot>    <g
+    <g
        transform="matrix(0.68328053,0,0,1.0120724,133.59096,-90.443145)"
        style="display:inline;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
        id="g970-24-4">
@@ -137,6 +118,28 @@
        id="path4738"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="94.107117"
+       y="-132.92862"
+       id="text880"><tspan
+         sodipodi:role="line"
+         id="tspan878"
+         x="94.107117"
+         y="-132.92862"
+         style="stroke-width:0.26458332">kast</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="212.32184"
+       y="-133.86664"
+       id="text880-2"><tspan
+         sodipodi:role="line"
+         id="tspan878-6"
+         x="212.32184"
+         y="-133.86664"
+         style="stroke-width:0.26458332">kgen</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
