@@ -1,5 +1,7 @@
 #if defined(_WIN32) & !defined(KAPRINO_MONOTONE_LOG)
+#   define NOMINMAX
 #   include <windows.h>
+#   undef NOMINMAX
 #endif
 
 #include "kgen/KgenAccelerator.h"
