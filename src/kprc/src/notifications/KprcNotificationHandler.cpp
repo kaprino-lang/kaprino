@@ -2,6 +2,7 @@
 #   define NOMINMAX
 #   include <windows.h>
 #   undef NOMINMAX
+#   undef ERROR
 #endif
 
 #include "kgen/KgenAccelerator.h"
