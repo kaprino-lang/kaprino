@@ -1,0 +1,29 @@
+//
+// Declare a class which has two values.
+//
+#class Vector2
+|>
+    #let x (<- R).
+    #let y (<- R).
+|>
+
+//
+// Declare to use a external function.
+//
+#func sqrt(x) (R -> R) extern.
+
+//
+// Define functions which will be used to get the length.
+//
+squaredlength(v) = v_x ^ 2 + v_y ^ 2 (Vector2 -> R).
+length(v) = sqrt(squaredlength(v)) (Vector2 -> R).
+
+//
+// Declare a variable of Vector2 and calculate the length of it.
+//
+#let vec (<- Vector2).
+
+vec_x := 3.0.
+vec_y := 4.0.
+
+#print length(vec).

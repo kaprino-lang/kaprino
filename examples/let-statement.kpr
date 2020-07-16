@@ -1,7 +1,0 @@
-// Expect 3.14 as output.
-
-#print 3.14.
-
-#let a = 3.14 (<- R).
-
-#print a.

@@ -1,0 +1,33 @@
+//
+// Simple calculator
+//
+
+#print "Input two numbers:".
+
+#let x = 0.0 (<- R).
+#let y = 0.0 (<- R).
+
+#read x.
+#read y.
+
+#print x, " + ", y, " = ", x + y.
+#print x, " - ", y, " = ", x - y.
+#print x, " * ", y, " = ", x * y.
+
+#if y = 0
+|>
+    #print "Cannot divide by 0.".
+|>
+#otherwise
+|>
+    #print x, " / ", y, " = ", x / y.
+|>
+
+#if x < 0
+|>
+    #print "Cannnot calculate a power of negative number.".
+|>
+#otherwise
+|>
+    #print x, " ^ ", y, " = ", x ^ y.
+|>

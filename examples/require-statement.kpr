@@ -1,8 +1,0 @@
-#require "stdlib/terminal".
-
-#let x = "Hey!" (<- Text).
-
-printText(x).
-
-x := readText().
-printText(x).

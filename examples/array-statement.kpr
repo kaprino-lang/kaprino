@@ -1,3 +1,0 @@
-#let array (Z100 -> R).
-
-array(0) := 0.0.
