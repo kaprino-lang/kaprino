@@ -3,34 +3,34 @@
 //
 // Declare and initialize a variable.
 //
-#let x = 1.0 (<- R).
-#let limit = 5.0 (<- R).
+#let x = 1.0 (<- R)
+#let limit = 5.0 (<- R)
 
 //
 // Define a function which square a number.
 //
-square(a) = a ^ 2.0 (R -> R).
+square(a) = a ^ 2.0 (R -> R)
 
 #loop
 |>
     //
     // Print a squared number.
     //
-    printR(square(x)).
+    printR(square(x))
 
     //
     // Exit a loop when x is as same as limit.
     //
     #if x = limit
     |>
-        #exit.
+        #exit
     |>
     #otherwise
     |>
         //
         // Increment the value.
         //
-        x := x + 1.0.
+        x := x + 1.0
     |>
 |>
 

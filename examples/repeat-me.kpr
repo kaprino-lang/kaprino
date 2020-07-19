@@ -1,14 +1,14 @@
 //
 // Import the package for controlling terminal.
 //
-#require "stdlib/terminal".
+#require "stdlib/terminal"
 
-#let text = "Input a word here!" (<- Text).
+#let text = "Input a word here!" (<- Text)
 
-printText(text).
+printText(text)
 
 //
 // Read a line and print it.
 //
-text := readText().
-printText(text).
+text := readText()
+printText(text)
