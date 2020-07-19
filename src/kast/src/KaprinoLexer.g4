@@ -67,8 +67,6 @@ REAL_NUMBER     : DIGIT+ '.' DIGIT+
 //
 // Reserved symbol
 //
-DOT     : '.'
-        ;
 UNDERBAR: '_'
         ;
 CLOSER  : '|>'
