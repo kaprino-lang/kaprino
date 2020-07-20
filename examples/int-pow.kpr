@@ -3,27 +3,27 @@
 //
 #func intpow(x, y) (Z, Z -> Z)
 |>
-    #let a = 1 (<- Z).
-    #let b = 0 (<- Z).
+    #let a = 1 (<- Z)
+    #let b = 0 (<- Z)
 
     #if y < 0
     |>
-        #submit 0.
+        #submit 0
     |>
 
     #loop
     |>
         #if  b = y
         |>
-            #submit a.
+            #submit a
         |>
-        a := a * x.
-        b := b + 1.
+        a := a * x
+        b := b + 1
     |>
 |>
 
 //
 // Try it.
 //
-#print "3 ^ 4 = ", intpow(3, 4).
-#print "5 ^ 2 = ", intpow(5, 2).
+#print "3 ^ 4 = ", intpow(3, 4)
+#print "5 ^ 2 = ", intpow(5, 2)
