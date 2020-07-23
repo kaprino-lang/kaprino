@@ -9,41 +9,7 @@ This is a strongly-typed programming language that tastes like a mathematics.
 
 ## Code snippets :memo:
 
-Generate squared numbers.
-
-```
-#require "stdlib/terminal".
-
-// Declare and initialize a variable.
-#let x = 1.0 (<- R).
-
-// Define a function which square a number.
-square(a) = a ^ 2.0 (R -> R).
-
-#loop
-|>
-    // Print a squared number.
-    printR(square(x)).
-
-    // Finish the loop.
-    #if x = 5.0
-    |>
-        #exit.
-    |>
-    #otherwise
-    |>
-        // Increment the value.
-        x := x + 1.0.
-    |>
-|>
-
-// Output:
-// 1.000000
-// 4.000000
-// 9.000000
-// 16.000000
-// 25.000000
-```
+![Code example](https://github.com/kaprino-lang/kaprino/blob/master/img/code_example1.png)
 
 ## How to run :computer:
 
