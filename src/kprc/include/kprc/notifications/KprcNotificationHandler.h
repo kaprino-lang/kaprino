@@ -1,4 +1,4 @@
-#include "kgen/NotificationManager.h"
+#include "kgen/notifications/NotificationManager.h"
 
 namespace kaprino::kprc {
 

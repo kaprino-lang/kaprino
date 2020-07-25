@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -21,8 +22,17 @@ class NotificationHandler {
 class NotificationManager {
    public:
     NotificationManager();
+
+    int line;
+    int pos;
+
     void add_handler(NotificationHandler* handler);
     void remove_handler(NotificationHandler* handler);
+    void move_pos(int line, int pos);
+    void log(std::string message);
+    void warn(std::string message);
+    void error(std::string message);
+    void asrt(bool expr, std::string message);
     void log(std::string message, std::string file, int line, int pos);
     void warn(std::string message, std::string file, int line, int pos);
     void error(std::string message, std::string file, int line, int pos);
