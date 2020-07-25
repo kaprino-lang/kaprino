@@ -42,4 +42,6 @@ class NotificationManager {
     std::vector<NotificationHandler*>* handlers;
 };
 
+extern NotificationManager* logger;
+
 };  // namespace kaprino::kgen
