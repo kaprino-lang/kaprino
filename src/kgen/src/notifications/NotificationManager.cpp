@@ -27,6 +27,27 @@ void NotificationManager::remove_handler(NotificationHandler* handler) {
     handlers->erase(item);
 }
 
+void NotificationManager::move_pos(int line, int pos) {
+    this->line = line;
+    this->pos = pos;
+}
+
+void NotificationManager::log(std::string message) {
+    log(message, depsolver.files.top(), line, pos);
+}
+
+void NotificationManager::warn(std::string message) {
+    warn(message, depsolver.files.top(), line, pos);
+}
+
+void NotificationManager::error(std::string message) {
+    error(message, depsolver.files.top(), line, pos);
+}
+
+void NotificationManager::asrt(bool expr, std::string message) {
+    asrt(expr, message, depsolver.files.top(), line, pos);
+}
+
 void NotificationManager::log(std::string message, std::string file, int line, int pos) {
     for(auto handle : *handlers) {
         handle->log(message, file, line, pos);
@@ -46,7 +67,7 @@ void NotificationManager::error(std::string message, std::string file, int line,
 }
 
 void NotificationManager::asrt(bool expr, std::string message, std::string file, int line, int pos) {
-    if (expr) {
+    if (!expr) {
         error(message, file, line, pos);
         throw -1;
     }

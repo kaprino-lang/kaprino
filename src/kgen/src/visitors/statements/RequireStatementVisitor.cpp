@@ -31,7 +31,7 @@ antlrcpp::Any StatementVisitor::visitRequireStatement(KaprinoParser::RequireStat
         0
     );
 
-    statementObj->statements = DependencySolver::importRequirePackage(package_name);
+    statementObj->statements = depsolver.importRequirePackage(package_name);
 
     logger->log(
         "End reading package: " + package_name,

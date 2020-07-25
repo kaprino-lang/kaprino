@@ -5,8 +5,7 @@
 namespace kaprino::kgen {
 
 void CodeGenerator::generate(std::string input_file_path, llvm::IRBuilder<>* builder, llvm::Module* module) {
-    auto input_text = getText(input_file_path);
-    auto statements = DependencySolver::parseFile(input_text);
+    auto statements = depsolver.parseFile(input_file_path);
 
     generate(statements, builder, module);
 }

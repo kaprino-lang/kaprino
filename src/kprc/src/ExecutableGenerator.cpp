@@ -75,7 +75,7 @@ std::string ExecutableGenerator::emitExecutable(llvm::Module* module, bool optim
     compile_command << " ";
     compile_command << "\"" << llvmir_path << "\"";
 
-    for (auto link_file : kaprino::kgen::DependencySolver::linkFiles) {
+    for (auto link_file : kaprino::kgen::depsolver.linkFiles) {
         compile_command << " ";
         compile_command << "\"" << link_file << "\"";
     }
