@@ -19,11 +19,9 @@ class LetStatementObject : StatementObject {
             auto init_val = initVal->codegen(builder, module);
 
             logger->asrt(
-                allocated->getType()->getPointerTo() == init_val->getType(),
-                "Types are not matched",
-                "internal",
-                0,
-                0
+                allocated->getType() == init_val->getType() ||
+                    allocated->getType()->getPointerElementType() == init_val->getType(),
+                "Types are not matched"
             );
 
             builder->CreateStore(init_val, allocated);

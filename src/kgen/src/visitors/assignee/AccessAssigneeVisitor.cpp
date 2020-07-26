@@ -16,7 +16,7 @@ class AccessAssigneeObject : AssigneeObject {
         auto type = ptr->getType();
         if (TypeManager::isDefaultType(builder, module, type)) {
             logger->error(
-                "You cannot use access operator to",
+                "The type named \"" + type->getStructName().str() + "\" has no members.",
                 "internal",
                 0,
                 0

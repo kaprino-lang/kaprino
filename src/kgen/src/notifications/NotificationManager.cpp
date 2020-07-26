@@ -20,7 +20,7 @@ void NotificationManager::remove_handler(NotificationHandler* handler) {
     auto item = std::find(handlers->begin(), handlers->end(), handler);
 
     logger->asrt(
-        item == handlers->end(),
+        item != handlers->end(),
         "Failed to remove NotificationHandler", "internal", 0, 0
     );
 

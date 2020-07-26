@@ -16,11 +16,9 @@ class AssignStatementObject : StatementObject {
         auto val = expr->codegen(builder, module);
 
         logger->asrt(
-            ptr->getType()->getPointerTo() == val->getType(),
-            "Types are not matched",
-            "internal",
-            0,
-            0
+            ptr->getType() == val->getType() ||
+                ptr->getType()->getPointerElementType() == val->getType(),
+            "Types are not matched"
         );
 
         builder->CreateStore(val, ptr);

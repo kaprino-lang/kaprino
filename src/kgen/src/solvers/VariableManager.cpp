@@ -29,28 +29,14 @@ llvm::Value* VariableManager::getptr(llvm::IRBuilder<>* builder, llvm::Module* m
     }
 
     logger->error(
-        "Try to access a variable which doesn't exist",
-        "internal",
-        0,
-        0
+        "Not found a variable whose name is \"" + paramName + "\""
     );
     throw -1;
 }
 
 void VariableManager::store(llvm::IRBuilder<>* builder, llvm::Module* module, std::string paramName, llvm::Value* value) {
-    for (auto param : params) {
-        if (param.name == paramName) {
-            builder->CreateStore(value, param.alloca_ptr);
-            return;
-        }
-    }
-
-    logger->error(
-        "Try to access a variable which doesn't exist",
-        "internal",
-        0,
-        0
-    );
+    auto ptr = getptr(builder, module, paramName);
+    builder->CreateStore(value, ptr);
 }
 
 void VariableManager::add_scope() {
