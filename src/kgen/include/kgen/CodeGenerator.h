@@ -13,7 +13,6 @@ namespace kaprino::kgen
         std::string getOutFileName(std::string file_path);
 
        private:
-        std::string getText(std::string file_path);
         void removeUnreachableCode(llvm::IRBuilder<>* builder, llvm::Module* module);
     };
 
