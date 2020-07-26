@@ -34,6 +34,18 @@ int main_internal(int argc, const char* argv[]) {
     }
 
     auto input_file_path = ArgsManager::getFile();
+    input_file_path = std::filesystem::absolute(input_file_path)
+        .string();
+
+    kaprino::kgen::depsolver.files.push(input_file_path);
+
+    auto input_directory = std::filesystem::path(input_file_path)
+        .parent_path()
+        .string();
+
+    kaprino::kgen::depsolver
+        .searchDirectories
+        .push_back(input_directory);
 
     llvm::LLVMContext context;
     llvm::IRBuilder<> builder(context);
@@ -106,7 +118,7 @@ int main(int argc, const char* argv[]) {
     }
 
     kaprino::kgen::logger->log(
-        "Kaprino returns: " + ret_code,
+        "Kaprino returns: " + std::to_string(ret_code),
         "internal", 0, 0
     );
     return 0;
