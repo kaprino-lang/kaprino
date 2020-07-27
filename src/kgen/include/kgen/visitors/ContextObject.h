@@ -11,7 +11,7 @@ class ContextObject {
         pos = ctx->getStart()->getStartIndex();
     }
 
-   private:
+   protected:
     int line;
     int pos;
 };
