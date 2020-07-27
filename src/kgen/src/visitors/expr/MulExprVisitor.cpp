@@ -4,13 +4,15 @@
 
 namespace kaprino::kgen {
 
-class MulExprObject : ExprObject {
+class MulExprObject : public ExprObject {
    public:
     bool isMul;
     ExprObject* left;
     ExprObject* right;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto l = left->codegen(builder, module);
         auto r = right->codegen(builder, module);
         if (KAPRINO_CONFIRM_INT64(module, l, r)) {
@@ -30,6 +32,7 @@ class MulExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitMulExpr(KaprinoParser::MulExprContext* ctx) {
     auto exprObj = new MulExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->left = visit(ctx->expr(0)).as<ExprObject*>();
     exprObj->right = visit(ctx->expr(1)).as<ExprObject*>();
     exprObj->isMul = ctx->mul_op()->getText() == "*";

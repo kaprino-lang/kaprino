@@ -5,7 +5,7 @@
 
 namespace kaprino::kgen {
 
-class IfStatementObject : StatementObject {
+class IfStatementObject : public StatementObject {
    public:
     ExprObject* val;
     bool hasOtherwise;
@@ -15,6 +15,8 @@ class IfStatementObject : StatementObject {
     static long long branch_count;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto match = val->codegen(builder, module);
 
         auto parent = builder->GetInsertBlock()->getParent();
@@ -62,6 +64,7 @@ long long IfStatementObject::branch_count = 0LL;
 antlrcpp::Any StatementVisitor::visitIfStatement(KaprinoParser::IfStatementContext* ctx) {
     auto statementObj = new IfStatementObject();
 
+    statementObj->setContextPosition(ctx);
     statementObj->val = visit(ctx->expr()).as<ExprObject*>();
 
     auto codeblocks = ctx->codeblock();

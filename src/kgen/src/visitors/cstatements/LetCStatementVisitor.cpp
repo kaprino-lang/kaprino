@@ -7,12 +7,14 @@
 
 namespace kaprino::kgen {
 
-class LetCStatementObject : CStatementObject {
+class LetCStatementObject : public CStatementObject {
    public:
     std::string name;
     std::string type;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module, ClassStructureObject* members) override {
+        logger->move_pos(line, pos);
+
         auto type_obj = TypeManager::gettype(builder, module, type);
         auto param_obj = new ClassPrameterObject();
         param_obj->name = name;
@@ -24,6 +26,7 @@ class LetCStatementObject : CStatementObject {
 antlrcpp::Any StatementVisitor::visitLetCStatement(KaprinoParser::LetCStatementContext* ctx) {
     auto statementObj = new LetCStatementObject();
 
+    statementObj->setContextPosition(ctx);
     statementObj->name = ctx->name->getText();
     statementObj->type = ctx->types->getText();
 

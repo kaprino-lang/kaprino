@@ -4,11 +4,13 @@
 
 namespace kaprino::kgen {
 
-class NumberExprObject : ExprObject {
+class NumberExprObject : public ExprObject {
    public:
     long long value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto llVal = llvm::ConstantInt::get(KAPRINO_INT64_TY(module), value);
 
         return llVal;
@@ -18,6 +20,7 @@ class NumberExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitNumberExpr(KaprinoParser::NumberExprContext* ctx) {
     auto exprObj = new NumberExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->value = atoll(ctx->number()->getText().c_str());
 
     return (ExprObject*)exprObj;

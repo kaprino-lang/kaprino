@@ -5,12 +5,14 @@
 
 namespace kaprino::kgen {
 
-class UpArrowExprObject : ExprObject {
+class UpArrowExprObject : public ExprObject {
    public:
     ExprObject* left;
     ExprObject* right;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto l = left->codegen(builder, module);
         auto r = right->codegen(builder, module);
         auto powFunc = get_pow(builder, module);
@@ -27,6 +29,7 @@ class UpArrowExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitUpArrowExpr(KaprinoParser::UpArrowExprContext* ctx) {
     auto exprObj = new UpArrowExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->left = visit(ctx->expr(0)).as<ExprObject*>();
     exprObj->right = visit(ctx->expr(1)).as<ExprObject*>();
 

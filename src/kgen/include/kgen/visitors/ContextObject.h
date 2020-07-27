@@ -8,7 +8,7 @@ class ContextObject {
    public:
     virtual void setContextPosition(antlr4::ParserRuleContext* ctx) {
         line = ctx->getStart()->getLine();
-        pos = ctx->getStart()->getStartIndex();
+        pos = ctx->getStart()->getCharPositionInLine() + 1;
     }
 
    protected:

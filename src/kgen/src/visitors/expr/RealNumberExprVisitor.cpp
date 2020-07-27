@@ -4,13 +4,14 @@
 
 namespace kaprino::kgen {
 
-class RealNumberExprObject : ExprObject {
+class RealNumberExprObject : public ExprObject {
    public:
     double value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto doubleVal = llvm::ConstantFP::get(KAPRINO_DOUBLE_TY(module), value);
+        logger->move_pos(line, pos);
 
+        auto doubleVal = llvm::ConstantFP::get(KAPRINO_DOUBLE_TY(module), value);
         return doubleVal;
     }
 };
@@ -18,6 +19,7 @@ class RealNumberExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitRealNumberExpr(KaprinoParser::RealNumberExprContext* ctx) {
     auto exprObj = new RealNumberExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->value = atof(ctx->real_number()->getText().c_str());
 
     return (ExprObject*)exprObj;

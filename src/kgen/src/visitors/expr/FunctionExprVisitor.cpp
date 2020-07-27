@@ -5,12 +5,14 @@
 
 namespace kaprino::kgen {
 
-class FunctionExprObject : ExprObject {
+class FunctionExprObject : public ExprObject {
    public:
     std::string name;
     std::vector<ExprObject*> args;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto func = FunctionManager::getfunc(builder, module, name);
         std::vector<llvm::Value*> argVals;
         for (auto arg : args) {
@@ -24,6 +26,7 @@ class FunctionExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitFunctionExpr(KaprinoParser::FunctionExprContext* ctx) {
     auto exprObj = new FunctionExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->name = ctx->ID()->getText();
     for (auto expr : ctx->expr()) {
         exprObj->args.push_back(visit(expr).as<ExprObject*>());

@@ -5,12 +5,14 @@
 
 namespace kaprino::kgen {
 
-class AccessExprObject : ExprObject {
+class AccessExprObject : public ExprObject {
    public:
     ExprObject* expr;
     std::string name;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto val = expr->codegen(builder, module);
         auto type = val->getType();
         auto type_name = type->getPointerElementType()->getStructName().str();
@@ -24,6 +26,7 @@ class AccessExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitAccessExpr(KaprinoParser::AccessExprContext* ctx) {
     auto exprObj = new AccessExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->expr = visit(ctx->expr()).as<ExprObject*>();
     exprObj->name = ctx->ID()->getText();
 

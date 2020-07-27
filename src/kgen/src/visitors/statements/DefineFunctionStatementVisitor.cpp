@@ -9,7 +9,7 @@
 
 namespace kaprino::kgen {
 
-class DefineFunctionStatementObject : StatementObject {
+class DefineFunctionStatementObject : public StatementObject {
    public:
     std::string funcName;
     std::vector<std::string> inputParamNames;
@@ -17,6 +17,8 @@ class DefineFunctionStatementObject : StatementObject {
     ExprObject* expr;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto previousblock = builder->GetInsertBlock();
         VariableManager::add_scope();
         {
@@ -70,6 +72,8 @@ class DefineFunctionStatementObject : StatementObject {
 
 antlrcpp::Any StatementVisitor::visitDefineFunctionStatement(KaprinoParser::DefineFunctionStatementContext* ctx) {
     auto statementObj = new DefineFunctionStatementObject();
+
+    statementObj->setContextPosition(ctx);
 
     auto names = ctx->ID();
     statementObj->funcName = names[0]->getText();

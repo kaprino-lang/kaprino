@@ -4,19 +4,22 @@
 
 namespace kaprino::kgen {
 
-class TextExprObject : ExprObject {
+class TextExprObject : public ExprObject {
    public:
     std::string value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto val = builder->CreateGlobalStringPtr(value);
+        logger->move_pos(line, pos);
 
+        auto val = builder->CreateGlobalStringPtr(value);
         return val;
     }
 };
 
 antlrcpp::Any StatementVisitor::visitTextExpr(KaprinoParser::TextExprContext* ctx) {
     auto exprObj = new TextExprObject();
+
+    exprObj->setContextPosition(ctx);
 
     auto text = ctx->text()->getText();
     exprObj->value = text.substr(1, text.size() - 2);

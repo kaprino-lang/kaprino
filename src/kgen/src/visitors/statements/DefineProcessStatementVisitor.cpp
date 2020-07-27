@@ -8,7 +8,7 @@
 
 namespace kaprino::kgen {
 
-class DefineProcessStatementObject : StatementObject {
+class DefineProcessStatementObject : public StatementObject {
    public:
     std::string funcName;
     std::vector<std::string> inputParamNames;
@@ -16,6 +16,8 @@ class DefineProcessStatementObject : StatementObject {
     std::vector<StatementObject*>* statements;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto previousblock = builder->GetInsertBlock();
         VariableManager::add_scope();
         {
@@ -80,6 +82,8 @@ class DefineProcessStatementObject : StatementObject {
 
 antlrcpp::Any StatementVisitor::visitDefineProcessStatement(KaprinoParser::DefineProcessStatementContext* ctx) {
     auto statementObj = new DefineProcessStatementObject();
+
+    statementObj->setContextPosition(ctx);
 
     auto names = ctx->ID();
     statementObj->funcName = names[0]->getText();
