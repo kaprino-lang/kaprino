@@ -38,7 +38,7 @@ void KprcNotificationHandler::log(std::string message, std::string file, int lin
         std::cout << "[LOG] " << message << std::endl;
     }
     else {
-        std::cout << "[LOG] " << message << " (" << file << " line:" << line << " pos:" << pos << ")" << std::endl;
+        std::cout << "[LOG] " << message << " (" << file << ":" << line << ":" << pos << ")" << std::endl;
     }
 }
 
@@ -47,7 +47,7 @@ void KprcNotificationHandler::warn(std::string message, std::string file, int li
         std::cerr << ANSI_YELLOW_CODE << "[WARNING] " << message << ANSI_CLEAN_CODE << std::endl;
     }
     else {
-        std::cerr << ANSI_YELLOW_CODE << "[WARNING] " << message << " (" << file << " line:" << line << " pos:" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
+        std::cerr << ANSI_YELLOW_CODE << "[WARNING] " << message << " (" << file << ":" << line << ":" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
     }
 }
 
@@ -56,7 +56,7 @@ void KprcNotificationHandler::error(std::string message, std::string file, int l
         std::cerr << ANSI_RED_CODE << "[ERROR] " << message << ANSI_CLEAN_CODE << std::endl;
     }
     else {
-        std::cerr << ANSI_RED_CODE << "[ERROR] " << message << " (" << file << " line:" << line << " pos:" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
+        std::cerr << ANSI_RED_CODE << "[ERROR] " << message << " (" << file << ":" << line << ":" << pos << ")" << ANSI_CLEAN_CODE << std::endl;
     }
 }
 
