@@ -5,8 +5,6 @@
 
 namespace kaprino::kgen {
 
-std::vector<StatementObject*>* ParseFile(std::string text);
-
 class RequireStatementObject : public StatementObject {
    public:
     std::vector<StatementObject*>* statements;
