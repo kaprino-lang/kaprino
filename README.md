@@ -36,7 +36,7 @@ Here is the table of available environments.
 |---|:---:|
 |Linux x64| :heavy_check_mark: |
 |Windows x64| :heavy_check_mark: |
-|MacOS x64| Coming soon |
+|MacOS x64| :heavy_check_mark: |
 
 ### Build from sources :hammer:
 
