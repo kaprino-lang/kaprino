@@ -7,12 +7,14 @@
 
 namespace kaprino::kgen {
 
-class ClassStatementObject : StatementObject {
+class ClassStatementObject : public StatementObject {
    public:
     std::string name;
     std::vector<CStatementObject*>* statements;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto structure = new ClassStructureObject();
         auto size = statements->size();
 
@@ -29,6 +31,8 @@ class ClassStatementObject : StatementObject {
 
 antlrcpp::Any StatementVisitor::visitClassStatement(KaprinoParser::ClassStatementContext* ctx) {
     auto statementObj = new ClassStatementObject();
+
+    statementObj->setContextPosition(ctx);
     statementObj->name = ctx->ID()->getText();
     statementObj->statements = new std::vector<CStatementObject*>();
 

@@ -5,13 +5,13 @@
 
 namespace kaprino::kgen {
 
-std::vector<StatementObject*>* ParseFile(std::string text);
-
-class RequireStatementObject : StatementObject {
+class RequireStatementObject : public StatementObject {
    public:
     std::vector<StatementObject*>* statements;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         for (auto statement : *statements) {
             statement->codegen(builder, module);
         }
@@ -20,6 +20,8 @@ class RequireStatementObject : StatementObject {
 
 antlrcpp::Any StatementVisitor::visitRequireStatement(KaprinoParser::RequireStatementContext* ctx) {
     auto statementObj = new RequireStatementObject();
+
+    statementObj->setContextPosition(ctx);
 
     auto package_name = ctx->text()->getText();
     package_name = package_name.substr(1, package_name.size() - 2);
@@ -31,7 +33,7 @@ antlrcpp::Any StatementVisitor::visitRequireStatement(KaprinoParser::RequireStat
         0
     );
 
-    statementObj->statements = DependencySolver::importRequirePackage(package_name);
+    statementObj->statements = depsolver.importRequirePackage(package_name);
 
     logger->log(
         "End reading package: " + package_name,

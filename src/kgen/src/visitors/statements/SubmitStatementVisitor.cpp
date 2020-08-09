@@ -5,16 +5,18 @@
 
 namespace kaprino::kgen {
 
-class LoopStatementObject : StatementObject {
+class LoopStatementObject : public StatementObject {
    public:
     static std::stack<llvm::BasicBlock*>& comebackpos;
 };
 
-class SubmitStatementObject : StatementObject {
+class SubmitStatementObject : public StatementObject {
    public:
     ExprObject* expr;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         LoopStatementObject::comebackpos = *(new std::stack<llvm::BasicBlock*>());
         if (expr) {
             builder->CreateRet(expr->codegen(builder, module));
@@ -28,6 +30,8 @@ class SubmitStatementObject : StatementObject {
 
 antlrcpp::Any StatementVisitor::visitSubmitStatement(KaprinoParser::SubmitStatementContext* ctx) {
     auto statementObj = new SubmitStatementObject();
+
+    statementObj->setContextPosition(ctx);
 
     auto expr = ctx->expr();
 

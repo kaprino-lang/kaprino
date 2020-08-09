@@ -1,10 +1,12 @@
 #pragma once
 
-#include "kgen/KgenAccelerator.h"
+#include "llvm/IR/IRBuilder.h"
+
+#include "kgen/visitors/ContextObject.h"
 
 namespace kaprino::kgen {
 
-class StatementObject {
+class StatementObject :public ContextObject {
    public:
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) {}
 };

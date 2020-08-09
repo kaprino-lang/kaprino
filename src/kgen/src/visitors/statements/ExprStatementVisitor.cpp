@@ -5,18 +5,21 @@
 
 namespace kaprino::kgen {
 
-class ExprStatementObject : StatementObject {
+class ExprStatementObject : public StatementObject {
    public:
     ExprObject* expr;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
-        auto val = expr->codegen(builder, module);
+        logger->move_pos(line, pos);
+
+        expr->codegen(builder, module);
     }
 };
 
 antlrcpp::Any StatementVisitor::visitExprStatement(KaprinoParser::ExprStatementContext* ctx) {
     auto statementObj = new ExprStatementObject();
 
+    statementObj->setContextPosition(ctx);
     statementObj->expr = visit(ctx->expr()).as<ExprObject*>();
 
     return (StatementObject*)statementObj;

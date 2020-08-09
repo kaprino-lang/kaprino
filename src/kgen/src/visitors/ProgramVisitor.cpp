@@ -9,11 +9,9 @@ antlrcpp::Any StatementVisitor::visitProgram(KaprinoParser::ProgramContext *ctx)
 
     auto statementsObj = new std::vector<StatementObject *>();
 
+    logger->move_pos(0, 0);
     logger->log(
-        "This program contains " + std::to_string(statements.size()) + "statement(s)",
-        "internal",
-        0,
-        0
+        "This program contains " + std::to_string(statements.size()) + "statement(s)"
     );
 
     for (auto statement : statements) {

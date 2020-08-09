@@ -4,11 +4,13 @@
 
 namespace kaprino::kgen {
 
-class BracketExprObject : ExprObject {
+class BracketExprObject : public ExprObject {
    public:
     ExprObject* value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         return value->codegen(builder, module);
     }
 };
@@ -16,6 +18,7 @@ class BracketExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitBracketExpr(KaprinoParser::BracketExprContext* ctx) {
     auto exprObj = new BracketExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->value = visit(ctx->expr()).as<ExprObject*>();
 
     return (ExprObject*)exprObj;

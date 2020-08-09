@@ -4,13 +4,15 @@
 
 namespace kaprino::kgen {
 
-class CompareExprObject : ExprObject {
+class CompareExprObject : public ExprObject {
    public:
     ExprObject* left;
     ExprObject* right;
     std::string op;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto l = left->codegen(builder, module);
         auto r = right->codegen(builder, module);
 
@@ -70,6 +72,7 @@ class CompareExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitCompareExpr(KaprinoParser::CompareExprContext* ctx) {
     auto exprObj = new CompareExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->left = visit(ctx->expr(0)).as<ExprObject*>();
     exprObj->right = visit(ctx->expr(1)).as<ExprObject*>();
     exprObj->op = ctx->compare_op()->getText();

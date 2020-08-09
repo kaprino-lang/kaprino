@@ -6,21 +6,21 @@
 
 namespace kaprino::kgen {
 
-class AssignStatementObject : StatementObject {
+class AssignStatementObject : public StatementObject {
    public:
     AssigneeObject* assignee;
     ExprObject* expr;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto ptr = assignee->codegen(builder, module);
         auto val = expr->codegen(builder, module);
 
         logger->asrt(
-            ptr->getType()->getPointerTo() == val->getType(),
-            "Types are not matched",
-            "internal",
-            0,
-            0
+            ptr->getType() == val->getType() ||
+                ptr->getType()->getPointerElementType() == val->getType(),
+            "Types are not matched"
         );
 
         builder->CreateStore(val, ptr);
@@ -30,6 +30,7 @@ class AssignStatementObject : StatementObject {
 antlrcpp::Any StatementVisitor::visitAssignStatement(KaprinoParser::AssignStatementContext* ctx) {
     auto statementObj = new AssignStatementObject();
 
+    statementObj->setContextPosition(ctx);
     statementObj->assignee = visit(ctx->assignee()).as<AssigneeObject*>();
     statementObj->expr = visit(ctx->assigner).as<ExprObject*>();
 

@@ -33,7 +33,8 @@
 #include "KaprinoLexer.h"
 #include "KaprinoParser.h"
 
-#include "kgen/NotificationManager.h"
+#include "kgen/notifications/NotificationManager.h"
+#include "kgen/solvers/DependencySolver.h"
 
 namespace kaprino::kgen {
 
@@ -44,8 +45,6 @@ namespace kaprino::kgen {
 #define ANSI_YELLOW_CODE "\u001b[33;1m"
 #define ANSI_RED_CODE "\u001b[31;1m"
 #define ANSI_CLEAN_CODE "\u001b[0m"
-
-    extern NotificationManager* logger;
 
 //
 // ------ LLVM type ------
@@ -76,8 +75,6 @@ namespace kaprino::kgen {
 #else
 #   define KAPRINO_ENV_SPLIT_CHAR ":"
 #endif
-
-    static std::string current_file;
 
 //
 // ------ Cast ------

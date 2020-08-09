@@ -36,7 +36,8 @@ classstatement  : LET name=ID LEFT_BRACKET CONTAINS types=ID RIGHT_BRACKET # Let
 codeblock       : CLOSER statement* CLOSER # CodeBlockStatement
                 ;
 
-expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
+expr            : ID LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionExpr
+                | LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | expr UNDERBAR ID # AccessExpr
                 | expr uparrow_op expr # UpArrowExpr
                 | expr mul_op expr # MulExpr
@@ -49,7 +50,6 @@ expr            : LEFT_BRACKET expr RIGHT_BRACKET # BracketExpr
                 | text # TextExpr
                 | const_bool # BooleanExpr
                 | name=ID # ParameterExpr
-                | ID LEFT_BRACKET (expr (COMMA expr)*)? RIGHT_BRACKET # FunctionExpr
                 ;
 
 function_type   : ID (COMMA ID)* MAPPING_TO ID # FunctionType

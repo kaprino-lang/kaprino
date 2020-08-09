@@ -17,11 +17,8 @@ llvm::Type* TypeManager::gettype(llvm::IRBuilder<>* builder, llvm::Module* modul
     auto found = types.find(name);
 
     logger->asrt(
-        found == types.end(),
-        "Try to access a type which doesn't exist",
-        "internal",
-        0,
-        0
+        found != types.end(),
+        "Not found a type whose name is \"" + name + "\""
     );
 
     return found->second.first;
@@ -31,11 +28,8 @@ ClassStructureObject* TypeManager::getstructure(llvm::IRBuilder<>* builder, llvm
     auto found = types.find(name);
 
     logger->asrt(
-        found == types.end(),
-        "Try to access a type which doesn't exist",
-        "internal",
-        0,
-        0
+        found != types.end(),
+        "Not found a type whose name is \"" + name + "\""
     );
 
     return found->second.second;

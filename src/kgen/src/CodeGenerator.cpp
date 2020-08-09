@@ -5,8 +5,7 @@
 namespace kaprino::kgen {
 
 void CodeGenerator::generate(std::string input_file_path, llvm::IRBuilder<>* builder, llvm::Module* module) {
-    auto input_text = getText(input_file_path);
-    auto statements = DependencySolver::parseFile(input_text);
+    auto statements = depsolver.parseFile(input_file_path);
 
     generate(statements, builder, module);
 }
@@ -53,23 +52,6 @@ std::string CodeGenerator::getOutFileName(std::string file_path) {
         .replace_extension(".ll")
         .string();
     return output_file_path;
-}
-
-std::string CodeGenerator::getText(std::string file_path) {
-    std::ifstream input_file(file_path);
-
-    std::ostringstream ss;
-    ss << input_file.rdbuf();
-    std::string input_text;
-    input_text = ss.str();
-
-    logger->asrt(
-        !input_file.good(),
-        "Not found input files: \"" + file_path + "\"",
-        file_path, 0, 0
-    );
-
-    return input_text;
 }
 
 void CodeGenerator::removeUnreachableCode(llvm::IRBuilder<>* builder, llvm::Module* module) {

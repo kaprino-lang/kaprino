@@ -6,11 +6,13 @@
 
 namespace kaprino::kgen {
 
-class PrintStatementObject : StatementObject {
+class PrintStatementObject : public StatementObject {
    public:
     std::vector<ExprObject*> exprs;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto printfFunc = get_printf(builder, module);
 
         std::string formatText;
@@ -55,6 +57,8 @@ class PrintStatementObject : StatementObject {
 
 antlrcpp::Any StatementVisitor::visitPrintStatement(KaprinoParser::PrintStatementContext* ctx) {
     auto statementObj = new PrintStatementObject();
+
+    statementObj->setContextPosition(ctx);
 
     auto exprs = ctx->expr();
     for (auto expr : exprs) {

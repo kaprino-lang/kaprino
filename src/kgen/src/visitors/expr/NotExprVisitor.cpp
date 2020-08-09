@@ -4,11 +4,13 @@
 
 namespace kaprino::kgen {
 
-class NotExprObject : ExprObject {
+class NotExprObject : public ExprObject {
    public:
     ExprObject* value;
 
     virtual llvm::Value* codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         return builder->CreateNot(value->codegen(builder, module));
     }
 };
@@ -16,6 +18,7 @@ class NotExprObject : ExprObject {
 antlrcpp::Any StatementVisitor::visitNotExpr(KaprinoParser::NotExprContext* ctx) {
     auto exprObj = new NotExprObject();
 
+    exprObj->setContextPosition(ctx);
     exprObj->value = visit(ctx->expr()).as<ExprObject*>();
 
     return (ExprObject*)exprObj;

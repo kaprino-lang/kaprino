@@ -17,11 +17,8 @@ llvm::Function* FunctionManager::getfunc(llvm::IRBuilder<>* builder, llvm::Modul
     auto found = funcs.find(funcName);
 
     logger->asrt(
-        found == funcs.end(),
-        "Try to access a function which doesn't exist",
-        "internal",
-        0,
-        0
+        found != funcs.end(),
+        "Try to access a function which doesn't exist"
     );
 
     return found->second;

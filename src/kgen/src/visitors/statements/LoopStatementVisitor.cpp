@@ -4,7 +4,7 @@
 
 namespace kaprino::kgen {
 
-class LoopStatementObject : StatementObject {
+class LoopStatementObject : public StatementObject {
    public:
     std::vector<StatementObject*>* body;
 
@@ -12,6 +12,8 @@ class LoopStatementObject : StatementObject {
     static std::stack<llvm::BasicBlock*>& comebackpos;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto parent = builder->GetInsertBlock()->getParent();
 
         auto loopblock = llvm::BasicBlock::Create(module->getContext(), "loop" + std::to_string(loop_count), parent);
@@ -49,6 +51,7 @@ std::stack<llvm::BasicBlock*>& LoopStatementObject::comebackpos =
 antlrcpp::Any StatementVisitor::visitLoopStatement(KaprinoParser::LoopStatementContext* ctx) {
     auto statementObj = new LoopStatementObject();
 
+    statementObj->setContextPosition(ctx);
     statementObj->body = visit(ctx->codeblock()).as<std::vector<StatementObject*>*>();
 
     return (StatementObject*)statementObj;

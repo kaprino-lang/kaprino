@@ -6,11 +6,13 @@
 
 namespace kaprino::kgen {
 
-class ReadStatementObject : StatementObject {
+class ReadStatementObject : public StatementObject {
    public:
     AssigneeObject* assignee;
 
     virtual void codegen(llvm::IRBuilder<>* builder, llvm::Module* module) override {
+        logger->move_pos(line, pos);
+
         auto val = assignee->codegen(builder, module);
         auto scanfFunc = get_scanf(builder, module);
         if (val->getType() == KAPRINO_DOUBLE_PTR_TY(module)) {
@@ -34,6 +36,7 @@ class ReadStatementObject : StatementObject {
 antlrcpp::Any StatementVisitor::visitReadStatement(KaprinoParser::ReadStatementContext* ctx) {
     auto statementObj = new ReadStatementObject();
 
+    statementObj->setContextPosition(ctx);
     statementObj->assignee = visit(ctx->assignee()).as<AssigneeObject*>();
 
     return (StatementObject*)statementObj;
