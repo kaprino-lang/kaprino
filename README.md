@@ -3,15 +3,17 @@
 </div>
 
 [![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
-[![CI](https://github.com/kaprino-lang/kaprino/workflows/CI/badge.svg)](https://github.com/kaprino-lang/kaprino/actions?query=workflow%3ACI)
+[![Build](https://github.com/kaprino-lang/kaprino/workflows/Build/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/kaprino/kaprino)](https://hub.docker.com/r/kaprino/kaprino/builds)
+[![GitHub](https://img.shields.io/github/license/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino/blob/master/LICENSE)
 
 This is a strongly-typed programming language that tastes like a mathematics.
 
-## Code snippets :memo:
+## Code snippets 📝
 
-![Code example](https://github.com/kaprino-lang/kaprino/blob/master/img/code_example1.png)
+![Code example](https://raw.githubusercontent.com/kaprino-lang/kaprino/master/img/code_example1.png)
 
-## How to run :computer:
+## How to run 💻
 
 Write a code and save it with the extension, `.kpr`.  
 Now, you can compile it by executing the following command:  
@@ -25,24 +27,24 @@ kprc will generate an executable.
 
 If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino.herokuapp.com/).
 
-## Installation :cd:
+## Installation 💿
 
-### Download from release page :floppy_disk:
+### Download from release page 💾
 
 Download achievements from [Release Page](https://github.com/kaprino-lang/kaprino/releases) and add the directory path put it into to PATH.  
 Here is the table of available environments.
 
-|OS|Available|
-|---|:---:|
-|Linux x64| :heavy_check_mark: |
-|Windows x64| :heavy_check_mark: |
-|MacOS x64| :heavy_check_mark: |
+|OS|Available|Status|
+|---|:---:|:---:|
+|Linux x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/Linux%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
+|Windows x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/Windows%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
+|MacOS x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/MacOS%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
 
-### Build from sources :hammer:
+### Build from sources 🔨
 
 Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/HowToBuild.md).
 
-### Run kaprino using Docker :whale:
+### Run kaprino using Docker 🐳
 
 You can use a docker image which is already installed kaprino.
 

@@ -1,0 +1,57 @@
+name: MacOS release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  #
+  # Build the sources for Linux and publish achievements.
+  #
+  build-mac:
+    runs-on: "macos-latest"
+    #
+    # Specify the version of the compilers.
+    #
+    env:
+      CXX: g++-8
+      CC: gcc-8
+
+    steps:
+      - uses: actions/checkout@v2
+      #
+      # Get a tag name which is used to release achievements.
+      #
+      - uses: olegtarasov/get-tag@v2
+        id: tag_name
+      #
+      # Install LLVM.
+      #
+      - run: |
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
+          tar xJf llvm-9.0.1.src.tar.xz
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          make
+          sudo make install
+        name: Install LLVM
+      #
+      # Build the sources.
+      #
+      - run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DKAPRINO_BUILD_STDLIB=OFF
+          make
+        name: Build kprc
+      #
+      # Publish them.
+      #
+      - uses: actions/upload-artifact@v2
+        name: Publish artifact
+        with:
+          name: "kprc-${{ steps.tag_name.outputs.tag }}-macos-x64"
+          path: "./build/**/*"
