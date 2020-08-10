@@ -1,0 +1,32 @@
+name: Docker release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  #
+  # Push a docker image.
+  #
+  pushdocker:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      #
+      # Get a tag name which is used to release achievements.
+      #
+      - uses: olegtarasov/get-tag@v2
+        id: tag_name
+      #
+      # Build the sources on a docker image.
+      #
+      - uses: docker/build-push-action@v1
+        id: buildDocker
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: kaprino/kaprino
+          tags: ${{ steps.tag_name.outputs.tag }},latest
+          push: true
