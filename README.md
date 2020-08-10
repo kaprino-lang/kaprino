@@ -7,11 +7,11 @@
 
 This is a strongly-typed programming language that tastes like a mathematics.
 
-## Code snippets :memo:
+## Code snippets 📝
 
-![Code example](https://github.com/kaprino-lang/kaprino/blob/master/img/code_example1.png)
+![Code example](https://raw.githubusercontent.com/kaprino-lang/kaprino/master/img/code_example1.png)
 
-## How to run :computer:
+## How to run 💻
 
 Write a code and save it with the extension, `.kpr`.  
 Now, you can compile it by executing the following command:  
@@ -25,24 +25,24 @@ kprc will generate an executable.
 
 If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino.herokuapp.com/).
 
-## Installation :cd:
+## Installation 💿
 
-### Download from release page :floppy_disk:
+### Download from release page 💾
 
 Download achievements from [Release Page](https://github.com/kaprino-lang/kaprino/releases) and add the directory path put it into to PATH.  
 Here is the table of available environments.
 
 |OS|Available|
 |---|:---:|
-|Linux x64| :heavy_check_mark: |
-|Windows x64| :heavy_check_mark: |
-|MacOS x64| :heavy_check_mark: |
+|Linux x64| ✔️ |
+|Windows x64| ✔️ |
+|MacOS x64| ✔️ |
 
-### Build from sources :hammer:
+### Build from sources 🔨
 
 Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/HowToBuild.md).
 
-### Run kaprino using Docker :whale:
+### Run kaprino using Docker 🐳
 
 You can use a docker image which is already installed kaprino.
 
