@@ -3,7 +3,9 @@
 </div>
 
 [![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
-[![CI](https://github.com/kaprino-lang/kaprino/workflows/CI/badge.svg)](https://github.com/kaprino-lang/kaprino/actions?query=workflow%3ACI)
+[![Build](https://github.com/kaprino-lang/kaprino/workflows/Build/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/kaprino/kaprino)](https://hub.docker.com/r/kaprino/kaprino/builds)
+[![GitHub](https://img.shields.io/github/license/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino/blob/master/LICENSE)
 
 This is a strongly-typed programming language that tastes like a mathematics.
 
@@ -32,11 +34,11 @@ If you are tired to set your environment, you can use [Kaprino Online Compiler](
 Download achievements from [Release Page](https://github.com/kaprino-lang/kaprino/releases) and add the directory path put it into to PATH.  
 Here is the table of available environments.
 
-|OS|Available|
-|---|:---:|
-|Linux x64| ✔️ |
-|Windows x64| ✔️ |
-|MacOS x64| ✔️ |
+|OS|Available|Status|
+|---|:---:|:---:|
+|Linux x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/Linux%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
+|Windows x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/Windows%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
+|MacOS x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/MacOS%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
 
 ### Build from sources 🔨
 
