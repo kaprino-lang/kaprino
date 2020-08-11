@@ -2,10 +2,11 @@
   <h1>Kaprino <i>- A language of mathematical thinking</i></h1>
 </div>
 
-[![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
 [![Build](https://github.com/kaprino-lang/kaprino/workflows/Build/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/kaprino/kaprino)](https://hub.docker.com/r/kaprino/kaprino/builds)
+[![Latest release](https://img.shields.io/github/v/release/kaprino-lang/kaprino?include_prereleases)](https://github.com/kaprino-lang/kaprino/releases)
 [![GitHub](https://img.shields.io/github/license/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino)
 
 This is a strongly-typed programming language that tastes like a mathematics.
 
@@ -47,6 +48,10 @@ Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/H
 ### Run kaprino using Docker 🐳
 
 You can use a docker image which is already installed kaprino.
+
+[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/kaprino/kaprino)](https://hub.docker.com/r/kaprino/kaprino)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/kaprino/kaprino)](https://hub.docker.com/r/kaprino/kaprino/builds)
+[![Docker Image Size](https://img.shields.io/docker/image-size/kaprino/kaprino/latest)](https://hub.docker.com/r/kaprino/kaprino)
 
 ```
 docker run --rm -it kaprino/kaprino:latest
