@@ -26,7 +26,7 @@ $ kprc some-source.kpr
 
 kprc will generate an executable.
 
-If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino.herokuapp.com/).
+If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino-lang.github.io/online).
 
 ## Installation 💿
 
