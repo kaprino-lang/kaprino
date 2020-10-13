@@ -7,31 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ########################################################
 #
-# Dependencies LLVM
-#
-########################################################
-
-find_package(LLVM 9.0.0 REQUIRED)
-
-########################################################
-#
-# Dependencies: Antlr4
-#
-########################################################
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
-add_definitions(-DANTLR4CPP_STATIC)
-
-set(ANTLR4_WITH_STATIC_CRT OFF)
-set(ANTLR_EXECUTABLE "${CMAKE_SOURCE_DIR}/antlr-4.8-complete.jar" CACHE FILEPATH "A path to antlr4 executable")
-
-include(ExternalAntlr4Cpp)
-
-find_package(ANTLR REQUIRED)
-
-########################################################
-#
 # Variables to build
 #
 ########################################################
@@ -39,6 +14,23 @@ find_package(ANTLR REQUIRED)
 set(KAPRINO_BUILD_STDLIB ON CACHE BOOL "Build stdlib")
 set(KAPRINO_MONOTONE_LOG OFF CACHE BOOL "Make stdout monotone")
 set(KAPRINO_OPTIMIZER_ON OFF CACHE BOOL "[Experimental] Optimize output")
+
+########################################################
+#
+# Dependencies LLVM
+#
+########################################################
+
+find_package(LLVM CONFIG REQUIRED)
+
+########################################################
+#
+# Dependencies: Antlr4
+#
+########################################################
+
+find_path(ANTLR4_INCLUDE_DIRS antlr4-runtime.h)
+find_library(ANTLR4_LIBS antlr4-runtime)
 
 ########################################################
 #

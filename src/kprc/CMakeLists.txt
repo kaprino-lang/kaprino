@@ -38,8 +38,7 @@ target_compile_definitions(kprc
 ########################################################
 
 target_include_directories(kprc PRIVATE ${ANTLR4_INCLUDE_DIRS})
-target_include_directories(kprc PRIVATE ${ANTLR_KaprinoLexer_OUTPUT_DIR})
-target_include_directories(kprc PRIVATE ${ANTLR_KaprinoParser_OUTPUT_DIR})
+target_include_directories(kprc PRIVATE ${KAST_INCLUDE_DIR})
 
 ########################################################
 #

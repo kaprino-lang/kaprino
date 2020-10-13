@@ -64,7 +64,7 @@ set(KGEN_SOURCE
 #
 ########################################################
 
-add_library(kgen ${KGEN_SOURCE} ${ANTLR_KaprinoLexer_CXX_OUTPUTS} ${ANTLR_KaprinoParser_CXX_OUTPUTS})
+add_library(kgen ${KGEN_SOURCE} ${KAST_SOURCE})
 
 target_include_directories(kgen PRIVATE ${KGEN_INCLUDE_DIR})
 
@@ -82,11 +82,10 @@ target_compile_definitions(kgen
 #
 ########################################################
 
-target_include_directories(kgen PRIVATE ${ANTLR4_INCLUDE_DIRS})
-target_include_directories(kgen PRIVATE ${ANTLR_KaprinoLexer_OUTPUT_DIR})
-target_include_directories(kgen PRIVATE ${ANTLR_KaprinoParser_OUTPUT_DIR})
+target_include_directories(kgen PRIVATE ${ANTLR_INCLUDE_DIRS})
+target_include_directories(kgen PRIVATE ${KAST_INCLUDE_DIR})
 
-target_link_libraries(kgen antlr4_static)
+target_link_libraries(kgen ${ANTLR_LIBS})
 
 ########################################################
 #
