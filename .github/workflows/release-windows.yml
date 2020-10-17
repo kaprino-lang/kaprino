@@ -28,7 +28,7 @@ jobs:
       # Build the sources.
       #
       - run: |
-          .\bootstrap.bat
+          python bootstrap.py
         name: Build kprc
       #
       # Publish them.

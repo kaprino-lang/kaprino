@@ -29,8 +29,7 @@ jobs:
       # Build the sources.
       #
       - run: |
-          chmod +x ./bootstrap.sh
-          ./bootstrap.sh
+          python bootstrap.py
         name: Build kprc
       #
       # Publish them.

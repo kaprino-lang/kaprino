@@ -31,8 +31,7 @@ RUN \
 WORKDIR /tmp/kaprino
 
 RUN \
-    chmod +x bootstrap.sh; \
-    . bootstrap.sh;
+    python3 bootstrap.py;
 
 ########################################################
 #
