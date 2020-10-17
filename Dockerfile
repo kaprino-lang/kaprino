@@ -28,12 +28,11 @@ RUN \
 # Build Kaprino
 #
 ########################################################
-WORKDIR /tmp/kaprino/build
+WORKDIR /tmp/kaprino
 
 RUN \
-    cmake .. -G Ninja; \
-    ninja; \
-    ninja install;
+    chmod +x bootstrap.sh; \
+    . bootstrap.sh;
 
 ########################################################
 #
