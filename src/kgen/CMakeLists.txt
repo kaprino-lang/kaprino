@@ -82,10 +82,10 @@ target_compile_definitions(kgen
 #
 ########################################################
 
-target_include_directories(kgen PRIVATE ${ANTLR_INCLUDE_DIRS})
+target_include_directories(kgen PRIVATE ${ANTLR4_INCLUDE_DIRS})
 target_include_directories(kgen PRIVATE ${KAST_INCLUDE_DIR})
 
-target_link_libraries(kgen ${ANTLR_LIBS})
+target_link_libraries(kgen ${ANTLR4_LIBS})
 
 ########################################################
 #
@@ -95,9 +95,11 @@ target_link_libraries(kgen ${ANTLR_LIBS})
 
 target_include_directories(kgen PRIVATE ${LLVM_INCLUDE_DIRS})
 
-llvm_map_components_to_libnames(LLVM_LIBS all)
-target_link_directories(kgen PUBLIC ${LLVM_LIBRARY_DIRS})
-target_link_libraries(kgen ${LLVM_LIBS})
+# The below line doesn't work correctly due to bug on LLVM 10.0.0.
+# llvm_map_components_to_libnames(LLVM_LIBS all)
+set(LLVM_LIBS ${LLVM_AVAILABLE_LIBS})
+
+target_link_libraries(kgen ${LLVM_AVAILABLE_LIBS})
 
 ########################################################
 #
