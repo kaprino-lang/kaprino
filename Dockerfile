@@ -18,6 +18,8 @@ RUN \
     apt upgrade; \
     apt install -y \
         curl \
+        unzip \
+        tar \
         build-essential \
         python3.8 \
         openjdk-11-jdk \
