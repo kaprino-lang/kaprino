@@ -9,13 +9,17 @@ RUN \
 # Install tools which are required.
 #
 ########################################################
+    apt update; \
+    apt-get install -y \
+        software-properties-common; \
     add-apt-repository ppa:openjdk-r/ppa; \
+    add-apt-repository ppa:deadsnakes/ppa; \
     apt update; \
     apt upgrade; \
-    apt install \
+    apt install -y \
         curl \
         build-essential \
-        python3 \
+        python3.8 \
         openjdk-11-jdk \
         cmake \
         clang \
@@ -32,9 +36,9 @@ RUN \
 # Clean unused files
 #
 ########################################################
-    apt remove --purge \
-        python3 \
-        openjdk10 \
+    apt remove --purge -y \
+        python3.8 \
+        openjdk-11-jdk \
         cmake \
         git \
     rm -rf /var/lib/apt/lists/*;
