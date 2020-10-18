@@ -9,13 +9,14 @@ RUN \
 # Install tools which are required.
 #
 ########################################################
+    add-apt-repository ppa:openjdk-r/ppa; \
     apt update; \
     apt upgrade; \
     apt install \
         curl \
         build-essential \
         python3 \
-        openjdk10 \
+        openjdk-11-jdk \
         cmake \
         clang \
         git; \
