@@ -7,8 +7,8 @@
 set(KAST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/kast/dist")
 set(KAST_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/kast/dist")
 set(KAST_GRAMMER_FILES
-    "${KAST_SOURCE_DIR}/../src/KaprinoLexer.g4"
-    "${KAST_SOURCE_DIR}/../src/KaprinoParser.g4"
+    "${CMAKE_SOURCE_DIR}/src/kast/src/KaprinoLexer.g4"
+    "${CMAKE_SOURCE_DIR}/src/kast/src/KaprinoParser.g4"
 )
 
 set(KAST_SOURCE

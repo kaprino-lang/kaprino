@@ -2,6 +2,7 @@ import os
 import pathlib
 import contextlib
 import argparse
+import platform
 
 #
 # Pushd suggested on https://gist.github.com/howardhamilton/537e13179489d6896dd3
@@ -41,9 +42,16 @@ if VCPKG_PATH == None:
 
     with pushd("vcpkg"):
         os.system(f"git checkout {VCPKG_USE_HASH}")
-        if os.name == 'nt':
+        if platform.system() == "Windows":
             os.system(".\\bootstrap-vcpkg.bat")
             os.system(".\\vcpkg install antlr4 llvm[target-all]")
+            with open(".\\buildtrees\llvm\install-x86-windows-dbg-out.log", "r") as f:
+                print(f.read())
+        elif platform.system() == "Linux":
+            os.system("./bootstrap-vcpkg.sh")
+            os.system("./vcpkg install antlr4 llvm[target-all]")
+            with open("./buildtrees/llvm/install-x64-linux-dbg-out.log", "r") as f:
+                print(f.read())
         else:
             os.system("./bootstrap-vcpkg.sh")
             os.system("./vcpkg install antlr4 llvm[target-all]")
@@ -56,7 +64,7 @@ if VCPKG_PATH == None:
 os.mkdir("build")
 
 with pushd("build"):
-    if os.name == 'nt':
+    if platform.system() == "Windows":
         os.system(f"cmake .. -DCMAKE_BUILD_TYPE={CMAKE_BUILD_CONFIG} -DCMAKE_TOOLCHAIN_FILE={VCPKG_PATH}\\scripts\\buildsystems\\vcpkg.cmake")
         os.system("cmake --build .\\ --target install")
     else:

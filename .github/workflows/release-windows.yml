@@ -35,7 +35,6 @@ jobs:
       #
       - uses: actions/upload-artifact@v2
         name: Publish artifact
-        if: ${{ steps.tag_name.outputs.tag != 'test' }}
         with:
           name: "kprc-${{ steps.tag_name.outputs.tag }}-win-x64"
           path: "./build/Release/**/*"
