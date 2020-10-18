@@ -1,59 +1,41 @@
-FROM buildpack-deps AS build-env
+FROM ubuntu:18.04
 
 COPY . /tmp/kaprino/
+WORKDIR /
 
+RUN \
 ########################################################
 #
 # Install tools which are required.
 #
 ########################################################
-WORKDIR /
-
-RUN \
-    apk update; \
-    apk add --no-cache \
-        clang \
+    apt update; \
+    apt upgrade; \
+    apt install \
+        curl \
+        build-essential \
         python3 \
-        build-base \
-        util-linux-dev \
-        ninja \
         openjdk11 \
         cmake \
-        wget \
-        git \
-        zip;
-
+        clang \
+        git; \
 ########################################################
 #
 # Build Kaprino
 #
 ########################################################
-WORKDIR /tmp/kaprino
-
-RUN \
-    python3 bootstrap.py Release;
-
+    cd /tmp/kaprino; \
+    python3 bootstrap.py Release; \
 ########################################################
 #
-# Deploy stage
+# Clean unused files
 #
 ########################################################
-
-FROM buildpack-deps
-
-COPY --from=build-env /usr/local/bin/kprc /usr/local/bin/kprc
-COPY --from=build-env /usr/local/include/stdlib /usr/local/include/stdlib
-
-WORKDIR /
-
-RUN \
-    apk update; \
-    apk add --no-cache \
-        binutils \
-        clang \
-        musl-dev \
-        gcc; \
-    mkdir /tmp; \
-    rm -rf /var/cache/apk/*;
+    apt remove --purge \
+        python3 \
+        openjdk11 \
+        cmake \
+        git \
+    rm -rf /var/lib/apt/lists/*;
 
 ENV KAPRINOPKG /usr/local/include
