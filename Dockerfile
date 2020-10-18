@@ -17,6 +17,7 @@ RUN \
     apt update; \
     apt upgrade; \
     apt install -y \
+        pkg-config \
         curl \
         unzip \
         tar \
