@@ -28,7 +28,7 @@ jobs:
       # Build the sources.
       #
       - run: |
-          python bootstrap.py Release
+          python bootstrap.py --config Release
         name: Build kprc
       #
       # Publish them.

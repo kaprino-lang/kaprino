@@ -15,7 +15,7 @@ RUN \
         curl \
         build-essential \
         python3 \
-        openjdk11 \
+        openjdk10 \
         cmake \
         clang \
         git; \
@@ -25,7 +25,7 @@ RUN \
 #
 ########################################################
     cd /tmp/kaprino; \
-    python3 bootstrap.py Release; \
+    python3 bootstrap.py --config Release; \
 ########################################################
 #
 # Clean unused files
@@ -33,7 +33,7 @@ RUN \
 ########################################################
     apt remove --purge \
         python3 \
-        openjdk11 \
+        openjdk10 \
         cmake \
         git \
     rm -rf /var/lib/apt/lists/*;
