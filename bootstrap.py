@@ -1,4 +1,5 @@
 import os
+import sys
 import contextlib
 
 #
@@ -32,12 +33,17 @@ with pushd("vcpkg"):
 #
 # Build kaprino
 #
+if len(sys.argv) == 1:
+    CMAKE_BUILD_CONFIG = "Debug"
+else:
+    CMAKE_BUILD_CONFIG = sys.argv[1]
+
 os.mkdir("build")
 
 with pushd("build"):
     if os.name == 'nt':
-        os.system("cmake .. -DCMAKE_TOOLCHAIN_FILE=..\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
+        os.system(f"cmake .. -DCMAKE_BUILD_TYPE={CMAKE_BUILD_CONFIG} -DCMAKE_TOOLCHAIN_FILE=..\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
         os.system("cmake --build .\\ --target install")
     else:
-        os.system("cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake")
+        os.system(f"cmake .. -DCMAKE_BUILD_TYPE={CMAKE_BUILD_CONFIG} -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake")
         os.system("cmake --build ./ --target install")

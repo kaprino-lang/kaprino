@@ -1,4 +1,4 @@
-FROM capra314cabra/llvm-alpine-libs:9.0.1 AS build-env
+FROM buildpack-deps AS build-env
 
 COPY . /tmp/kaprino/
 
@@ -31,7 +31,7 @@ RUN \
 WORKDIR /tmp/kaprino
 
 RUN \
-    python3 bootstrap.py;
+    python3 bootstrap.py Release;
 
 ########################################################
 #
@@ -39,7 +39,7 @@ RUN \
 #
 ########################################################
 
-FROM capra314cabra/llvm-alpine-libs:9.0.1
+FROM buildpack-deps
 
 COPY --from=build-env /usr/local/bin/kprc /usr/local/bin/kprc
 COPY --from=build-env /usr/local/include/stdlib /usr/local/include/stdlib
