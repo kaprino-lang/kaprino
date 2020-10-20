@@ -44,17 +44,17 @@ if VCPKG_PATH == None:
         os.system(f"git checkout {VCPKG_USE_HASH}")
         if platform.system() == "Windows":
             os.system(".\\bootstrap-vcpkg.bat")
-            os.system(".\\vcpkg install antlr4 llvm[target-all]")
+            os.system(".\\vcpkg install antlr4 llvm")
             with open(".\\buildtrees\llvm\install-x86-windows-dbg-out.log", "r") as f:
                 print(f.read())
         elif platform.system() == "Linux":
             os.system("./bootstrap-vcpkg.sh")
-            os.system("./vcpkg install antlr4 llvm[target-all]")
+            os.system("./vcpkg install antlr4 llvm")
             with open("./buildtrees/llvm/install-x64-linux-dbg-out.log", "r") as f:
                 print(f.read())
         else:
             os.system("./bootstrap-vcpkg.sh")
-            os.system("./vcpkg install antlr4 llvm[target-all]")
+            os.system("./vcpkg install antlr4 llvm")
 
     VCPKG_PATH = pathlib.Path(os.getcwd()).joinpath("vcpkg").as_uri()
 
