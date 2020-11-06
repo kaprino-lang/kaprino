@@ -6,7 +6,7 @@ use nom::combinator::map;
 use nom::character::complete::char;
 use nom::character::complete::space0;
 use super::EvaluableObject;
-use super::numbers_object::numbers_parser;
+use super::factor_object::factor_parser;
 use super::super::program_object::CodeGen;
 
 #[derive(Debug,PartialEq)]
@@ -36,7 +36,7 @@ impl ExponentsObject {
 pub fn exponents_parser(text: &str) -> IResult<&str, EvaluableObject> {
     map(
         tuple((
-            numbers_parser,
+            factor_parser,
             space0,
             opt(
                 tuple((

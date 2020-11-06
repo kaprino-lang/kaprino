@@ -35,6 +35,8 @@ impl EvaluableObject {
 }
 
 pub mod numbers_object;
+pub mod paren_object;
+pub mod factor_object;
 pub mod exponents_object;
 pub mod term_object;
 pub mod expr_object;
