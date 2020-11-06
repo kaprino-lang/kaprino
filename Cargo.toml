@@ -1,6 +1,5 @@
 [workspace]
 members = [
-    "src/kast",
     "src/kgen",
     "src/kprc"
 ]
