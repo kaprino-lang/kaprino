@@ -9,6 +9,11 @@ pub struct CodeGen<'ctx> {
     pub builder: Builder<'ctx>
 }
 
-pub struct ProgramObject {
-    
+impl CodeGen<'_> {
+    pub fn new<'ctx>(context: &'ctx Context, name: &str) -> CodeGen<'ctx> {
+        let module = context.create_module(name);
+        let builder = context.create_builder();
+
+        CodeGen { context, module, builder }
+    }
 }
