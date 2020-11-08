@@ -1,5 +1,5 @@
 #[cfg(test)]
-fn jit_expr(source: &'static str) -> u64 {
+pub fn jit_expr(source: &'static str) -> u64 {
     use inkwell::context::Context;
     use inkwell::execution_engine::JitFunction;
     use super::super::expr_object;
@@ -41,38 +41,4 @@ fn jit_expr(source: &'static str) -> u64 {
             panic!("{}", text);
         }
     }
-}
-
-#[test]
-fn test_expr_object1() {
-    use super::super::expr_object;
-
-    let parsed = expr_object::expr_parser("(5 + 4) * 3 - 3").unwrap();
-    assert_eq!(parsed.1.eval(), 24);
-}
-
-#[test]
-fn test_expr_object2() {
-    use super::super::expr_object;
-
-    let parsed = expr_object::expr_parser("5 + 4 * 3 - 3").unwrap();
-    assert_eq!(parsed.1.eval(), 14);
-}
-
-#[test]
-fn test_expr_object3() {
-    use super::super::expr_object;
-
-    let parsed = expr_object::expr_parser("4 * 6 + 3 ^ 2 * 5").unwrap();
-    assert_eq!(parsed.1.eval(), 69);
-}
-
-#[test]
-fn test_expr_object4() {
-    assert_eq!(jit_expr("(6 - 2) * 3 + 5"), (6 - 2) * 3 + 5);
-}
-
-#[test]
-fn test_expr_object5() {
-    assert_eq!(jit_expr("6 - 2 * 3 + 5"), 6 - 2 * 3 + 5);
 }

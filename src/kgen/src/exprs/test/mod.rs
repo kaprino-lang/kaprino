@@ -1,3 +1,15 @@
-pub mod test_expr_object;
-pub mod test_term_object;
-pub mod test_exponents_object;
+pub mod jit_compile;
+
+#[test]
+fn test_expr_object1() {
+    use jit_compile::jit_expr;
+
+    assert_eq!(jit_expr("(6 - 2) * 3 + 5"), (6 - 2) * 3 + 5);
+}
+
+#[test]
+fn test_expr_object2() {
+    use jit_compile::jit_expr;
+
+    assert_eq!(jit_expr("6 - 2 * 3 + 5"), 6 - 2 * 3 + 5);
+}
