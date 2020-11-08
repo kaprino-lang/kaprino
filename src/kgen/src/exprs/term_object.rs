@@ -1,4 +1,4 @@
-use inkwell::values::IntValue;
+use inkwell::values::BasicValueEnum;
 use nom::IResult;
 use nom::sequence::tuple;
 use nom::multi::many0;
@@ -39,10 +39,35 @@ impl TermObject {
         first
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> IntValue<'ctx> {
-        let i64_type = gen.context.i64_type();
-        let int_val: IntValue<'ctx> = i64_type.const_int(0, false);
-        int_val
+    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
+        let native_left_val = self.first.codegen(gen)?;
+
+        let mut left_val = match native_left_val {
+            BasicValueEnum::IntValue(val) => Ok(val),
+            _ => Err("This values cannot be added.")
+        }?;
+
+        for val in &self.others {
+            let (op, obj) = val;
+
+            let native_right_val = obj.codegen(gen)?;
+
+            let right_val = match native_right_val {
+                BasicValueEnum::IntValue(val) => Ok(val),
+                _ => Err("This values cannot be added.")
+            }?;
+
+            left_val = match op {
+                TermOpKind::Mul => {
+                    gen.builder.build_int_mul(left_val, right_val, "")
+                },
+                TermOpKind::Div => {
+                    gen.builder.build_int_unsigned_div(left_val, right_val, "")
+                }
+            }
+        };
+
+        Ok(BasicValueEnum::IntValue(left_val))
     }
 }
 

@@ -1,4 +1,4 @@
-use inkwell::values::IntValue;
+use inkwell::values::BasicValueEnum;
 use nom::IResult;
 use nom::sequence::tuple;
 use nom::combinator::opt;
@@ -26,10 +26,8 @@ impl ExponentsObject {
         u64::pow(self.left.eval(), self.right.eval() as u32)
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> IntValue<'ctx> {
-        let i64_type = gen.context.i64_type();
-        let int_val: IntValue<'ctx> = i64_type.const_int(0, false);
-        int_val
+    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
+        self.left.codegen(gen)
     }
 }
 

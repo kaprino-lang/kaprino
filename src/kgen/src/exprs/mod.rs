@@ -1,9 +1,9 @@
-use inkwell::values::IntValue;
-use expr_object::ExprObject;
-use term_object::TermObject;
-use exponents_object::ExponentsObject;
-use numbers_object::NumberObject;
+use inkwell::values::BasicValueEnum;
 use super::program_object::CodeGen;
+use exponents_object::ExponentsObject;
+use expr_object::ExprObject;
+use numbers_object::NumberObject;
+use term_object::TermObject;
 
 /// Object which represents evaluable expressions.
 #[derive(Debug,PartialEq)]
@@ -24,7 +24,7 @@ impl EvaluableObject {
         }
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> IntValue<'ctx> {
+    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
         match self {
             EvaluableObject::NumberObject(obj) => obj.codegen(&gen),
             EvaluableObject::ExponentsObject(obj) => obj.codegen(&gen),

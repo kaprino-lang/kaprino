@@ -1,9 +1,10 @@
+use inkwell::values::BasicValueEnum;
 use inkwell::values::IntValue;
-use nom::IResult;
-use nom::combinator::map;
 use nom::character::complete::digit1;
-use super::EvaluableObject;
+use nom::combinator::map;
+use nom::IResult;
 use super::super::program_object::CodeGen;
+use super::EvaluableObject;
 
 #[derive(Debug,PartialEq)]
 pub struct NumberObject {
@@ -21,10 +22,10 @@ impl NumberObject {
         self.number
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> IntValue<'ctx> {
+    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
         let i64_type = gen.context.i64_type();
         let int_val: IntValue<'ctx> = i64_type.const_int(self.number, false);
-        int_val
+        Ok(BasicValueEnum::IntValue(int_val))
     }
 }
 

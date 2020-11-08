@@ -1,19 +1,19 @@
-use inkwell::values::IntValue;
-use nom::IResult;
-use nom::sequence::tuple;
-use nom::multi::many0;
+use inkwell::values::BasicValueEnum;
 use nom::branch::alt;
-use nom::combinator::map;
 use nom::character::complete::char;
 use nom::character::complete::space0;
+use nom::combinator::map;
+use nom::IResult;
+use nom::multi::many0;
+use nom::sequence::tuple;
+use super::super::program_object::CodeGen;
 use super::EvaluableObject;
 use super::term_object::term_parser;
-use super::super::program_object::CodeGen;
 
 #[derive(Debug,PartialEq)]
 pub enum ExprOpKind {
     Add,
-    Minus
+    Sub
 }
 
 #[derive(Debug,PartialEq)]
@@ -33,16 +33,41 @@ impl ExprObject {
             let (op, obj) = val;
             first = match op {
                 ExprOpKind::Add => { first + obj.eval() },
-                ExprOpKind::Minus => { first - obj.eval() }
+                ExprOpKind::Sub => { first - obj.eval() }
             }
         };
         first
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> IntValue<'ctx> {
-        let i64_type = gen.context.i64_type();
-        let int_val: IntValue<'ctx> = i64_type.const_int(0, false);
-        int_val
+    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
+        let native_left_val = self.first.codegen(gen)?;
+
+        let mut left_val = match native_left_val {
+            BasicValueEnum::IntValue(val) => Ok(val),
+            _ => Err("This values cannot be added.")
+        }?;
+
+        for val in &self.others {
+            let (op, obj) = val;
+
+            let native_right_val = obj.codegen(gen)?;
+
+            let right_val = match native_right_val {
+                BasicValueEnum::IntValue(val) => Ok(val),
+                _ => Err("This values cannot be added.")
+            }?;
+
+            left_val = match op {
+                ExprOpKind::Add => {
+                    gen.builder.build_int_add(left_val, right_val, "")
+                },
+                ExprOpKind::Sub => {
+                    gen.builder.build_int_sub(left_val, right_val, "")
+                }
+            }
+        };
+
+        Ok(BasicValueEnum::IntValue(left_val))
     }
 }
 
@@ -62,7 +87,7 @@ pub fn expr_parser(text: &str) -> IResult<&str, EvaluableObject> {
                         let (op, _, obj) = val;
                         let op_kind = match op {
                             '+' => ExprOpKind::Add,
-                            '-' => ExprOpKind::Minus,
+                            '-' => ExprOpKind::Sub,
                             _ => ExprOpKind::Add
                         };
                         (op_kind, obj)
