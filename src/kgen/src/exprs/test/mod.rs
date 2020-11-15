@@ -1,4 +1,4 @@
-pub mod jit_compile;
+mod jit_compile;
 
 #[test]
 fn test_expr_object1() {

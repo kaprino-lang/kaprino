@@ -41,4 +41,4 @@ pub mod exponents_object;
 pub mod term_object;
 pub mod expr_object;
 
-pub mod test;
+mod test;
