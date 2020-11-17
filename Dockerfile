@@ -1,6 +1,6 @@
 FROM kaprino/llvm:latest
 
-COPY . ~/tmp/kaprino/
+COPY . /tmp/kaprino/
 
 RUN \
 ########################################################
@@ -8,5 +8,5 @@ RUN \
 # Build Kaprino
 #
 ########################################################
-    cd ~/tmp/kaprino \
+    cd /tmp/kaprino \
     && cargo test
