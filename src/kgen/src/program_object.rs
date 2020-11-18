@@ -3,6 +3,7 @@ use inkwell::module::Module;
 use inkwell::builder::Builder;
 use super::resolvers::type_resolver::TypeResolver;
 use super::resolvers::parameter_resolver::ParameterResolver;
+use super::resolvers::function_resolver::FunctionResolver;
 
 #[derive(Debug)]
 pub struct CodeGen<'ctx> {
@@ -10,7 +11,8 @@ pub struct CodeGen<'ctx> {
     pub module: Module<'ctx>,
     pub builder: Builder<'ctx>,
     pub param_resolver: ParameterResolver<'ctx>,
-    pub type_resolver: TypeResolver<'ctx>
+    pub type_resolver: TypeResolver<'ctx>,
+    pub function_resolver: FunctionResolver<'ctx>
 }
 
 impl<'ctx> CodeGen<'_> {
@@ -19,7 +21,15 @@ impl<'ctx> CodeGen<'_> {
         let builder = context.create_builder();
         let param_resolver = ParameterResolver::new();
         let type_resolver = TypeResolver::new();
+        let function_resolver = FunctionResolver::new();
 
-        CodeGen { context, module, builder, param_resolver, type_resolver }
+        CodeGen {
+            context,
+            module,
+            builder,
+            param_resolver,
+            type_resolver,
+            function_resolver
+        }
     }
 }
