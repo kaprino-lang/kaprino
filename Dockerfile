@@ -9,4 +9,5 @@ RUN \
 #
 ########################################################
     cd /tmp/kaprino \
+    && apt-get install libffi-dev \
     && cargo test
