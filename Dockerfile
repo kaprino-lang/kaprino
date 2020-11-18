@@ -3,11 +3,17 @@ FROM kaprino/llvm:latest
 COPY . /tmp/kaprino/
 
 RUN \
-########################################################
-#
-# Build Kaprino
-#
-########################################################
+    ####################################
+    #
+    # Install dependencies
+    #
+    ####################################
     cd /tmp/kaprino \
-    && apt-get install libffi-dev \
+    && apt-get update \
+    && apt-get install -y libffi-dev \
+    ####################################
+    #
+    # Run tests
+    #
+    ####################################
     && cargo test
