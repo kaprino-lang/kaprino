@@ -1,15 +1,13 @@
-mod jit_compile;
-
 #[test]
-fn test_expr_object1() {
-    use jit_compile::jit_expr;
+fn exprs_expr_object_test1() {
+    use super::expr_object::expr_parser;
 
-    assert_eq!(jit_expr("(6 - 2) * 3 + 5"), (6 - 2) * 3 + 5);
+    assert_eq!(expr_parser("(6 - 2) * 3 + 5").unwrap().1.eval(), (6 - 2) * 3 + 5);
 }
 
 #[test]
-fn test_expr_object2() {
-    use jit_compile::jit_expr;
+fn exprs_expr_object_test2() {
+    use super::expr_object::expr_parser;
 
-    assert_eq!(jit_expr("6 - 2 * 3 + 5"), 6 - 2 * 3 + 5);
+    assert_eq!(expr_parser("6 - 2 * 3 + 5").unwrap().1.eval(), 6 - 2 * 3 + 5);
 }
