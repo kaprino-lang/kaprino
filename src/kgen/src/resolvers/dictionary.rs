@@ -2,13 +2,13 @@ use std::collections::VecDeque;
 
 #[derive(Debug, PartialEq)]
 pub struct DictionaryItem<'ctx, T> {
-    content: &'ctx T,
+    content: T,
     id: &'ctx str,
     scope_id: &'ctx str
 }
 
 impl<'ctx, T> DictionaryItem<'ctx, T> {
-    pub fn new(content: &'ctx T, id: &'ctx str, scope_id: &'ctx str) -> DictionaryItem<'ctx, T> {
+    pub fn new(content: T, id: &'ctx str, scope_id: &'ctx str) -> DictionaryItem<'ctx, T> {
         DictionaryItem { content, id, scope_id }
     }
 }
@@ -24,7 +24,7 @@ impl<'ctx, T> Dictionary<'ctx, T> {
         Dictionary { contents: Vec::new(), scope: VecDeque::new() }
     }
 
-    pub fn add(&mut self, id: &'ctx str, content: &'ctx T) {
+    pub fn add(&mut self, id: &'ctx str, content: T) {
         let content_with_scope = DictionaryItem::new(
             content,
             id,
@@ -49,6 +49,16 @@ impl<'ctx, T> Dictionary<'ctx, T> {
             .find(|item| item.id == id);
         match content {
             Some(item) => Some(&item.content),
+            None => None
+        }
+    }
+
+    pub fn find_mut(&mut self, id: &str) -> Option<&mut T> {
+        let content = self.contents
+            .iter_mut()
+            .find(|item| item.id == id);
+        match content {
+            Some(item) => Some(&mut item.content),
             None => None
         }
     }
