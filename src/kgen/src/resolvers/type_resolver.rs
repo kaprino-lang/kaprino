@@ -1,3 +1,4 @@
+use inkwell::types::BasicTypeEnum;
 use super::dictionary::Dictionary;
 use super::super::program_object::CodeGen;
 
@@ -9,6 +10,7 @@ pub struct KMember<'ctx> {
 
 #[derive(Debug, PartialEq)]
 pub struct KType<'ctx> {
+    pub type_name: &'ctx str,
     pub members: Vec<KMember<'ctx>>
 }
 
@@ -28,6 +30,46 @@ impl<'ctx> KType<'ctx> {
             .iter()
             .find(|member| member.name == name)
     }
+
+    pub fn get_type(&'ctx self, gen: &'ctx CodeGen) -> BasicTypeEnum {
+        match self.type_name {
+            "Z" => {
+                BasicTypeEnum::IntType(
+                    gen.context.i32_type()
+                )
+            },
+            "R" => {
+                BasicTypeEnum::FloatType(
+                    gen.context.f64_type()
+                )
+            },
+            _ => {
+                BasicTypeEnum::IntType(
+                    gen.context.i32_type()
+                )
+            }
+        }
+    }
 }
 
 pub type TypeResolver<'ctx> = Dictionary<'ctx, KType<'ctx>>;
+
+impl<'ctx> TypeResolver<'_> {
+    pub fn init_default_types(&mut self) {
+        self.add(
+            "Z",
+            KType {
+                type_name: "Z",
+                members: Vec::new()
+            }
+        );
+
+        self.add(
+            "R",
+            KType {
+                type_name: "R",
+                members: Vec::new()
+            }
+        );
+    }
+}

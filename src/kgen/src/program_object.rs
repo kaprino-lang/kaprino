@@ -32,4 +32,8 @@ impl<'ctx> CodeGen<'_> {
             function_resolver
         }
     }
+
+    pub fn init(&mut self) {
+        self.type_resolver.init_default_types();
+    }
 }
