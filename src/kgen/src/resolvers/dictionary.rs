@@ -1,40 +1,40 @@
 use std::collections::VecDeque;
 
-#[derive(Debug, PartialEq)]
-pub struct DictionaryItem<'ctx, T> {
+#[derive(Debug, PartialEq, Clone)]
+pub struct DictionaryItem<T> {
     content: T,
-    id: &'ctx str,
-    scope_id: &'ctx str
+    id: String,
+    scope_id: String
 }
 
-impl<'ctx, T> DictionaryItem<'ctx, T> {
-    pub fn new(content: T, id: &'ctx str, scope_id: &'ctx str) -> DictionaryItem<'ctx, T> {
+impl<T> DictionaryItem<T> {
+    pub fn new(content: T, id: String, scope_id: String) -> DictionaryItem<T> {
         DictionaryItem { content, id, scope_id }
     }
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Dictionary<'ctx, T> {
-    contents: Vec<DictionaryItem<'ctx, T>>,
-    scope: VecDeque<&'ctx str>
+pub struct Dictionary<T> {
+    contents: Vec<DictionaryItem<T>>,
+    scope: VecDeque<String>
 }
 
-impl<'ctx, T> Dictionary<'ctx, T> {
-    pub fn new() -> Dictionary<'ctx, T> {
+impl<T> Dictionary<T> {
+    pub fn new() -> Dictionary<T> {
         Dictionary { contents: Vec::new(), scope: VecDeque::new() }
     }
 
-    pub fn add(&mut self, id: &'ctx str, content: T) {
+    pub fn add(&mut self, id: &str, content: T) {
         let content_with_scope = DictionaryItem::new(
             content,
-            id,
+            id.to_string(),
             self.get_current_scope()
         );
         self.contents.push(content_with_scope);
     }
 
-    pub fn add_scope(&mut self, scope: &'ctx str) {
-        self.scope.push_back(scope);
+    pub fn add_scope(&mut self, scope: &str) {
+        self.scope.push_back(scope.to_string());
     }
 
     pub fn remove_scope(&mut self) {
@@ -63,10 +63,10 @@ impl<'ctx, T> Dictionary<'ctx, T> {
         }
     }
 
-    fn get_current_scope(&self) -> &'ctx str {
+    fn get_current_scope(&self) -> String {
         match self.scope.back() {
-            Some(scope_id) => scope_id,
-            None => "__global"
+            Some(scope_id) => scope_id.clone(),
+            None => "__global".to_string()
         }
     }
 }
