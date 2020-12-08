@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use inkwell::values::BasicValueEnum;
 use super::program_object::CodeGen;
 use exponents_object::ExponentsObject;
@@ -24,12 +25,12 @@ impl EvaluableObject {
         }
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
         match self {
-            EvaluableObject::NumberObject(obj) => obj.codegen(&gen),
-            EvaluableObject::ExponentsObject(obj) => obj.codegen(&gen),
-            EvaluableObject::TermObject(obj) => obj.codegen(&gen),
-            EvaluableObject::ExprObject(obj) => obj.codegen(&gen)
+            EvaluableObject::NumberObject(obj) => obj.codegen(gen),
+            EvaluableObject::ExponentsObject(obj) => obj.codegen(gen),
+            EvaluableObject::TermObject(obj) => obj.codegen(gen),
+            EvaluableObject::ExprObject(obj) => obj.codegen(gen),
         }
     }
 }

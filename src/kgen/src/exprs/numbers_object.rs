@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use inkwell::values::BasicValueEnum;
 use inkwell::values::IntValue;
 use nom::character::complete::digit1;
@@ -22,8 +23,8 @@ impl NumberObject {
         self.number
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
-        let i64_type = gen.context.i64_type();
+    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+        let i64_type = gen.borrow().context.i64_type();
         let int_val: IntValue<'ctx> = i64_type.const_int(self.number, false);
         Ok(BasicValueEnum::IntValue(int_val))
     }

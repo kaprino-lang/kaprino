@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use inkwell::values::BasicValueEnum;
 use nom::branch::alt;
 use nom::character::complete::char;
@@ -39,7 +40,7 @@ impl ExprObject {
         first
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx CodeGen) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
         let native_left_val = self.first.codegen(gen)?;
 
         let mut left_val = match native_left_val {
@@ -59,10 +60,10 @@ impl ExprObject {
 
             left_val = match op {
                 ExprOpKind::Add => {
-                    gen.builder.build_int_add(left_val, right_val, "")
+                    gen.borrow().builder.build_int_add(left_val, right_val, "")
                 },
                 ExprOpKind::Sub => {
-                    gen.builder.build_int_sub(left_val, right_val, "")
+                    gen.borrow().builder.build_int_sub(left_val, right_val, "")
                 }
             }
         };
