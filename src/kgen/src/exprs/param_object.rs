@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use inkwell::values::BasicValueEnum;
 use nom::combinator::map;
 use nom::IResult;
@@ -18,8 +17,8 @@ impl<'ctx> ParamObject {
         }
     }
 
-    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
-        match gen.borrow_mut().param_resolver.find_mut(&self.param_name) {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
+        match gen.param_resolver.borrow_mut().find_mut(&self.param_name) {
             Some(val) => Ok(val.value),
             None => Err("Unknown parameters")
         }

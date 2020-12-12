@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use inkwell::types::BasicTypeEnum;
 use super::dictionary::Dictionary;
 use super::super::program_object::CodeGen;
@@ -19,10 +18,6 @@ impl<'ctx> KMember {
     pub fn new(name: String, type_name: String) -> KMember {
         KMember { name, type_name }
     }
-
-    pub fn get_type(&self, gen: &'ctx CodeGen) -> &'ctx KType {
-        gen.type_resolver.find(&self.name).unwrap()
-    }
 }
 
 impl<'ctx> KType {
@@ -32,21 +27,21 @@ impl<'ctx> KType {
             .find(|member| member.name == name)
     }
 
-    pub fn get_type(&self, gen: &RefCell<CodeGen<'ctx>>) -> BasicTypeEnum<'ctx> {
+    pub fn get_type(&self, gen: &CodeGen<'ctx>) -> BasicTypeEnum<'ctx> {
         match self.type_name.as_str() {
             "Z" => {
                 BasicTypeEnum::IntType(
-                    gen.borrow().context.i32_type()
+                    gen.context.i32_type()
                 )
             },
             "R" => {
                 BasicTypeEnum::FloatType(
-                    gen.borrow().context.f64_type()
+                    gen.context.f64_type()
                 )
             },
             _ => {
                 BasicTypeEnum::IntType(
-                    gen.borrow().context.i32_type()
+                    gen.context.i32_type()
                 )
             }
         }

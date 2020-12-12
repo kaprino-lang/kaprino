@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use inkwell::context::Context;
 use inkwell::module::Module;
 use inkwell::builder::Builder;
@@ -10,18 +11,18 @@ pub struct CodeGen<'ctx> {
     pub context: &'ctx Context,
     pub module: Module<'ctx>,
     pub builder: Builder<'ctx>,
-    pub param_resolver: ParameterResolver<'ctx>,
-    pub type_resolver: TypeResolver<'ctx>,
-    pub function_resolver: FunctionResolver<'ctx>
+    pub param_resolver: RefCell<ParameterResolver<'ctx>>,
+    pub type_resolver: RefCell<TypeResolver<'ctx>>,
+    pub function_resolver: RefCell<FunctionResolver<'ctx>>
 }
 
 impl<'ctx> CodeGen<'_> {
     pub fn new(context: &'ctx Context, name: &str) -> CodeGen<'ctx> {
         let module = context.create_module(name);
         let builder = context.create_builder();
-        let param_resolver = ParameterResolver::new();
-        let type_resolver = TypeResolver::new();
-        let function_resolver = FunctionResolver::new();
+        let param_resolver = RefCell::new(ParameterResolver::new());
+        let type_resolver = RefCell::new(TypeResolver::new());
+        let function_resolver = RefCell::new(FunctionResolver::new());
 
         CodeGen {
             context,
@@ -33,7 +34,7 @@ impl<'ctx> CodeGen<'_> {
         }
     }
 
-    pub fn init(&mut self) {
-        self.type_resolver.init_default_types();
+    pub fn init(&self) {
+        self.type_resolver.borrow_mut().init_default_types();
     }
 }

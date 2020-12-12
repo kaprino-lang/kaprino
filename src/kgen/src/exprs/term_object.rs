@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use inkwell::values::BasicValueEnum;
 use nom::IResult;
 use nom::sequence::tuple;
@@ -43,7 +42,7 @@ impl<'ctx> TermObject {
         first
     }
 
-    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
         let native_left_val = self.first.codegen(gen)?;
 
         let mut left_val = match native_left_val {
@@ -63,10 +62,10 @@ impl<'ctx> TermObject {
 
             left_val = match op {
                 TermOpKind::Mul => {
-                    gen.borrow().builder.build_int_mul(left_val, right_val, "")
+                    gen.builder.build_int_mul(left_val, right_val, "")
                 },
                 TermOpKind::Div => {
-                    gen.borrow().builder.build_int_unsigned_div(left_val, right_val, "")
+                    gen.builder.build_int_unsigned_div(left_val, right_val, "")
                 }
             }
         };

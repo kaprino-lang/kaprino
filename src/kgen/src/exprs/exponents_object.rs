@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use inkwell::values::BasicValueEnum;
 use nom::IResult;
 use nom::sequence::tuple;
@@ -27,7 +26,7 @@ impl<'ctx> ExponentsObject {
         u64::pow(self.left.eval(), self.right.eval() as u32)
     }
 
-    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
         self.left.codegen(gen)
     }
 }
