@@ -11,12 +11,14 @@ pub struct ParamObject {
     param_name: String
 }
 
-impl ParamObject {
+impl<'ctx> ParamObject {
     pub fn new(param_name: String) -> Self {
-        Self { param_name }
+        Self {
+            param_name
+        }
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
         match gen.borrow_mut().param_resolver.find_mut(&self.param_name) {
             Some(val) => Ok(val.value),
             None => Err("Unknown parameters")

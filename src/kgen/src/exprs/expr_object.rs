@@ -23,9 +23,11 @@ pub struct ExprObject {
     others: Vec<(ExprOpKind, EvaluableObject)>
 }
 
-impl ExprObject {
-    pub fn new(first: EvaluableObject, others: Vec<(ExprOpKind, EvaluableObject)>) -> ExprObject {
-        ExprObject { first, others }
+impl<'ctx> ExprObject {
+    pub fn new(first: EvaluableObject, others: Vec<(ExprOpKind, EvaluableObject)>) -> Self {
+        Self {
+            first, others
+        }
     }
 
     pub fn eval(&self) -> u64 {
@@ -40,7 +42,7 @@ impl ExprObject {
         first
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
         let native_left_val = self.first.codegen(gen)?;
 
         let mut left_val = match native_left_val {

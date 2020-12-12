@@ -17,7 +17,7 @@ pub enum EvaluableObject {
     ParamObject(Box<ParamObject>)
 }
 
-impl EvaluableObject {
+impl<'ctx> EvaluableObject {
     pub fn eval(&self) -> u64 {
         match self {
             EvaluableObject::NumberObject(obj) => obj.eval(),
@@ -28,7 +28,7 @@ impl EvaluableObject {
         }
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
         match self {
             EvaluableObject::NumberObject(obj) => obj.codegen(gen),
             EvaluableObject::ExponentsObject(obj) => obj.codegen(gen),

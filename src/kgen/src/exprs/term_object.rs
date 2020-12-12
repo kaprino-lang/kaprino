@@ -23,9 +23,12 @@ pub struct TermObject {
     others: Vec<(TermOpKind, EvaluableObject)>
 }
 
-impl TermObject {
-    pub fn new(first: EvaluableObject, others: Vec<(TermOpKind, EvaluableObject)>) -> TermObject {
-        TermObject { first, others }
+impl<'ctx> TermObject {
+    pub fn new(first: EvaluableObject, others: Vec<(TermOpKind, EvaluableObject)>) -> Self {
+        Self {
+            first,
+            others
+        }
     }
 
     pub fn eval(&self) -> u64 {
@@ -40,7 +43,7 @@ impl TermObject {
         first
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
         let native_left_val = self.first.codegen(gen)?;
 
         let mut left_val = match native_left_val {

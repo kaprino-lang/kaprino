@@ -12,10 +12,10 @@ pub struct NumberObject {
     number: u64
 }
 
-impl NumberObject {
-    pub fn new(number: u64) -> NumberObject {
-        NumberObject {
-            number: number
+impl<'ctx> NumberObject {
+    pub fn new(number: u64) -> Self{
+        Self {
+            number
         }
     }
 
@@ -23,7 +23,7 @@ impl NumberObject {
         self.number
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
         let i64_type = gen.borrow().context.i64_type();
         let int_val: IntValue<'ctx> = i64_type.const_int(self.number, false);
         Ok(BasicValueEnum::IntValue(int_val))

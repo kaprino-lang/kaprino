@@ -16,7 +16,7 @@ pub struct ExponentsObject {
     right: EvaluableObject,
 }
 
-impl ExponentsObject {
+impl<'ctx> ExponentsObject {
     pub fn new(left: EvaluableObject, right: EvaluableObject) -> Self {
         Self {
             left, right
@@ -27,7 +27,7 @@ impl ExponentsObject {
         u64::pow(self.left.eval(), self.right.eval() as u32)
     }
 
-    pub fn codegen<'ctx>(&self, gen: &'ctx RefCell<CodeGen>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &RefCell<CodeGen<'ctx>>) -> Result<BasicValueEnum<'ctx>, &str> {
         self.left.codegen(gen)
     }
 }
