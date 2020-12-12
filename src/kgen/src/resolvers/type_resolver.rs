@@ -32,7 +32,7 @@ impl<'ctx> KType {
             .find(|member| member.name == name)
     }
 
-    pub fn get_type(&self, gen: &'ctx RefCell<CodeGen>) -> BasicTypeEnum<'ctx> {
+    pub fn get_type(&self, gen: &RefCell<CodeGen<'ctx>>) -> BasicTypeEnum<'ctx> {
         match self.type_name.as_str() {
             "Z" => {
                 BasicTypeEnum::IntType(
