@@ -1,5 +1,6 @@
 use inkwell::types::BasicTypeEnum;
 use inkwell::types::FunctionType;
+use inkwell::values::FunctionValue;
 use nom::character::complete::char;
 use nom::character::complete::space0;
 use nom::character::complete::alphanumeric1;
@@ -8,6 +9,7 @@ use nom::IResult;
 use nom::sequence::tuple;
 use super::super::program_object::CodeGen;
 use super::super::exprs::EvaluableObject;
+use super::super::resolvers::parameter_resolver::KParameter;
 use super::super::exprs::expr_object::expr_parser;
 use super::super::statements::StatementObject;
 use super::args_object::args_parser;
@@ -102,6 +104,22 @@ impl<'ctx> FunctionObject {
         }
     }
 
+    fn assign_args(&self, gen: &CodeGen<'ctx>, func: &FunctionValue<'ctx>) {
+        let mut param_resolver = gen.param_resolver.borrow_mut();
+
+        param_resolver.add_scope(&self.func_name);
+
+        let params = func.get_params();
+        for (idx, param_name) in self.args.iter().enumerate() {
+            let kparam = KParameter::new(
+                self.args[idx].clone(),
+                params[idx]
+            );
+
+            param_resolver.add(param_name, kparam);
+        };
+    }
+
     fn codegen_expr(&self, gen: &CodeGen<'ctx>, expr: &EvaluableObject) -> Result<(), String> {
         match self.get_func_type(gen) {
             Ok(func_type) => {
@@ -110,12 +128,19 @@ impl<'ctx> FunctionObject {
 
                 gen.builder.position_at_end(basic_block);
 
+                self.assign_args(gen, &func);
+
                 match expr.codegen(gen) {
                     Ok(expr) => {
                         gen.builder.build_return(Some(&expr));
+
+                        gen.param_resolver.borrow_mut().remove_scope();
+
                         Ok(())
                     },
                     Err(error_message) => {
+                        gen.param_resolver.borrow_mut().remove_scope();
+
                         Err(error_message.to_string())
                     }
                 }
@@ -134,9 +159,13 @@ impl<'ctx> FunctionObject {
 
                 gen.builder.position_at_end(basic_block);
 
+                self.assign_args(gen, &func);
+
                 for st in statements {
                     st.codegen(gen);
                 };
+
+                gen.param_resolver.borrow_mut().remove_scope();
 
                 Ok(())
             },
