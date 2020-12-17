@@ -17,7 +17,7 @@ pub enum EvaluableObject {
 }
 
 impl<'ctx> EvaluableObject {
-    pub fn eval(&self) -> u64 {
+    pub fn eval(&self) -> u32 {
         match self {
             EvaluableObject::NumberObject(obj) => obj.eval(),
             EvaluableObject::ExponentsObject(obj) => obj.eval(),

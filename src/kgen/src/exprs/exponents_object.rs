@@ -22,8 +22,8 @@ impl<'ctx> ExponentsObject {
         }
     }
 
-    pub fn eval(&self) -> u64 {
-        u64::pow(self.left.eval(), self.right.eval() as u32)
+    pub fn eval(&self) -> u32 {
+        u32::pow(self.left.eval(), self.right.eval() as u32)
     }
 
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {

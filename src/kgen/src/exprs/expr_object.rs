@@ -29,7 +29,7 @@ impl<'ctx> ExprObject {
         }
     }
 
-    pub fn eval(&self) -> u64 {
+    pub fn eval(&self) -> u32 {
         let mut first = self.first.eval();
         for val in &self.others {
             let (op, obj) = val;

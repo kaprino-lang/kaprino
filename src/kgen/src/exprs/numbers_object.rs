@@ -8,23 +8,23 @@ use super::EvaluableObject;
 
 #[derive(Debug,PartialEq)]
 pub struct NumberObject {
-    number: u64
+    number: u32
 }
 
 impl<'ctx> NumberObject {
-    pub fn new(number: u64) -> Self{
+    pub fn new(number: u32) -> Self{
         Self {
             number
         }
     }
 
-    pub fn eval(&self) -> u64 {
+    pub fn eval(&self) -> u32 {
         self.number
     }
 
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
-        let i64_type = gen.context.i64_type();
-        let int_val: IntValue<'ctx> = i64_type.const_int(self.number, false);
+        let i32_type = gen.context.i32_type();
+        let int_val: IntValue<'ctx> = i32_type.const_int(self.number.into(), false);
         Ok(BasicValueEnum::IntValue(int_val))
     }
 }
