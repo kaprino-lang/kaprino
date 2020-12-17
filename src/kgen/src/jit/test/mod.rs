@@ -18,3 +18,10 @@ fn jit_execute_statement_test1() {
 
     assert_eq!(execute_statement("#ret (6 - 2) * 3 + 5").unwrap(), (6 - 2) * 3 + 5);
 }
+
+#[test]
+fn jit_execute_function_test1() {
+    use super::execute_function::execute_function;
+
+    assert_eq!(execute_function("f(x) = 35 (Z -> Z)", "f", 0).unwrap(), 35);
+}
