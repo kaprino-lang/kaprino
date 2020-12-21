@@ -2,9 +2,16 @@ use std::cell::RefCell;
 use inkwell::context::Context;
 use inkwell::module::Module;
 use inkwell::builder::Builder;
-use super::resolvers::type_resolver::TypeResolver;
-use super::resolvers::parameter_resolver::ParameterResolver;
+use nom::character::complete::space0;
+use nom::combinator::map;
+use nom::IResult;
+use nom::multi::many0;
+use nom::sequence::tuple;
+use super::functions::function_object::function_parser;
+use super::functions::function_object::FunctionObject;
 use super::resolvers::function_resolver::FunctionResolver;
+use super::resolvers::parameter_resolver::ParameterResolver;
+use super::resolvers::type_resolver::TypeResolver;
 
 #[derive(Debug)]
 pub struct CodeGen<'ctx> {
@@ -14,6 +21,21 @@ pub struct CodeGen<'ctx> {
     pub param_resolver: RefCell<ParameterResolver<'ctx>>,
     pub type_resolver: RefCell<TypeResolver<'ctx>>,
     pub function_resolver: RefCell<FunctionResolver<'ctx>>
+}
+
+fn program_parser(text: &str) -> IResult<&str, Vec<Box<FunctionObject>>> {
+    map(
+        many0(
+            tuple((
+                space0,
+                function_parser,
+                space0
+            ))
+        ),
+        |val| {
+            val.into_iter().map(|v| { v.1 }).collect()
+        }
+    )(text)
 }
 
 impl<'ctx> CodeGen<'_> {
@@ -36,5 +58,25 @@ impl<'ctx> CodeGen<'_> {
 
     pub fn init(&self) {
         self.type_resolver.borrow_mut().init_default_types();
+    }
+
+    pub fn parse(&self, text: &str) -> Result<(), String> {
+        let parsed = program_parser(text);
+        match parsed {
+            Ok((_, parsed)) => {
+                for obj in parsed {
+                    let result = obj.codegen(self);
+
+                    if let Err(text) = result {
+                        return Err(text);
+                    };
+                };
+
+                Ok(())
+            },
+            Err(text) => {
+                Err(text.to_string())
+            }
+        }
     }
 }
