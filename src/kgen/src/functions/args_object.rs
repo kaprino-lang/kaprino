@@ -7,7 +7,7 @@ use nom::bytes::complete::tag;
 use nom::character::complete::space0;
 use nom::character::complete::alphanumeric1;
 
-pub fn args_parser(text: &str) -> IResult<&str, Vec<&str>> {
+pub fn args_inside_parser(text: &str) -> IResult<&str, Vec<&str>> {
     let texts_parser = map(
         tuple((
             alphanumeric1,
@@ -44,6 +44,21 @@ pub fn args_parser(text: &str) -> IResult<&str, Vec<&str>> {
                 Some(vec) => vec,
                 None => Vec::new()
             }
+        }
+    )(text)
+}
+
+pub fn args_parser(text: &str) -> IResult<&str, Vec<&str>> {
+    map(
+        tuple((
+            tag("("),
+            space0,
+            args_inside_parser,
+            space0,
+            tag(")")
+        )),
+        |val| {
+            val.2
         }
     )(text)
 }
