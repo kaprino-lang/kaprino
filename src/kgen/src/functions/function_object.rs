@@ -1,16 +1,20 @@
 use inkwell::types::BasicTypeEnum;
 use inkwell::types::FunctionType;
 use inkwell::values::FunctionValue;
+use nom::branch::alt;
+use nom::bytes::complete::tag;
+use nom::character::complete::alphanumeric1;
 use nom::character::complete::char;
 use nom::character::complete::space0;
-use nom::character::complete::alphanumeric1;
 use nom::combinator::map;
 use nom::IResult;
+use nom::multi::many0;
 use nom::sequence::tuple;
-use super::super::program_object::CodeGen;
 use super::super::exprs::EvaluableObject;
-use super::super::resolvers::parameter_resolver::KParameter;
 use super::super::exprs::expr_object::expr_parser;
+use super::super::program_object::CodeGen;
+use super::super::resolvers::parameter_resolver::KParameter;
+use super::super::statements::statement_object::statement_parser;
 use super::super::statements::StatementObject;
 use super::args_object::args_parser;
 use super::function_type_object::function_type_parser;
@@ -188,29 +192,21 @@ impl<'ctx> FunctionObject {
     }
 }
 
-pub fn function_parser(text: &str) -> IResult<&str, Box<FunctionObject>> {
+fn expr_function_parser(text: &str) -> IResult<&str, Box<FunctionObject>> {
     map(
         tuple((
             alphanumeric1,
             space0,
-            char('('),
-            space0,
             args_parser,
-            space0,
-            char(')'),
             space0,
             char('='),
             space0,
             expr_parser,
             space0,
-            char('('),
-            space0,
-            function_type_parser,
-            space0,
-            char(')')
+            function_type_parser
         )),
         |val| {
-            let (func_name, _, _, _, args, _, _, _, _, _, expr, _, _, _, fn_type, _, _) = val;
+            let (func_name, _, args, _, _, _, expr, _, fn_type) = val;
 
             let func_name = func_name.to_string();
             let args: Vec<String> = args.iter().map(|s| { s.to_string() }).collect();
@@ -224,4 +220,55 @@ pub fn function_parser(text: &str) -> IResult<&str, Box<FunctionObject>> {
             )
         }
     )(text)
+}
+
+fn statement_function_parser(text: &str) -> IResult<&str, Box<FunctionObject>> {
+    map(
+        tuple((
+            tag("#func"),
+            space0,
+            alphanumeric1,
+            space0,
+            args_parser,
+            space0,
+            function_type_parser,
+            space0,
+            tag("|>"),
+            map(
+                many0(
+                    tuple((
+                        space0,
+                        statement_parser,
+                        space0
+                    ))
+                ),
+                |val| {
+                    let vec: Vec<StatementObject> = val.into_iter().map(|v| { v.1 }).collect();
+                    vec
+                }
+            ),
+            tag("|<"),
+        )),
+        |val| {
+            let (_, _, func_name, _, args, _, fn_type, _, _, statements, _) = val;
+
+            let func_name = func_name.to_string();
+            let args: Vec<String> = args.iter().map(|s| { s.to_string() }).collect();
+            let types: Vec<String> = fn_type.0.iter().map(|s| { s.to_string() }).collect();
+            let ret_type = fn_type.1.to_string();
+
+            Box::new(
+                FunctionObject::new(
+                    func_name, args, types, ret_type, None, Some(statements)
+                )
+            )
+        }
+    )(text)
+}
+
+pub fn function_parser(text: &str) -> IResult<&str, Box<FunctionObject>> {
+    alt((
+        expr_function_parser,
+        statement_function_parser
+    ))(text)
 }
