@@ -2,6 +2,31 @@
 
 Written in extended [Backus Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form).
 
+## Syntax for the functions
+
+```
+<function>
+    ::= <params> <args> "=" <expr> <functype>
+    | "#func" <params> <args> <functype> "|>" (<statement>)* "|<"
+<args>
+    ::= "(" <params> ("," <params>)* ")"
+<functype>
+    ::= "(" <params> ("," <params>)* "->" <params> ")"
+```
+
+## Syntax for the statements
+
+```
+<statement>
+    ::= "#let" <params> (":=" <expr>)? "(" "<-" <params> ")"
+    | <params> ":=" <expr>
+    | "#call" <expr>
+    | "#if" <expr> "|>" (<statement>)* "|<"
+    | "#loop" "|>" (<statement>)* "|<"
+    | "#break"
+    | "#ret" <expr>
+```
+
 ## Syntax for the expressions
 
 ```
