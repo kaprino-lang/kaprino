@@ -1,5 +1,5 @@
 [package]
-name = "kprc"
+name = "kpr"
 version = "0.1.0"
 authors = ["Akihisa Yagi <capra314cabra@gmail.com>"]
 edition = "2018"
@@ -8,3 +8,7 @@ edition = "2018"
 
 [dependencies.kgen]
 path = "../kgen"
+
+[dependencies]
+inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", features = ["llvm9-0"] }
+clap = "2.33.3"
