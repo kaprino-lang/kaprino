@@ -3,6 +3,7 @@ use inkwell::context::Context;
 use inkwell::module::Module;
 use inkwell::builder::Builder;
 use nom::character::complete::space0;
+use nom::combinator::eof;
 use nom::combinator::map;
 use nom::IResult;
 use nom::multi::many0;
@@ -25,14 +26,17 @@ pub struct CodeGen<'ctx> {
 
 fn program_parser(text: &str) -> IResult<&str, Vec<Box<FunctionObject>>> {
     map(
-        many0(
-            tuple((
-                space0,
-                function_parser,
-                space0
-            ))
-        ),
-        |val| {
+        tuple((
+            many0(
+                tuple((
+                    space0,
+                    function_parser,
+                    space0
+                ))
+            ),
+            eof
+        )),
+        |(val, _)| {
             val.into_iter().map(|v| { v.1 }).collect()
         }
     )(text)
