@@ -46,8 +46,10 @@ impl KprcApp {
                 .value_name("OUTPUT")
                 .takes_value(true)
                 .help("Output file name"))
-            .arg(Arg::with_name("llvm")
-                .help("Emits LLVM IR files only"))
+            .arg(Arg::with_name("llvm-only")
+                .long("llvm-only")
+                .help("Emits LLVM IR files only")
+            )
     }
 
     fn get_source_content(&self) -> Result<String, String> {
