@@ -9,7 +9,7 @@ use nom::IResult;
 use nom::multi::many0;
 use nom::sequence::tuple;
 use super::functions::function_object::function_parser;
-use super::functions::function_object::FunctionObject;
+use super::functions::FunctionObject;
 use super::resolvers::function_resolver::FunctionResolver;
 use super::resolvers::parameter_resolver::ParameterResolver;
 use super::resolvers::type_resolver::TypeResolver;
@@ -24,7 +24,7 @@ pub struct CodeGen<'ctx> {
     pub function_resolver: RefCell<FunctionResolver<'ctx>>
 }
 
-fn program_parser(text: &str) -> IResult<&str, Vec<Box<FunctionObject>>> {
+fn program_parser(text: &str) -> IResult<&str, Vec<FunctionObject>> {
     map(
         tuple((
             many0(
