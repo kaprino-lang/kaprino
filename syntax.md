@@ -8,6 +8,7 @@ Written in extended [Backus Naur Form (BNF)](https://en.wikipedia.org/wiki/Backu
 <function>
     ::= <params> <args> "=" <expr> <functype>
     | "#func" <params> <args> <functype> "|>" (<statement>)* "|<"
+    | "#extfunc" <params> <args> <functype>
 <args>
     ::= "(" <params> ("," <params>)* ")"
 <functype>
