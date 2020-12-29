@@ -5,6 +5,7 @@ use super::program_object::CodeGen;
 use super::resolvers::parameter_resolver::KParameter;
 use expr_function::ExprFunction;
 use statement_function::StatementFunction;
+use external_function::ExternalFunction;
 
 pub mod args_object;
 pub mod function_type_object;
@@ -13,14 +14,16 @@ pub mod function_object;
 #[derive(Debug,PartialEq)]
 pub enum FunctionObject {
     ExprFunction(Box<ExprFunction>),
-    StatementFunction(Box<StatementFunction>)
+    StatementFunction(Box<StatementFunction>),
+    ExternalFunction(Box<ExternalFunction>)
 }
 
 impl<'ctx> FunctionObject {
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), String> {
         match self {
             FunctionObject::ExprFunction(obj) => obj.codegen(gen),
-            FunctionObject::StatementFunction(obj) => obj.codegen(gen)
+            FunctionObject::StatementFunction(obj) => obj.codegen(gen),
+            FunctionObject::ExternalFunction(obj) => obj.codegen(gen)
         }
     }
 }
@@ -132,5 +135,6 @@ pub trait FunctionObjectTrait {
 
 pub mod expr_function;
 pub mod statement_function;
+pub mod external_function;
 
 mod test;
