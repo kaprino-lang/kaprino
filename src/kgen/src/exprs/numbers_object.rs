@@ -22,7 +22,7 @@ impl<'ctx> NumberObject {
         self.number
     }
 
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, String> {
         let i32_type = gen.context.i32_type();
         let int_val: IntValue<'ctx> = i32_type.const_int(self.number.into(), false);
         Ok(BasicValueEnum::IntValue(int_val))

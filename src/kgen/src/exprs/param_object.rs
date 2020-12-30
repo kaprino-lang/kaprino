@@ -17,10 +17,10 @@ impl<'ctx> ParamObject {
         }
     }
 
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, String> {
         match gen.param_resolver.borrow_mut().find_mut(&self.param_name) {
             Some(val) => Ok(val.value),
-            None => Err("Unknown parameters")
+            None => Err("Unknown parameters".to_string())
         }
     }
 }

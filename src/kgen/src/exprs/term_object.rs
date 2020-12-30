@@ -42,7 +42,7 @@ impl<'ctx> TermObject {
         first
     }
 
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, String> {
         let native_left_val = self.first.codegen(gen)?;
 
         let mut left_val = match native_left_val {

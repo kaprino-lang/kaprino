@@ -27,7 +27,7 @@ impl<'ctx> EvaluableObject {
         }
     }
 
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, &str> {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, String> {
         match self {
             EvaluableObject::NumberObject(obj) => obj.codegen(gen),
             EvaluableObject::ExponentsObject(obj) => obj.codegen(gen),
