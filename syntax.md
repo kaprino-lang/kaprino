@@ -44,7 +44,9 @@ Written in extended [Backus Naur Form (BNF)](https://en.wikipedia.org/wiki/Backu
 <expop>
     ::= "^"
 <factor>
-    ::= <numbers>
+    ::= <params> "(" <expr> ("," <expr>)* ")"
+    | "\"" <text> "\""
+    | <numbers>
     | <params>
     | "(" <expr> ")"
     | "not" <factor>
