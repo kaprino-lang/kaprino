@@ -24,5 +24,11 @@ jobs:
         run: apt-get update
       - name: Install libffi-dev
         run: apt-get install -y libffi-dev
+      - name: Setup Rust
+        run: |
+          rustup install stable
+          rustup default stable
+      - name: Get toolchains
+        run: rustup show
       - name: Test kaprino
         run: cargo test
