@@ -1,4 +1,5 @@
 use inkwell::types::BasicTypeEnum;
+use inkwell::AddressSpace;
 use super::dictionary::Dictionary;
 use super::super::program_object::CodeGen;
 
@@ -39,6 +40,11 @@ impl<'ctx> KType {
                     gen.context.f64_type()
                 )
             },
+            "Text" => {
+                BasicTypeEnum::PointerType(
+                    gen.context.i8_type().ptr_type(AddressSpace::Generic)
+                )
+            },
             _ => {
                 BasicTypeEnum::IntType(
                     gen.context.i32_type()
@@ -64,6 +70,14 @@ impl<'ctx> TypeResolver<'_> {
             "R",
             KType {
                 type_name: "R".to_string(),
+                members: Vec::new()
+            }
+        );
+
+        self.add(
+            "Text",
+            KType {
+                type_name: "Text".to_string(),
                 members: Vec::new()
             }
         );
