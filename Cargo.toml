@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "src/kgen",
+    "src/kpr",
+    "src/kprc"
+]
