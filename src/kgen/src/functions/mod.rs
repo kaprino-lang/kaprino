@@ -123,9 +123,12 @@ pub trait FunctionObjectTrait {
 
         let params = func.get_params();
         for (idx, param_name) in self.get_info().args.iter().enumerate() {
+            let allocated = gen.builder.build_alloca(params[idx].get_type(), "");
+            gen.builder.build_store(allocated, params[idx]);
+
             let kparam = KParameter::new(
                 self.get_info().args[idx].clone(),
-                params[idx]
+                allocated.into()
             );
 
             param_resolver.add(param_name, kparam);
