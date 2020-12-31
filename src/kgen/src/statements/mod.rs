@@ -9,11 +9,11 @@ pub enum StatementObject {
 }
 
 impl<'ctx> StatementObject {
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) {
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), String> {
         match self {
             StatementObject::RetObject(obj) => obj.codegen(gen),
             StatementObject::LetObject(obj) => obj.codegen(gen)
-        };
+        }
     }
 }
 

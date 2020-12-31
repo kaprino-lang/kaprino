@@ -52,7 +52,7 @@ impl<'ctx> StatementFunction {
                 self.assign_args(gen, &func);
 
                 for st in &self.statements {
-                    st.codegen(gen);
+                    st.codegen(gen)?;
                 };
 
                 gen.param_resolver.borrow_mut().remove_scope();
