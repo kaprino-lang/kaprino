@@ -18,10 +18,12 @@ impl<'ctx> ParamObject {
     }
 
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, String> {
-        match gen.param_resolver.borrow_mut().find_mut(&self.param_name) {
-            Some(val) => Ok(val.value),
-            None => Err("Unknown parameters".to_string())
-        }
+        let mut resolver =  gen.param_resolver.borrow_mut();
+        let param = resolver.find_mut(&self.param_name)
+            .ok_or("Unknown parameters".to_string())?;
+        let loaded_value = gen.builder.build_load(param.value.into_pointer_value(), "");
+
+        Ok(loaded_value)
     }
 }
 
