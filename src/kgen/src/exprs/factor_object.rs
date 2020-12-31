@@ -4,11 +4,13 @@ use super::EvaluableObject;
 use super::numbers_object::numbers_parser;
 use super::paren_object::paren_parser;
 use super::param_object::param_parser;
+use super::string_object::string_parser;
 
 pub fn factor_parser(text: &str) -> IResult<&str, EvaluableObject> {
     alt((
         numbers_parser,
         paren_parser,
-        param_parser
+        param_parser,
+        string_parser
     ))(text)
 }

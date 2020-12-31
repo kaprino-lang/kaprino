@@ -5,11 +5,13 @@ use expr_object::ExprObject;
 use numbers_object::NumberObject;
 use term_object::TermObject;
 use param_object::ParamObject;
+use string_object::StringObject;
 
 /// Object which represents evaluable expressions.
 #[derive(Debug,PartialEq)]
 pub enum EvaluableObject {
     NumberObject(Box<NumberObject>),
+    StringObject(Box<StringObject>),
     ExponentsObject(Box<ExponentsObject>),
     TermObject(Box<TermObject>),
     ExprObject(Box<ExprObject>),
@@ -30,6 +32,7 @@ impl<'ctx> EvaluableObject {
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, String> {
         match self {
             EvaluableObject::NumberObject(obj) => obj.codegen(gen),
+            EvaluableObject::StringObject(obj) => obj.codegen(gen),
             EvaluableObject::ExponentsObject(obj) => obj.codegen(gen),
             EvaluableObject::TermObject(obj) => obj.codegen(gen),
             EvaluableObject::ExprObject(obj) => obj.codegen(gen),
@@ -38,6 +41,7 @@ impl<'ctx> EvaluableObject {
     }
 }
 
+pub mod string_object;
 pub mod numbers_object;
 pub mod paren_object;
 pub mod factor_object;
