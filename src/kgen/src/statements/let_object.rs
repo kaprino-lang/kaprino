@@ -73,28 +73,31 @@ impl<'ctx> LetObject {
 
 pub fn let_parser(text: &str) -> IResult<&str, StatementObject> {
     let assign_parser = map(tuple((
+            space0,
             tag(":="),
             space0,
             expr_parser
         )),
         |val| {
-            let (_, _, expr) = val;
+            let (_, _, _, expr) = val;
             expr
         }
     );
 
     let type_parser = map(
         tuple((
+            space0,
             tag("("),
             space0,
             tag("<-"),
             space0,
             alphanumeric1,
             space0,
-            tag(")")
+            tag(")"),
+            space0
         )),
         |val| {
-            let (_, _, _, _, type_name, _, _) = val;
+            let (_, _, _, _, _, type_name, _, _, _) = val;
             type_name
         }
     );
