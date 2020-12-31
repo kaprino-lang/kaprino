@@ -5,6 +5,7 @@ use expr_object::ExprObject;
 use numbers_object::NumberObject;
 use term_object::TermObject;
 use param_object::ParamObject;
+use function_call_object::FunctionCallObject;
 use string_object::StringObject;
 
 /// Object which represents evaluable expressions.
@@ -15,7 +16,8 @@ pub enum EvaluableObject {
     ExponentsObject(Box<ExponentsObject>),
     TermObject(Box<TermObject>),
     ExprObject(Box<ExprObject>),
-    ParamObject(Box<ParamObject>)
+    ParamObject(Box<ParamObject>),
+    FunctionCallObject(Box<FunctionCallObject>)
 }
 
 impl<'ctx> EvaluableObject {
@@ -36,13 +38,15 @@ impl<'ctx> EvaluableObject {
             EvaluableObject::ExponentsObject(obj) => obj.codegen(gen),
             EvaluableObject::TermObject(obj) => obj.codegen(gen),
             EvaluableObject::ExprObject(obj) => obj.codegen(gen),
-            EvaluableObject::ParamObject(obj) => obj.codegen(gen)
+            EvaluableObject::ParamObject(obj) => obj.codegen(gen),
+            EvaluableObject::FunctionCallObject(obj) => obj.codegen(gen)
         }
     }
 }
 
 pub mod string_object;
 pub mod numbers_object;
+pub mod function_call_object;
 pub mod paren_object;
 pub mod factor_object;
 pub mod exponents_object;
