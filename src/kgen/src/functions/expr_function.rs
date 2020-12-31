@@ -41,31 +41,26 @@ impl<'ctx> ExprFunction {
     }
 
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), String> {
-        match self.get_func_type(gen) {
-            Ok(func_type) => {
-                let func = gen.module.add_function(&self.get_info().name, func_type, None);
-                let basic_block = gen.context.append_basic_block(func, "entry");
+        let func_type =  self.get_func_type(gen)?;
 
-                gen.builder.position_at_end(basic_block);
+        let func = gen.module.add_function(&self.get_info().name, func_type, None);
+        let basic_block = gen.context.append_basic_block(func, "entry");
 
-                self.assign_args(gen, &func);
+        gen.builder.position_at_end(basic_block);
 
-                match self.expr.codegen(gen) {
-                    Ok(expr) => {
-                        gen.builder.build_return(Some(&expr));
+        self.assign_args(gen, &func);
 
-                        gen.param_resolver.borrow_mut().remove_scope();
+        match self.expr.codegen(gen) {
+            Ok(expr) => {
+                gen.builder.build_return(Some(&expr));
 
-                        Ok(())
-                    },
-                    Err(error_message) => {
-                        gen.param_resolver.borrow_mut().remove_scope();
+                gen.param_resolver.borrow_mut().remove_scope();
 
-                        Err(error_message.to_string())
-                    }
-                }
+                Ok(())
             },
             Err(error_message) => {
+                gen.param_resolver.borrow_mut().remove_scope();
+
                 Err(error_message)
             }
         }

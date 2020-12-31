@@ -29,45 +29,46 @@ impl<'ctx> LetObject {
         }
     }
 
-    fn allocate_param(&self, gen: &CodeGen<'ctx>) -> KParameter<'ctx> {
-        let type_inst = match gen.type_resolver.borrow().find(&self.type_name) {
-            Some(val) => {
-                Ok(val.get_type(gen))
-            },
-            None => {
-                Err(format!("Unknown types: {}", self.type_name))
-            }
-        };
+    fn allocate_param(&self, gen: &CodeGen<'ctx>) -> Result<KParameter<'ctx>, String> {
+        let type_value = gen.type_resolver.borrow()
+            .find(&self.type_name)
+            .ok_or(format!("Unknown types: {}", self.type_name))?
+            .get_type(gen);
 
         let allocated = gen.builder.build_alloca(
-            type_inst.unwrap(),
+            type_value,
             &self.param_name
         );
 
-        KParameter {
+        Ok(KParameter {
             type_id: self.type_name.clone(),
             value: BasicValueEnum::PointerValue(allocated)
-        }
+        })
     }
 
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) {
-        let param = self.allocate_param(gen);
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), String> {
+        let param = self.allocate_param(gen)?;
 
         let mut param_mut = gen.param_resolver.borrow_mut();
         param_mut.add(&self.param_name, param);
 
         if let Some(expr) = &self.expr {
-            let param = param_mut.find(&self.param_name).unwrap();
+            let param = param_mut.find(&self.param_name)
+                .ok_or(format!("Unknown parameter named {}", self.param_name))?;
 
             match param.value {
                 BasicValueEnum::PointerValue(val) => {
                     gen.builder.build_store(val, expr.codegen(gen).unwrap());
+                    Ok(())
                 },
                 _ => {
-                    panic!("Cannot assign some value to immutable one");
+                    Err("Cannot assign some value to immutable one".to_string())
                 }
-            };
-        };
+            }
+        }
+        else {
+            Ok(())
+        }
     }
 }
 

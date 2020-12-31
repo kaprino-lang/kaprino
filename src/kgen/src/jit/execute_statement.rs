@@ -19,7 +19,7 @@ pub fn execute_statement(text: &str) -> Option<u32> {
     gen.builder.position_at_end(basic_block);
 
     if let Ok((_, val)) = statement_parser(text) {
-        val.codegen(&gen);
+        val.codegen(&gen).unwrap();
 
         let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
 

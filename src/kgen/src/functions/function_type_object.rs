@@ -22,10 +22,8 @@ pub fn function_type_parser(text: &str) -> IResult<&str, (Vec<&str>, &str)> {
         )),
         |val| {
             let (_, _, args, _, _, _, ret, _, _) = val;
-            match ret {
-                Some(ret) => (args, ret),
-                None => (args, "")
-            }
+
+            (args, ret.unwrap_or(""))
         }
     )(text)
 }

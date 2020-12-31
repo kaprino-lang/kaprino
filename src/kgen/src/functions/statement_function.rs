@@ -42,27 +42,22 @@ impl<'ctx> StatementFunction {
     }
 
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), String> {
-        match self.get_func_type(gen) {
-            Ok(func_type) => {
-                let func = gen.module.add_function(&self.get_info().name, func_type, None);
-                let basic_block = gen.context.append_basic_block(func, "entry");
+        let func_type = self.get_func_type(gen)?;
 
-                gen.builder.position_at_end(basic_block);
+        let func = gen.module.add_function(&self.get_info().name, func_type, None);
+        let basic_block = gen.context.append_basic_block(func, "entry");
 
-                self.assign_args(gen, &func);
+        gen.builder.position_at_end(basic_block);
 
-                for st in &self.statements {
-                    st.codegen(gen);
-                };
+        self.assign_args(gen, &func);
 
-                gen.param_resolver.borrow_mut().remove_scope();
+        for st in &self.statements {
+            st.codegen(gen)?;
+        };
 
-                Ok(())
-            },
-            Err(error_message) => {
-                Err(error_message)
-            }
-        }
+        gen.param_resolver.borrow_mut().remove_scope();
+
+        Ok(())
     }
 }
 

@@ -1,4 +1,3 @@
-use inkwell::values::BasicValueEnum;
 use nom::IResult;
 use nom::sequence::tuple;
 use nom::combinator::map;
@@ -21,24 +20,12 @@ impl<'ctx> RetObject {
         }
     }
 
-    fn get_ret_val(&self, gen: &CodeGen<'ctx>) -> Option<BasicValueEnum<'ctx>> {
-        match self.expr.codegen(gen) {
-            Ok(val) => Some(val),
-            Err(_) => None
-        }
-    }
+    pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), String> {
+        let ret_val = self.expr.codegen(gen)?;
 
-    pub fn codegen(&self, gen: &CodeGen<'ctx>) {
-        let ret_val = self.get_ret_val(gen);
+        gen.builder.build_return(Some(&ret_val));
 
-        match ret_val {
-            Some(val) => {
-                gen.builder.build_return(Some(&val));
-            },
-            None => {
-                gen.builder.build_return(None);
-            }
-        }
+        Ok(())
     }
 }
 
