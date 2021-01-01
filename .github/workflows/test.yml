@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check current sources
-        uses: |
+        run: |
           pwd
           ls
       - name: Check LLVM version
