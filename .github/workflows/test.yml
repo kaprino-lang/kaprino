@@ -12,6 +12,9 @@ jobs:
 
     container:
       image: kaprino/llvm:latest
+      env:
+        LLVM_SYS_90_PREFIX: /root/llvm-9
+        PATH: $PATH:/root/.cargo/bin
 
     strategy:
       matrix:
@@ -21,6 +24,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check LLVM version
-        run: llvm-config --version
+        run: /root/llvm-9/llvm-config --version
       - name: Test kaprino
         run: cargo test
