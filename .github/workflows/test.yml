@@ -23,3 +23,5 @@ jobs:
         run: /root/llvm-9/bin/llvm-config --version
       - name: Test kaprino
         run: cargo test
+        env:
+          RUSTUP_TOOLCHAIN: stable
