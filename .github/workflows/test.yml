@@ -20,15 +20,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Make apt-get up-to-date
-        run: apt-get update
-      - name: Install libffi-dev
-        run: apt-get install -y libffi-dev
-      - name: Setup Rust
-        run: |
-          rustup install stable
-          rustup default stable
-      - name: Get toolchains
-        run: rustup show
+      - name: Check LLVM version
+        run: llvm-config --version
       - name: Test kaprino
         run: cargo test
