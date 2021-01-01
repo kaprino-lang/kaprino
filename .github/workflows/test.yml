@@ -8,17 +8,9 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
-    container:
-      image: kaprino/llvm:latest
-      env:
-        LLVM_SYS_90_PREFIX: /root/llvm-9
-        PATH: $PATH:/root/.cargo/bin
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    container: kaprino/llvm:latest
 
     steps:
       - name: Checkout
