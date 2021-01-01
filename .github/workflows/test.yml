@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Check current sources
+        uses: |
+          pwd
+          ls
       - name: Check LLVM version
         run: /root/llvm-9/bin/llvm-config --version
       - name: Test kaprino
