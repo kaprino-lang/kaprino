@@ -8,20 +8,21 @@ on:
 
 jobs:
   test:
+    name: Test of ${{ matrix.project }}
     runs-on: ubuntu-20.04
-
     container: kaprino/llvm:latest
+
+    strategy:
+      matrix:
+        project: ["kgen", "kpr", "kprc"]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Check current sources
-        run: |
-          pwd
-          ls
       - name: Check LLVM version
         run: /root/llvm-9/bin/llvm-config --version
-      - name: Test kaprino
-        run: cargo test
+      - name: Run tests of ${{ matrix.project }}
+        run: cargo test --package $TEST_PROJECT
         env:
           RUSTUP_TOOLCHAIN: stable
+          TEST_PROJECT: ${{ matrix.project }}
