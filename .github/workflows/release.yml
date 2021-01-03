@@ -26,11 +26,11 @@ jobs:
         id: tag_name
 
       - name: Add msbuild to PATH
-        if: ${{ matrix.os }} == "windows-latest"
+        if: matrix.os == 'windows-latest'
         uses: microsoft/setup-msbuild@v1.0.0
 
       - name: Install LLVM on Windows
-        if: ${{ matrix.os }} == "windows-latest"
+        if: matrix.os == 'windows-latest'
         run: |
           mkdir llvm
           cd ./llvm
@@ -47,7 +47,7 @@ jobs:
           del /q ./llvm
 
       - name: Install LLVM on Unix
-        if: ${{ matrix.os }} == "ubuntu-20.04" || ${{ matrix.os }} == "macos-latest"
+        if: matrix.os == 'ubuntu-20.04' || matrix.os == 'macos-latest'
         run: |
           mkdir llvm
           cd ./llvm
@@ -76,8 +76,8 @@ jobs:
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: "kaprino-${{ steps.tag_name.outputs.tag }}-${{ matrix.os }}"
-          path: "./target/release/**"
+          name: kaprino-${{ steps.tag_name.outputs.tag }}-${{ matrix.os }}
+          path: ./target/release/**
 
   docker:
     name: Release Docker image
@@ -109,4 +109,4 @@ jobs:
           tags: |
             kaprino/kaprino:${{ steps.tag_name.outputs.tag }}
             kaprino/kaprino:latest
-          push: startsWith("${{ steps.tag_name.outputs.tag }}", "v")
+          push: startsWith('${{ steps.tag_name.outputs.tag }}', 'v')
