@@ -25,6 +25,21 @@ jobs:
         uses: dawidd6/action-get-tag@v1
         id: tag_name
 
+      - name: Install LLVM on Unix
+        if: matrix.os == 'ubuntu-20.04' || matrix.os == 'macos-latest'
+        run: |
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
+          tar xJf llvm-9.0.1.src.tar.xz
+          cd llvm-9.0.1.src
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
+          make
+          sudo make install
+        env:
+          CXX: g++-8
+          CC: gcc-8
+
       - name: Add msbuild to PATH
         if: matrix.os == 'windows-latest'
         uses: microsoft/setup-msbuild@v1.0.2
@@ -32,8 +47,6 @@ jobs:
       - name: Install LLVM on Windows
         if: matrix.os == 'windows-latest'
         run: |
-          mkdir llvm
-          cd ./llvm
           Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz" -OutFile "llvm-9.0.1.src.tar.xz"
           7z x ./llvm-9.0.1.src.tar.xz
           7z x ./llvm-9.0.1.src.tar
@@ -43,32 +56,16 @@ jobs:
           cmake .. -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
           msbuild ALL_BUILD.vcxproj -p:Configuration=Release
           msbuild INSTALL.vcxproj -p:Configuration=Release
-          cd ..
-          del /q ./llvm
 
-      - name: Install LLVM on Unix
-        if: matrix.os == 'ubuntu-20.04' || matrix.os == 'macos-latest'
+      - name: Add Musl target
+        if: matrix.os == 'ubuntu-20.04'
         run: |
-          mkdir llvm
-          cd ./llvm
-          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
-          tar xJf llvm-9.0.1.src.tar.xz
-          cd llvm-9.0.1.src
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
-          make
-          sudo make install
-          cd ..
-          rm -rf ./llvm
-        env:
-          CXX: g++-8
-          CC: gcc-8
+          rustup target add x86_64-unknown-linux-musl
+          sudo apt-get install musl-tools
 
       - name: Build
         run: |
-          rustup target add x86_64-unknown-linux-musl
-          cargo build --release --target x86_64-unknown-linux-musl
+          cargo build --release
         env:
           RUSTUP_TOOLCHAIN: stable
           TEST_PROJECT: ${{ matrix.project }}
@@ -104,9 +101,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
+        if: startsWith(steps.tag_name.outputs.tag, 'v')
         uses: docker/build-push-action@v2
         with:
           tags: |
             kaprino/kaprino:${{ steps.tag_name.outputs.tag }}
             kaprino/kaprino:latest
-          push: startsWith('${{ steps.tag_name.outputs.tag }}', 'v')
