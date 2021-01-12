@@ -4,11 +4,14 @@ on:
   push:
     tags:
       - "*"
+    branches:
+      - "feature/cd*"
 
 jobs:
   build-sources:
     name: Release for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
 
     strategy:
       matrix:
@@ -21,9 +24,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get tag name
-        uses: dawidd6/action-get-tag@v1
+      - name: Get tag or branch name
+        uses: nimblehq/branch-tag-action@v1
         id: tag_name
+
+      - name: Add Musl target
+        if: matrix.os == 'ubuntu-20.04'
+        run: |
+          rustup target add x86_64-unknown-linux-musl
+          sudo apt-get install musl-tools
+
+      - name: Setup Musl-GCC for building LLVM
+        if: matrix.os == 'ubuntu-20.04'
+        uses: allenevans/set-env@v2.0.0
+        with:
+          CXX: musl-g++
+          CC: musl-gcc
+
+      - name: Setup GCC for building LLVM
+        if: matrix.os == 'macos-latest'
+        uses: allenevans/set-env@v2.0.0
+        with:
+          CXX: g++-8
+          CC: gcc-8
+
+      - name: Add msbuild to PATH
+        if: matrix.os == 'windows-latest'
+        uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Install LLVM on Unix
         if: matrix.os == 'ubuntu-20.04' || matrix.os == 'macos-latest'
@@ -36,13 +63,6 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF
           make
           sudo make install
-        env:
-          CXX: g++-8
-          CC: gcc-8
-
-      - name: Add msbuild to PATH
-        if: matrix.os == 'windows-latest'
-        uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Install LLVM on Windows
         if: matrix.os == 'windows-latest'
@@ -57,23 +77,16 @@ jobs:
           msbuild ALL_BUILD.vcxproj -p:Configuration=Release
           msbuild INSTALL.vcxproj -p:Configuration=Release
 
-      - name: Add Musl target
-        if: matrix.os == 'ubuntu-20.04'
-        run: |
-          rustup target add x86_64-unknown-linux-musl
-          sudo apt-get install musl-tools
-
       - name: Build
         run: |
           cargo build --release
         env:
           RUSTUP_TOOLCHAIN: stable
-          TEST_PROJECT: ${{ matrix.project }}
 
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: kaprino-${{ steps.tag_name.outputs.tag }}-${{ matrix.os }}
+          name: kaprino-${{ steps.tag_name.outputs.branch_tag }}-${{ matrix.os }}
           path: ./target/release/**
 
   docker:
@@ -84,8 +97,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get tag name
-        uses: dawidd6/action-get-tag@v1
+      - name: Get tag or branch name
+        uses: nimblehq/branch-tag-action@v1
         id: tag_name
 
       - name: Set up QEMU
@@ -101,9 +114,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
-        if: startsWith(steps.tag_name.outputs.tag, 'v')
+        if: startsWith(steps.tag_name.outputs.branch_tag, 'v')
         uses: docker/build-push-action@v2
         with:
           tags: |
-            kaprino/kaprino:${{ steps.tag_name.outputs.tag }}
+            kaprino/kaprino:${{ steps.tag_name.outputs.branch_tag }}
             kaprino/kaprino:latest
