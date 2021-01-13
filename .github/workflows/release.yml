@@ -18,7 +18,9 @@ jobs:
         config:
           - { name: "Mac OS", os: macos-latest, cc: "gcc-8", cxx: "g++-8" }
           - { name: "Ubuntu", os: ubuntu-20.04, cc: "/usr/bin/musl-gcc", cxx: "/usr/bin/musl-g++" }
-          - { name: "Windows", os: windows-latest }
+          - { name: "Windows", os: windows-latest, cc: "cl", cxx: "cl" }
+        ninja-version:
+          - 1.10.0
 
     steps:
       - name: Checkout
@@ -36,51 +38,39 @@ jobs:
           rustup target add x86_64-unknown-linux-musl
           sudo apt install -y musl-tools
 
-      - name: Setup msbuild for building LLVM
-        if: matrix.config.os == 'windows-latest'
-        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@master
+        with:
+          version: matrix.ninja-version
 
-      - name: Install Ninja by Homebrew
-        if: matrix.config.os == 'macos-latest'
-        run: |
-          brew install ninja
-
-      - name: Install Ninja by apt
-        if: matrix.config.os == 'macos-latest'
-        run: |
-          sudo apt install -y ninja-build
-
-      - name: Install LLVM on Unix
+      - name: Download LLVM source on Unix
         if: matrix.config.os == 'ubuntu-20.04' || matrix.config.os == 'macos-latest'
         run: |
           wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
           tar xJf llvm-9.0.1.src.tar.xz
-          cd llvm-9.0.1.src
-          mkdir build
-          cd build
-          sudo cmake .. -G Ninja \
-            --build . --target install \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DLLVM_BUILD_TOOLS=OFF
-        env:
-          CC: matrix.config.cc
-          CXX: matrix.config.cxx
 
-      - name: Install LLVM on Windows
+      - name: Download LLVM source on Windows
         if: matrix.config.os == 'windows-latest'
         run: |
           Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz" -OutFile "llvm-9.0.1.src.tar.xz"
           7z x ./llvm-9.0.1.src.tar.xz
           7z x ./llvm-9.0.1.src.tar
-          cd llvm-9.0.1.src
+
+      - name: Build and install LLVM
+        run: |
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 16 2019" \
-            --build . --target install \
+          cmake .. -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DLLVM_BUILD_TOOLS=OFF
+          cmake --build .
+          cmake --install .
+        working-directory: ./llvm-9.0.1.src
+        env:
+          CC: matrix.config.cc
+          CXX: matrix.config.cxx
 
-      - name: Build
+      - name: Build kaprino
         run: |
           cargo build --release
         env:
