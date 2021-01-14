@@ -39,7 +39,7 @@ jobs:
           sudo apt install -y musl-tools
 
       - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@master
+        uses: ashutoshvarma/setup-ninja@v1.1
         with:
           version: ${{ matrix.ninja-version }}
 
