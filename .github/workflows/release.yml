@@ -76,8 +76,8 @@ jobs:
         shell: bash
         working-directory: ./llvm-9.0.1.src
         env:
-          CC: matrix.config.cc
-          CXX: matrix.config.cxx
+          CC: ${{ matrix.config.cc }}
+          CXX: ${{ matrix.config.cxx }}
 
       - name: Build kaprino
         run: |
