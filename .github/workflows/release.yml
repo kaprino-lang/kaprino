@@ -17,8 +17,8 @@ jobs:
       matrix:
         config:
           - { name: "Mac OS", os: macos-latest, cc: "gcc-8", cxx: "g++-8" }
-          - { name: "Ubuntu", os: ubuntu-20.04, cc: "/usr/bin/musl-gcc", cxx: "/usr/bin/musl-g++" }
-          - { name: "Windows", os: windows-latest, cc: "cl", cxx: "cl" }
+          - { name: "Ubuntu", os: ubuntu-20.04, cc: "/usr/bin/musl-gcc", cxx: "g++" }
+          - { name: "Windows", os: windows-latest, cc: "cl.exe", cxx: "cl.exe" }
         ninja-version:
           - 1.10.0
 
@@ -37,6 +37,9 @@ jobs:
         run: |
           rustup target add x86_64-unknown-linux-musl
           sudo apt install -y musl-tools
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.config.os == 'windows-latest'
 
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@v1.1
