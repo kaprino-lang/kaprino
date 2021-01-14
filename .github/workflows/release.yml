@@ -64,7 +64,6 @@ jobs:
 
       - name: Build and install LLVM
         run: |
-          ninja --help
           mkdir build
           cd build
           cmake .. -G Ninja \
