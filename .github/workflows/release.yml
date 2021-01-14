@@ -58,13 +58,17 @@ jobs:
 
       - name: Build and install LLVM
         run: |
+          ninja --help
           mkdir build
           cd build
           cmake .. -G Ninja \
+            -DCMAKE_C_COMPILER=${CC} \
+            -DCMAKE_CXX_COMPILER=${CXX} \
             -DCMAKE_BUILD_TYPE=Release \
             -DLLVM_BUILD_TOOLS=OFF
           cmake --build .
           cmake --install .
+        shell: bash
         working-directory: ./llvm-9.0.1.src
         env:
           CC: matrix.config.cc
