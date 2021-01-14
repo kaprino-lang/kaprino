@@ -42,10 +42,11 @@ jobs:
         uses: ashutoshvarma/setup-ninja@v1.1
         with:
           version: ${{ matrix.ninja-version }}
+          dest: ninja
 
-      - name: Show PATH
+      - name: Add Ninja to PATH
         run: |
-          echo $PATH
+          echo "$GITHUB_WORKSPACE/ninja" >> $GITHUB_PATH
         shell: bash
 
       - name: Download LLVM source on Unix
