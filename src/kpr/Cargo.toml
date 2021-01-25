@@ -10,5 +10,5 @@ edition = "2018"
 path = "../kgen"
 
 [dependencies]
-inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", features = ["llvm9-0"] }
+inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", features = ["llvm11-0"] }
 clap = "2.33.3"

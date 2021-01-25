@@ -55,21 +55,22 @@ jobs:
       - name: Download LLVM source on Unix
         if: matrix.config.os == 'ubuntu-20.04' || matrix.config.os == 'macos-latest'
         run: |
-          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz
-          tar xJf llvm-9.0.1.src.tar.xz
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/llvm-11.0.1.src.tar.xz
+          tar xJf llvm-11.0.1.src.tar.xz
 
       - name: Download LLVM source on Windows
         if: matrix.config.os == 'windows-latest'
         run: |
-          Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/llvm-9.0.1.src.tar.xz" -OutFile "llvm-9.0.1.src.tar.xz"
-          7z x ./llvm-9.0.1.src.tar.xz
-          7z x ./llvm-9.0.1.src.tar
+          Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/llvm-11.0.1.src.tar.xz" -OutFile "llvm-11.0.1.src.tar.xz"
+          7z x ./llvm-11.0.1.src.tar.xz
+          7z x ./llvm-11.0.1.src.tar
 
       - name: Build and install LLVM
         run: |
           mkdir build
           cd build
           cmake .. -G Ninja \
+            -DCMAKE_INSTALL_PREFIX=${INSTALL_PATH} \
             -DCMAKE_C_COMPILER=${CC} \
             -DCMAKE_CXX_COMPILER=${CXX} \
             -DCMAKE_BUILD_TYPE=Release \
@@ -77,10 +78,16 @@ jobs:
           cmake --build .
           cmake --install .
         shell: bash
-        working-directory: ./llvm-9.0.1.src
+        working-directory: ./llvm-11.0.1.src
         env:
+          INSTALL_PATH: ${{ github.workspace }}/llvm/bin
           CC: ${{ matrix.config.cc }}
           CXX: ${{ matrix.config.cxx }}
+
+      - name: Add LLVM to PATH
+        run: |
+          echo "$GITHUB_WORKSPACE/llvm/bin" >> $GITHUB_PATH
+        shell: bash
 
       - name: Build kaprino
         run: |
