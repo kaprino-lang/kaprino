@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Check LLVM version
-        run: /root/llvm-9/bin/llvm-config --version
+        run: /root/llvm/bin/llvm-config --version
 
       - name: Run tests of ${{ matrix.project }}
         run: cargo test --package $TEST_PROJECT

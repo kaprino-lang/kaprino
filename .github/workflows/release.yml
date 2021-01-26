@@ -17,7 +17,8 @@ jobs:
       matrix:
         config:
           - { name: "Mac OS", os: macos-latest, cc: "gcc-8", cxx: "g++-8" }
-          - { name: "Ubuntu", os: ubuntu-20.04, cc: "/usr/bin/musl-gcc", cxx: "g++" }
+          # - { name: "Ubuntu", os: ubuntu-20.04, cc: "/usr/bin/musl-gcc", cxx: "g++" }
+          - { name: "Ubuntu", os: ubuntu-20.04, cc: "gcc", cxx: "g++" }
           - { name: "Windows", os: windows-latest, cc: "cl.exe", cxx: "cl.exe" }
         ninja-version:
           - 1.10.0
@@ -38,7 +39,8 @@ jobs:
           rustup target add x86_64-unknown-linux-musl
           sudo apt install -y musl-tools
 
-      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup MSVC Dev Cmd
+        uses: ilammy/msvc-dev-cmd@v1
         if: matrix.config.os == 'windows-latest'
 
       - name: Setup Ninja
@@ -80,7 +82,7 @@ jobs:
         shell: bash
         working-directory: ./llvm-11.0.1.src
         env:
-          INSTALL_PATH: ${{ github.workspace }}/llvm/bin
+          INSTALL_PATH: ${{ github.workspace }}/llvm
           CC: ${{ matrix.config.cc }}
           CXX: ${{ matrix.config.cxx }}
 
