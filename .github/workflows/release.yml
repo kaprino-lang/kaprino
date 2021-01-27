@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         config:
-          - { name: "Mac OS", os: macos-latest, cc: "gcc-8", cxx: "g++-8" }
+          - { name: "Mac OS", os: macos-latest, cc: "gcc-10", cxx: "g++-10" }
           # - { name: "Ubuntu", os: ubuntu-20.04, cc: "/usr/bin/musl-gcc", cxx: "g++" }
           - { name: "Ubuntu", os: ubuntu-20.04, cc: "gcc", cxx: "g++" }
           - { name: "Windows", os: windows-latest, cc: "cl.exe", cxx: "cl.exe" }
@@ -96,7 +96,15 @@ jobs:
         env:
           RUSTUP_TOOLCHAIN: stable
 
-      - name: Publish artifact
+      - name: Upload artifact (Test)
+        if: ${{ !startsWith(steps.source_name.outputs.tag_name, 'v') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kaprino-test-${{ matrix.config.os }}
+          path: ./target/release/**
+
+      - name: Upload artifact
+        if: startsWith(steps.source_name.outputs.tag_name, 'v')
         uses: actions/upload-artifact@v2
         with:
           name: kaprino-${{ steps.source_name.outputs.tag_name }}-${{ matrix.config.os }}
@@ -127,6 +135,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image (Test)
+        if: ${{ !startsWith(steps.source_name.outputs.tag_name, 'v') }}
+        uses: docker/build-push-action@v2
+        with:
+          tags: |
+            kaprino/kaprino:test
+          push: false
 
       - name: Build and push Docker image
         if: startsWith(steps.source_name.outputs.tag_name, 'v')
