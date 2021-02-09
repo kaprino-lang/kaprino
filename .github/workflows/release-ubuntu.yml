@@ -1,0 +1,49 @@
+name: Release for Ubuntu
+
+on:
+  push:
+    tags:
+      - "*"
+    branches:
+      - "feature/cd*"
+
+jobs:
+  publish-kpr:
+    name: Publish kpr
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get tag or branch name
+        id: source_name
+        run: |
+          echo ::set-output name=tag_name::${GITHUB_REF#refs/*/}
+        shell: bash
+
+      - name: Install LLVM by apt-get
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 11
+
+      - name: Build kaprino
+        run: |
+          cargo build --release
+        env:
+          RUSTUP_TOOLCHAIN: stable
+
+      - name: Upload artifact (Test)
+        if: ${{ !startsWith(steps.source_name.outputs.tag_name, 'v') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kaprino-test-ubuntu
+          path: ./target/release/**
+
+      - name: Upload artifact
+        if: startsWith(steps.source_name.outputs.tag_name, 'v')
+        uses: actions/upload-artifact@v2
+        with:
+          name: kaprino-${{ steps.source_name.outputs.tag_name }}-ubuntu
+          path: ./target/release/**

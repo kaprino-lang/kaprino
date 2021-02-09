@@ -1,0 +1,95 @@
+name: Release for Windows
+
+on:
+  push:
+    tags:
+      - "*"
+    branches:
+      - "feature/cd*"
+
+jobs:
+  publish-kpr:
+    name: Publish kpr
+    runs-on: windows-2019
+
+    strategy:
+      matrix:
+        c-compiler:
+          - "cl.exe"
+        cxx-compiler:
+          - "cl.exe"
+        ninja-version:
+          - 1.10.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get tag or branch name
+        id: source_name
+        run: |
+          echo ::set-output name=tag_name::${GITHUB_REF#refs/*/}
+        shell: bash
+
+      - name: Setup MSVC Dev Cmd
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@v1.1
+        with:
+          version: ${{ matrix.ninja-version }}
+          dest: ninja
+
+      - name: Add Ninja to PATH
+        run: |
+          echo "$GITHUB_WORKSPACE/ninja" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Download LLVM source
+        run: |
+          Invoke-WebRequest "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/llvm-11.0.1.src.tar.xz" -OutFile "llvm-11.0.1.src.tar.xz"
+          7z x ./llvm-11.0.1.src.tar.xz
+          7z x ./llvm-11.0.1.src.tar
+
+      - name: Build and install LLVM
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G Ninja \
+            -DCMAKE_INSTALL_PREFIX=${INSTALL_PATH} \
+            -DCMAKE_C_COMPILER=${CC} \
+            -DCMAKE_CXX_COMPILER=${CXX} \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
+          cmake --install .
+        shell: bash
+        working-directory: ./llvm-11.0.1.src
+        env:
+          INSTALL_PATH: ${{ github.workspace }}/llvm
+          CC: ${{ matrix.c-compiler }}
+          CXX: ${{ matrix.cxx-compiler }}
+
+      - name: Add LLVM to PATH
+        run: |
+          echo "$GITHUB_WORKSPACE/llvm/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Build kaprino
+        run: |
+          cargo build --release
+        env:
+          RUSTUP_TOOLCHAIN: stable
+
+      - name: Upload artifact (Test)
+        if: ${{ !startsWith(steps.source_name.outputs.tag_name, 'v') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kaprino-test-windows
+          path: ./target/release/**
+
+      - name: Upload artifact
+        if: startsWith(steps.source_name.outputs.tag_name, 'v')
+        uses: actions/upload-artifact@v2
+        with:
+          name: kaprino-${{ steps.source_name.outputs.tag_name }}-windows
+          path: ./target/release/**
