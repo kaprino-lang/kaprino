@@ -1,4 +1,4 @@
-name: Release for Mac OS
+name: Release for macOS
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
   publish-kpr:
     name: Publish kpr
-    runs-on: macos-11.0
+    runs-on: macos-10.15
 
     steps:
       - name: Checkout
