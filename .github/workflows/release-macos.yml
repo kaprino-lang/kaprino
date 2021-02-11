@@ -25,6 +25,7 @@ jobs:
       - name: Install LLVM by homebrew
         run: |
           brew install llvm@11
+          brew link llvm@11
 
       - name: Build kaprino
         run: |
@@ -37,11 +38,15 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: kaprino-test-macos
-          path: ./target/release/**
+          path: |
+            ./target/release/kpr
+            ./target/release/kprc
 
       - name: Upload artifact
         if: startsWith(steps.source_name.outputs.tag_name, 'v')
         uses: actions/upload-artifact@v2
         with:
           name: kaprino-${{ steps.source_name.outputs.tag_name }}-macos
-          path: ./target/release/**
+          path: |
+            ./target/release/kpr
+            ./target/release/kprc

@@ -85,11 +85,15 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: kaprino-test-windows
-          path: ./target/release/**
+          path: |
+            ./target/release/kpr.exe
+            ./target/release/kprc.exe
 
       - name: Upload artifact
         if: startsWith(steps.source_name.outputs.tag_name, 'v')
         uses: actions/upload-artifact@v2
         with:
           name: kaprino-${{ steps.source_name.outputs.tag_name }}-windows
-          path: ./target/release/**
+          path: |
+            ./target/release/kpr.exe
+            ./target/release/kprc.exe
