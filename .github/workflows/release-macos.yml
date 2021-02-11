@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-kpr:
-    name: Publish kpr
+    name: publish kpr
     runs-on: macos-10.15
 
     steps:
@@ -25,7 +25,11 @@ jobs:
       - name: Install LLVM by homebrew
         run: |
           brew install llvm@11
-          brew link llvm@11
+
+      - name: Add LLVM to PATH
+        run: |
+          echo "LLVM_SYS_110_PREFIX=/usr/local/opt/llvm" >> $GITHUB_ENV
+        shell: bash
 
       - name: Build kaprino
         run: |

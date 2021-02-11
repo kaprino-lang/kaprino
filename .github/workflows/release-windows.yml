@@ -1,4 +1,4 @@
-name: Release for Windows
+name: Release for windows
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-kpr:
-    name: Publish kpr
+    name: publish kpr
     runs-on: windows-2019
 
     strategy:

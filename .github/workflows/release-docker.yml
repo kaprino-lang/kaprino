@@ -1,4 +1,4 @@
-name: Release for Docker
+name: Release for docker
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-image:
-    name: Publish docker image
+    name: publish docker image
     runs-on: ubuntu-20.04
 
     steps:

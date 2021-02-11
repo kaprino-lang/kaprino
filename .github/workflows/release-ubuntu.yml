@@ -1,4 +1,4 @@
-name: Release for Ubuntu
+name: Release for ubuntu
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-kpr:
-    name: Publish kpr
+    name: publish kpr
     runs-on: ubuntu-20.04
 
     steps:
