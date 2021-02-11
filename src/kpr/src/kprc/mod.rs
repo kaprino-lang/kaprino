@@ -20,7 +20,7 @@ impl KprcApp {
             Some(val) => Some(val.to_string()),
             None => None
         };
-        let llvm = args.is_present("llvm");
+        let llvm = args.is_present("llvm-only");
 
         if let Some(source_file) = source_file {
             let source_file = source_file.to_string();
