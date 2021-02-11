@@ -1,4 +1,4 @@
-name: Release for macOS
+name: Release for ubuntu
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
   publish-kpr:
     name: publish kpr
-    runs-on: macos-10.15
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout
@@ -22,14 +22,11 @@ jobs:
           echo ::set-output name=tag_name::${GITHUB_REF#refs/*/}
         shell: bash
 
-      - name: Install LLVM by homebrew
+      - name: Install LLVM by apt-get
         run: |
-          brew install llvm@11
-
-      - name: Add LLVM to PATH
-        run: |
-          echo "LLVM_SYS_110_PREFIX=/usr/local/opt/llvm" >> $GITHUB_ENV
-        shell: bash
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 11
 
       - name: Build kaprino
         run: |
@@ -41,7 +38,7 @@ jobs:
         if: ${{ !startsWith(steps.source_name.outputs.tag_name, 'v') }}
         uses: actions/upload-artifact@v2
         with:
-          name: kaprino-test-macos
+          name: kaprino-test-ubuntu
           path: |
             ./target/release/kpr
             ./target/release/kprc
@@ -50,7 +47,7 @@ jobs:
         if: startsWith(steps.source_name.outputs.tag_name, 'v')
         uses: actions/upload-artifact@v2
         with:
-          name: kaprino-${{ steps.source_name.outputs.tag_name }}-macos
+          name: kaprino-${{ steps.source_name.outputs.tag_name }}-ubuntu
           path: |
             ./target/release/kpr
             ./target/release/kprc
