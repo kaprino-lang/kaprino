@@ -1,3 +1,5 @@
+pub mod ast;
+pub mod error;
 pub mod resolvers;
 pub mod program_object;
 pub mod exprs;
