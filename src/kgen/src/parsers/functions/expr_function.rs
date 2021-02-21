@@ -15,9 +15,9 @@ use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
 
-//
-// Parse a function which has only one expression.
-//
+///
+/// Parse a function which has only one expression.
+///
 pub fn expr_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
     map(
         tuple((

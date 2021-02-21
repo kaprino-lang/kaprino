@@ -81,9 +81,9 @@ pub fn args_parser(text: Span) -> IResult<Span, Vec<&str>, VerboseError<Span>> {
     )(text)
 }
 
-//
-// Parse a type annotation for a function.
-//
+///
+/// Parse a type annotation for a function.
+///
 pub fn function_type_parser(text: Span) -> IResult<Span, (Vec<&str>, &str), VerboseError<Span>> {
     map(
         tuple((

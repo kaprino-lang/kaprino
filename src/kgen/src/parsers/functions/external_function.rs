@@ -13,9 +13,9 @@ use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
 
-//
-// Parse a function which is declared externally.
-//
+///
+/// Parse a function which is declared externally.
+///
 pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
     map(
         tuple((

@@ -14,9 +14,9 @@ use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
 use crate::parsers::statements::statement_parser;
 
-//
-// Parse a statement enclosed with spaces.
-//
+///
+/// Parse a statement enclosed with spaces.
+///
 fn statement_with_spaces_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
     let (text, _) = space0(text)?;
     let (text, statement) = statement_parser(text)?;
@@ -24,9 +24,9 @@ fn statement_with_spaces_parser(text: Span) -> IResult<Span, StatementObject, Ve
     Ok((text, statement))
 }
 
-//
-// Parse a C-like function into `FunctionObject`.
-//
+///
+/// Parse a C-like function into `FunctionObject`.
+///
 pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
     let (text, pos) = position(text)?;
     let (text, _) = tag("#func")(text)?;
