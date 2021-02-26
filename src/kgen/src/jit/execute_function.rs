@@ -1,27 +1,28 @@
 use inkwell::context::Context;
 use inkwell::OptimizationLevel;
 use inkwell::execution_engine::JitFunction;
-use super::super::program_object::CodeGen;
-use super::super::functions::function_object::function_parser;
+use crate::ast::CodeGen;
+use crate::parsers::functions::function_parser;
+use crate::parsers::Span;
 
-pub fn execute_function(text: &str, func_name: &str, arg: u32) -> Option<u32> {
+///
+/// Execute a function Just In Time.
+///
+pub fn execute_function(text: &str, func_name: &str, arg: u32) -> Result<u32, ()> {
     type TestFunc = unsafe extern "C" fn(u32) -> u32;
 
     let context = &Context::create();
     let gen = CodeGen::new(context, "test");
-    gen.init();
 
-    match function_parser(text) {
-        Ok((_, func)) => {
-            func.codegen(&gen).unwrap();
+    let text = Span::new(text);
+    let (_, func) = function_parser(text).or(Err(()))?;
 
-            let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
+    func.codegen(&gen).unwrap();
 
-            let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function(func_name).unwrap() };
-            let ret: u32 = unsafe { func.call(arg) };
+    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
 
-            Some(ret)
-        },
-        Err(_) => None
-    }
+    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function(func_name).unwrap() };
+    let ret = unsafe { func.call(arg) };
+
+    Ok(ret)
 }

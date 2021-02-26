@@ -10,6 +10,9 @@ use crate::resolvers::function_resolver::FunctionResolver;
 use crate::resolvers::parameter_resolver::ParameterResolver;
 use crate::resolvers::type_resolver::TypeResolver;
 
+///
+/// `CodeGen` stores information required to compile kaprino and has useful methods.
+///
 #[derive(Debug)]
 pub struct CodeGen<'ctx> {
     pub context: &'ctx Context,
@@ -31,6 +34,8 @@ impl<'ctx> CodeGen<'ctx> {
         let type_resolver = RefCell::new(TypeResolver::new());
         let function_resolver = RefCell::new(FunctionResolver::new());
 
+        type_resolver.borrow_mut().init_default_types();
+
         CodeGen {
             context,
             module,
@@ -39,13 +44,6 @@ impl<'ctx> CodeGen<'ctx> {
             type_resolver,
             function_resolver
         }
-    }
-
-    ///
-    /// Create a `CodeGen` instance.
-    ///
-    pub fn init(&self) {
-        self.type_resolver.borrow_mut().init_default_types();
     }
 
     ///
