@@ -18,7 +18,7 @@ pub fn numbers_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError
     let obj = EvaluableObject::NumberObject(
         Box::new(NumberObject::new(
             pos,
-            digit.fragment().parse().unwrap()
+            digit.fragment().parse().unwrap_or(0)
         ))
     );
 

@@ -27,9 +27,9 @@ pub fn execute_expr(text: &str) -> Result<u32, ()> {
 
     gen.builder.build_return(Some(&val));
 
-    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
+    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).or(Err(()))?;
 
-    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function("calc").unwrap() };
+    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function("calc") }.or(Err(()))?;
     let ret: u32 = unsafe { func.call() };
     Ok(ret)
 }

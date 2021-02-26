@@ -25,11 +25,11 @@ pub fn execute_statement(text: &str) -> Result<u32, ()> {
     let text = Span::new(text);
     let (_, val) = statement_parser(text).or(Err(()))?;
 
-    val.codegen(&gen).unwrap();
+    val.codegen(&gen).or(Err(()))?;
 
-    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
+    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).or(Err(()))?;
 
-    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function("calc").unwrap() };
+    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function("calc") }.or(Err(()))?;
     let ret: u32 = unsafe { func.call() };
 
     Ok(ret)

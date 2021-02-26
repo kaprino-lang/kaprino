@@ -17,11 +17,11 @@ pub fn execute_function(text: &str, func_name: &str, arg: u32) -> Result<u32, ()
     let text = Span::new(text);
     let (_, func) = function_parser(text).or(Err(()))?;
 
-    func.codegen(&gen).unwrap();
+    func.codegen(&gen).or(Err(()))?;
 
-    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
+    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).or(Err(()))?;
 
-    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function(func_name).unwrap() };
+    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function(func_name) }.or(Err(()))?;
     let ret = unsafe { func.call(arg) };
 
     Ok(ret)
