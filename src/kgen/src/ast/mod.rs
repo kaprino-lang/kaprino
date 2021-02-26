@@ -47,7 +47,7 @@ impl<'ctx> CodeGen<'ctx> {
     }
 
     ///
-    /// Parse a program.
+    /// Parse a program and catch errors if exists.
     ///
     pub fn parse(&'ctx self, text: &'ctx str) -> Result<Vec<FunctionObject>, Vec<ErrorToken>> {
         let text: Span<'ctx> = Span::new(text);
@@ -80,6 +80,32 @@ impl<'ctx> CodeGen<'ctx> {
                     }
                 }
             }
+        }
+    }
+
+    ///
+    /// Parse a program and generate LLVM codes. Also catch errors if exists.
+    ///
+    /// Please note that `codegen` calls a function `parse` internally.
+    ///
+    pub fn codegen(&'ctx self, text: &'ctx str) -> Result<(), Vec<ErrorToken>> {
+        let parsed = self.parse(text)?;
+
+        let errors: Vec<ErrorToken> = parsed
+            .into_iter()
+            .filter_map(|obj| {
+                match obj.codegen(self) {
+                    Ok(()) => None,
+                    Err(err) => Some(err)
+                }
+            })
+            .collect();
+
+        if errors.len() == 0 {
+            Ok(())
+        }
+        else {
+            Err(errors)
         }
     }
 }
