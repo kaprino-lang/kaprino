@@ -1,7 +1,7 @@
 use inkwell::types::BasicTypeEnum;
 use inkwell::AddressSpace;
-use super::dictionary::Dictionary;
-use super::super::program_object::CodeGen;
+use crate::ast::CodeGen;
+use crate::resolvers::dictionary::Dictionary;
 
 #[derive(Debug, PartialEq)]
 pub struct KMember {

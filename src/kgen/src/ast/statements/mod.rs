@@ -1,7 +1,7 @@
+use crate::ast::CodeGen;
 use crate::ast::statements::let_object::LetObject;
 use crate::ast::statements::ret_object::RetObject;
 use crate::error::error_token::ErrorToken;
-use crate::program_object::CodeGen;
 
 ///
 /// `StatementObject` is an object which represents a statement of sources.

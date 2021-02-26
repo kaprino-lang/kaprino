@@ -1,7 +1,7 @@
 use inkwell::values::BasicValueEnum;
 use crate::ast::exprs::EvaluableObject;
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `ExponentsObject` is an object which represents an expression which contains exponentiations.
@@ -29,7 +29,7 @@ impl<'ctx> ExponentsObject {
     #[allow(unused_variables)]
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<BasicValueEnum<'ctx>, ErrorToken> {
         Err(ErrorToken::error(
-            &self.pos,
+            self.pos.clone(),
             "EXPONENTS_OBJECT has not been implemented yet.".to_string()
         ))
     }

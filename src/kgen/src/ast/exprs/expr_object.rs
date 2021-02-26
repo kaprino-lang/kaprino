@@ -1,7 +1,7 @@
 use inkwell::values::BasicValueEnum;
 use crate::ast::exprs::EvaluableObject;
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `ExprOpKind` is an object which represents an operator, `+` or `-`.
@@ -41,7 +41,7 @@ impl<'ctx> ExprObject {
         let mut left_val = match native_left_val {
             BasicValueEnum::IntValue(val) => Ok(val),
             _ => Err(ErrorToken::error(
-                &self.pos,
+                self.pos.clone(),
                 "Two values cannot be added.".to_string()
             ))
         }?;
@@ -54,7 +54,7 @@ impl<'ctx> ExprObject {
             let right_val = match native_right_val {
                 BasicValueEnum::IntValue(val) => Ok(val),
                 _ => Err(ErrorToken::error(
-                    &self.pos,
+                    self.pos.clone(),
                     "Two values cannot be added.".to_string()
                 ))
             }?;

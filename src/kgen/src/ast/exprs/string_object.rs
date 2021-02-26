@@ -1,6 +1,6 @@
 use inkwell::values::BasicValueEnum;
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `StringObject` is an object which stores a text.

@@ -20,7 +20,7 @@ pub enum ErrorKind {
 ///
 /// It can be used with `ErrorToken`.
 ///
-#[derive(Debug,PartialEq)]
+#[derive(Debug,PartialEq,Clone)]
 pub struct FilePosition {
     file_name: String,
     line: u64,
@@ -32,10 +32,10 @@ pub struct FilePosition {
 /// `ErrorToken` is a token which stores information about the error occurred.
 ///
 #[derive(Debug,PartialEq)]
-pub struct ErrorToken<'a> {
+pub struct ErrorToken {
     kind: ErrorKind,
     error_message: String,
-    pos: &'a FilePosition
+    pos: FilePosition
 }
 
 impl FilePosition {
@@ -61,13 +61,13 @@ impl FilePosition {
     }
 }
 
-impl<'a> ErrorToken<'a> {
+impl ErrorToken {
     ///
     /// Create a `ErrorToken` instance.
     ///
     /// You need specify a kind of notifications.
     ///
-    pub fn new(pos: &'a FilePosition, kind: ErrorKind, error_message: String) -> Self {
+    pub fn new(pos: FilePosition, kind: ErrorKind, error_message: String) -> Self {
         Self {
             pos, kind, error_message
         }
@@ -76,7 +76,7 @@ impl<'a> ErrorToken<'a> {
     ///
     /// Produce an error token.
     ///
-    pub fn error(pos: &'a FilePosition, error_message: String) -> Self {
+    pub fn error(pos: FilePosition, error_message: String) -> Self {
         ErrorToken::new(pos, ErrorKind::Error, error_message)
     }
 }

@@ -1,7 +1,7 @@
 use inkwell::values::BasicValueEnum;
 use crate::ast::exprs::EvaluableObject;
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `FunctionCallObject` is an object which represents an expression which tries to call a function.
@@ -44,7 +44,7 @@ impl<'ctx> FunctionCallObject {
         let func = gen.module.get_function(&self.func_name)
             .ok_or(
                 ErrorToken::error(
-                    &self.pos,
+                    self.pos.clone(),
                     format!("Not found a function named {}", self.func_name)
                 )
             )?;
@@ -55,7 +55,7 @@ impl<'ctx> FunctionCallObject {
             .left()
             .ok_or(
                 ErrorToken::error(
-                    &self.pos,
+                    self.pos.clone(),
                     "Not found a value which will be returned.".to_string()
                 )
             )

@@ -7,7 +7,7 @@ use crate::ast::exprs::param_object::ParamObject;
 use crate::ast::exprs::string_object::StringObject;
 use crate::ast::exprs::term_object::TermObject;
 use crate::error::error_token::ErrorToken;
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `EvaluableObject` is an object which stores a yet-calculated value.

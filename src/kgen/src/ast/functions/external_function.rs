@@ -1,7 +1,7 @@
 use inkwell::module::Linkage;
+use crate::ast::CodeGen;
 use crate::ast::functions::{ FunctionInfo, FunctionObjectTrait };
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
 
 ///
 /// `ExternalFunction` is an object which represents a function implemented in external resources.
@@ -43,7 +43,7 @@ impl<'ctx> ExternalFunction {
     /// Generate the part of the abstract syntax tree.
     ///
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), ErrorToken> {
-        let func_type = self.get_func_type(gen, &self.pos)?;
+        let func_type = self.get_func_type(gen, self.pos.clone())?;
 
         gen.module.add_function(&self.get_info().name, func_type, Some(Linkage::External));
 

@@ -1,6 +1,6 @@
 use inkwell::values::{ BasicValueEnum, IntValue };
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `NumberObject` is an object which stores a number.

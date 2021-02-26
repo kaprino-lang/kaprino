@@ -1,6 +1,6 @@
+use crate::ast::CodeGen;
 use crate::ast::exprs::EvaluableObject;
 use crate::error::error_token::{ FilePosition, ErrorToken };
-use crate::program_object::CodeGen;
 
 ///
 /// `RetObject` is an object which represents a statement with the keyword `#ret`.

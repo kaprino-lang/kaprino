@@ -1,6 +1,6 @@
 use inkwell::values::BasicValueEnum;
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
+use crate::ast::CodeGen;
 
 ///
 /// `ParamObject` is an object which represents a parameter.
@@ -29,7 +29,7 @@ impl<'ctx> ParamObject {
         let param = resolver.find_mut(&self.param_name)
             .ok_or(
                 ErrorToken::error(
-                    &self.pos,
+                    self.pos.clone(),
                     "Unknown parameters".to_string()
                 )
             )?;

@@ -1,7 +1,7 @@
 use inkwell::values::BasicValueEnum;
+use crate::ast::CodeGen;
 use crate::ast::exprs::EvaluableObject;
 use crate::error::error_token::{ FilePosition, ErrorToken };
-use crate::program_object::CodeGen;
 use crate::resolvers::parameter_resolver::KParameter;
 
 ///
@@ -36,7 +36,7 @@ impl<'ctx> LetObject {
             .find(&self.type_name)
             .ok_or(
                 ErrorToken::error(
-                    &self.pos,
+                    self.pos.clone(),
                     format!("Not found a type named {}", self.type_name)
                 )
             )?
@@ -66,7 +66,7 @@ impl<'ctx> LetObject {
             let param = param_mut.find(&self.param_name)
                 .ok_or(
                     ErrorToken::error(
-                        &self.pos,
+                        self.pos.clone(),
                         format!("An unknown parameter named {} is referenced here", self.param_name)
                     )
                 )?;
@@ -78,7 +78,7 @@ impl<'ctx> LetObject {
                 },
                 _ => {
                     Err(ErrorToken::error(
-                        &self.pos,
+                        self.pos.clone(),
                         "Cannot assign some value to immutable one".to_string()
                     ))
                 }

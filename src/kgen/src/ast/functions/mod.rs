@@ -1,11 +1,11 @@
 use inkwell::types::BasicTypeEnum;
 use inkwell::types::FunctionType;
 use inkwell::values::FunctionValue;
+use crate::ast::CodeGen;
 use crate::ast::functions::expr_function::ExprFunction;
 use crate::ast::functions::external_function::ExternalFunction;
 use crate::ast::functions::statement_function::StatementFunction;
 use crate::error::error_token::{ ErrorToken, FilePosition };
-use crate::program_object::CodeGen;
 use crate::resolvers::parameter_resolver::KParameter;
 
 ///
@@ -72,7 +72,7 @@ pub trait FunctionObjectTrait {
     ///
     /// Get a list of types of the arguments.
     ///
-    fn get_arg_types<'ctx, 'a>(&self, gen: &CodeGen<'ctx>, pos: &'a FilePosition) -> Result<Vec<BasicTypeEnum<'ctx>>, ErrorToken<'a>> {
+    fn get_arg_types<'ctx>(&self, gen: &CodeGen<'ctx>, pos: FilePosition) -> Result<Vec<BasicTypeEnum<'ctx>>, ErrorToken> {
         let mut vec: Vec<BasicTypeEnum<'ctx>> = Vec::new();
         let mut error_message: Option<String> = None;
         let type_resolver = gen.type_resolver.borrow();
@@ -108,7 +108,7 @@ pub trait FunctionObjectTrait {
     ///
     /// Get a type of the return value.
     ///
-    fn get_ret_type<'ctx, 'a>(&self, gen: &CodeGen<'ctx>, pos: &'a FilePosition) -> Result<BasicTypeEnum<'ctx>, ErrorToken<'a>> {
+    fn get_ret_type<'ctx>(&self, gen: &CodeGen<'ctx>, pos: FilePosition) -> Result<BasicTypeEnum<'ctx>, ErrorToken> {
         let type_resolver = gen.type_resolver.borrow();
         let ret_type = type_resolver
             .find(&self.get_info().ret_type)
@@ -126,9 +126,9 @@ pub trait FunctionObjectTrait {
     ///
     /// Get a LLVM function type.
     ///
-    fn get_func_type<'ctx, 'a>(&self, gen: &CodeGen<'ctx>, pos: &'a FilePosition) -> Result<FunctionType<'ctx>, ErrorToken<'a>> {
-        let arg_types = self.get_arg_types(gen, &pos)?;
-        let ret_type = self.get_ret_type(gen, &pos)?;
+    fn get_func_type<'ctx>(&self, gen: &CodeGen<'ctx>, pos: FilePosition) -> Result<FunctionType<'ctx>, ErrorToken> {
+        let arg_types = self.get_arg_types(gen, pos.clone())?;
+        let ret_type = self.get_ret_type(gen, pos)?;
 
         let ret_type = match ret_type {
             BasicTypeEnum::ArrayType(val) => val.fn_type(arg_types.as_slice(), true),
