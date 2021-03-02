@@ -5,7 +5,8 @@ use clap::App;
 use clap::Arg;
 use clap::ArgMatches;
 use inkwell::context::Context;
-use kgen::program_object::CodeGen;
+use kgen::ast::CodeGen;
+use kgen::error::error_token::ErrorToken;
 
 pub struct KprcApp {
     source_file: String,
@@ -14,7 +15,7 @@ pub struct KprcApp {
 }
 
 impl KprcApp {
-    pub fn new(args: &ArgMatches) -> Result<Self, String> {
+    pub fn new(args: &ArgMatches) -> Result<Self, Vec<ErrorToken>> {
         let source_file = args.value_of("SOURCES");
         let output_file = match args.value_of("output") {
             Some(val) => Some(val.to_string()),
@@ -30,7 +31,9 @@ impl KprcApp {
             })
         }
         else {
-            Err("No source files given.".to_string())
+            Err(
+                vec![ErrorToken::fatal_error("No source files given.".to_string())]
+            )
         }
     }
 
@@ -52,10 +55,12 @@ impl KprcApp {
             )
     }
 
-    fn get_source_content(&self) -> Result<String, String> {
+    fn get_source_content(&self) -> Result<String, Vec<ErrorToken>> {
         match fs::read_to_string(&self.source_file) {
             Ok(content) => Ok(content),
-            Err(_) => Err(format!("Cannot read a source file named \"{}.\"", &self.source_file))
+            Err(_) => Err(
+                vec![ErrorToken::fatal_error(format!("Cannot read a source file named \"{}.\"", &self.source_file))]
+            )
         }
     }
 
@@ -70,17 +75,19 @@ impl KprcApp {
         }
     }
 
-    fn write_llvm_ir(&self, gen: &CodeGen, output_path: &str) -> Result<(), String> {
+    fn write_llvm_ir(&self, gen: &CodeGen, output_path: &str) -> Result<(), Vec<ErrorToken>> {
         let result = gen.module.print_to_file(format!("{}.ll", output_path));
         match result {
             Ok(_) => Ok(()),
             Err(error) => {
-                Err(error.to_string())
+                Err(
+                    vec![ErrorToken::fatal_error(error.to_string())]
+                )
             }
         }
     }
 
-    fn compile_by_clang(&self, output_path: &str) -> Result<(), String> {
+    fn compile_by_clang(&self, output_path: &str) -> Result<(), Vec<ErrorToken>> {
         let mut command = Command::new("clang");
         command.arg(format!("{}.ll", output_path));
         command.arg("-o");
@@ -94,23 +101,30 @@ impl KprcApp {
                             Ok(())
                         }
                         else {
-                            Err("Clang was finished unexpectedly.".to_string())
+                            Err(
+                                vec![ErrorToken::fatal_error("Clang was finished unexpectedly.".to_string())]
+                            )
                         }
                     },
                     Err(_) => {
-                        Err("Clang was finished unexpectedly.".to_string())
+                        Err(
+                            vec![ErrorToken::fatal_error("Clang was finished unexpectedly.".to_string())]
+                        )
                     }
                 }
             },
-            Err(_) => Err("Failed to launch Clang. Have you installed Clang?".to_string())
+            Err(_) => {
+                Err(
+                    vec![ErrorToken::fatal_error("Failed to launch Clang. Have you installed Clang?".to_string())]
+                )
+            }
         }
     }
 
-    pub fn execute(&self) -> Result<(), String> {
+    pub fn execute(&self) -> Result<(), Vec<ErrorToken>> {
         let context = &Context::create();
 
         let gen = CodeGen::new(context, &self.source_file);
-        gen.init();
 
         println!("log: Loading \"{}\"...", self.source_file);
         let mut content = self.get_source_content()?;
@@ -122,7 +136,7 @@ impl KprcApp {
         let output_path = self.get_output_path();
 
         println!("log: Parsing \"{}\"...", self.source_file);
-        gen.parse(&content)?;
+        gen.codegen(content.as_str())?;
 
         println!("log: Generating \"{}\"...", output_path);
         self.write_llvm_ir(&gen, &output_path)?;
