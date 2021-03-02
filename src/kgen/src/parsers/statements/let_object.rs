@@ -49,7 +49,7 @@ fn type_parser(text: Span) -> IResult<Span, &str, VerboseError<Span>> {
 }
 
 ///
-/// Parse a let statement.  Can be written in BNF as follow.
+/// Parse a let statement. Can be written in BNF as follow.
 ///
 /// ```bnf
 /// <let> ::= "#let" .* (":=" <expr>)* "(" "<-"" .* ")"
