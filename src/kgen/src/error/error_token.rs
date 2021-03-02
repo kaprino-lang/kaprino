@@ -1,3 +1,4 @@
+use std::fmt;
 use nom_locate::LocatedSpan;
 
 ///
@@ -11,8 +12,7 @@ pub enum ErrorKind {
     Error,
     Warning,
     Information,
-    Log,
-    InternalLog
+    Log
 }
 
 ///
@@ -38,6 +38,17 @@ pub struct ErrorToken {
     pos: FilePosition
 }
 
+impl fmt::Display for FilePosition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.file_name == "__internal" {
+            Ok(())
+        }
+        else {
+            write!(f, "{}:{}:{}", self.file_name, self.line, self.pos)
+        }
+    }
+}
+
 impl FilePosition {
     ///
     /// Create a `FilePosition` instance.
@@ -59,6 +70,36 @@ impl FilePosition {
             file_name, line, pos, length
         }
     }
+
+    ///
+    /// Return a default value.
+    ///
+    pub fn compiler() -> Self {
+        let file_name = "__internal".to_string();
+        Self {
+            file_name, line: 0, pos: 0, length: 0
+        }
+    }
+}
+
+impl fmt::Display for ErrorToken  {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let kind = match self.kind {
+            ErrorKind::FatalError | ErrorKind::Error => {
+                "[ERROR]"
+            },
+            ErrorKind::Warning => {
+                "[WARNING]"
+            },
+            ErrorKind::Information => {
+                "[INFO]"
+            },
+            ErrorKind::Log => {
+                "[LOG]"
+            }
+        };
+        write!(f, "{} {} {}", kind, self.error_message, self.pos)
+    }
 }
 
 impl ErrorToken {
@@ -74,9 +115,38 @@ impl ErrorToken {
     }
 
     ///
+    /// Produce a fatal error token.
+    ///
+    pub fn fatal_error(error_message: String) -> Self {
+        let pos = FilePosition::compiler();
+        ErrorToken::new(pos, ErrorKind::FatalError, error_message)
+    }
+
+    ///
     /// Produce an error token.
     ///
     pub fn error(pos: FilePosition, error_message: String) -> Self {
         ErrorToken::new(pos, ErrorKind::Error, error_message)
+    }
+
+    ///
+    /// Produce a warning token.
+    ///
+    pub fn warn(pos: FilePosition, warn_message: String) -> Self {
+        ErrorToken::new(pos, ErrorKind::Warning, warn_message)
+    }
+
+    ///
+    /// Produce an information token.
+    ///
+    pub fn info(pos: FilePosition, info_message: String) -> Self {
+        ErrorToken::new(pos, ErrorKind::Information, info_message)
+    }
+
+    ///
+    /// Produce a log token.
+    ///
+    pub fn log(pos: FilePosition, log_message: String) -> Self {
+        ErrorToken::new(pos, ErrorKind::Log, log_message)
     }
 }
