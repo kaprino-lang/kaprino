@@ -1,6 +1,12 @@
-pub mod resolvers;
-pub mod program_object;
-pub mod exprs;
-pub mod statements;
-pub mod functions;
+extern crate inkwell;
+#[macro_use]
+extern crate lazy_static;
+extern crate regex;
+extern crate nom;
+extern crate nom_locate;
+
+pub mod ast;
+pub mod error;
 pub mod jit;
+pub mod parsers;
+pub mod resolvers;

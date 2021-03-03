@@ -5,9 +5,10 @@ extern crate kgen;
 pub mod kprc;
 pub mod args_manager;
 
+use kgen::error::error_token::ErrorToken;
 use kprc::KprcApp;
 
-fn process() -> Result<(), String> {
+fn process() -> Result<(), Vec<ErrorToken>> {
     let matches = args_manager::get_args();
 
     if let Some(matches) = matches.subcommand_matches("compile") {
@@ -17,7 +18,9 @@ fn process() -> Result<(), String> {
         Ok(())
     }
     else {
-        Err("No subcommand given.".to_string())
+        Err(
+            vec![ErrorToken::fatal_error("No subcommand given.".to_string())]
+        )
     }
 }
 
@@ -26,8 +29,10 @@ fn main() {
         Ok(_) => {
             println!("Tasks completed! (^^)/");
         },
-        Err(message) => {
-            println!("error: {}", message);
+        Err(messages) => {
+            for message in messages {
+                println!("{}", message);
+            }
         }
     };
 }

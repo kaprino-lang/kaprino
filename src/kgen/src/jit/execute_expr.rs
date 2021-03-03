@@ -1,11 +1,15 @@
 use inkwell::context::Context;
 use inkwell::OptimizationLevel;
 use inkwell::execution_engine::JitFunction;
-use super::super::program_object::CodeGen;
-use super::super::exprs::expr_object;
+use crate::ast::CodeGen;
+use crate::parsers::exprs::expr_parser;
+use crate::parsers::Span;
 
-pub fn execute_expr(text: &str) -> Option<u32> {
-    type TestFunc = unsafe extern "C" fn(u32) -> u32;
+///
+/// Execute an expression Just In Time.
+///
+pub fn execute_expr(text: &str) -> Result<u32, ()> {
+    type TestFunc = unsafe extern "C" fn() -> u32;
 
     let context = &Context::create();
     let gen = CodeGen::new(context, "test");
@@ -17,22 +21,15 @@ pub fn execute_expr(text: &str) -> Option<u32> {
     let basic_block = gen.context.append_basic_block(sum, "entry");
     gen.builder.position_at_end(basic_block);
 
-    match expr_object::expr_parser(text) {
-        Ok((_, val1)) => {
-            let generated = val1.codegen(&gen);
-            match generated {
-                Ok(val2) => {
-                    gen.builder.build_return(Some(&val2));
+    let text = Span::new(text);
+    let (_, val) = expr_parser(text).or(Err(()))?;
+    let val = val.codegen(&gen).or(Err(()))?;
 
-                    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).unwrap();
+    gen.builder.build_return(Some(&val));
 
-                    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function("calc").unwrap() };
-                    let ret: u32 = unsafe { func.call(0) };
-                    Some(ret)
-                },
-                Err(_) => None
-            }
-        },
-        Err(_) => None
-    }
+    let execution_engine = gen.module.create_jit_execution_engine(OptimizationLevel::None).or(Err(()))?;
+
+    let func: JitFunction<TestFunc> = unsafe { execution_engine.get_function("calc") }.or(Err(()))?;
+    let ret: u32 = unsafe { func.call() };
+    Ok(ret)
 }

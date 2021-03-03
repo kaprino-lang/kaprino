@@ -1,10 +1,12 @@
 extern crate clap;
+extern crate kgen;
 extern crate kpr;
 
 use clap::App;
+use kgen::error::error_token::ErrorToken;
 use kpr::kprc::KprcApp;
 
-fn process() -> Result<(), String> {
+fn process() -> Result<(), Vec<ErrorToken>> {
     let mut app = App::new("Kaprino Compiler (kprc)");
     app = KprcApp::generate_args(app);
     let matches = app.get_matches();
@@ -20,8 +22,10 @@ fn main() {
         Ok(_) => {
             println!("Tasks completed! (^^)/");
         },
-        Err(message) => {
-            println!("error: {}", message);
+        Err(messages) => {
+            for message in messages {
+                println!("{}", message);
+            }
         }
     };
 }
