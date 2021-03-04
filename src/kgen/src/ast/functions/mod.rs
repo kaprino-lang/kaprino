@@ -131,12 +131,12 @@ pub trait FunctionObjectTrait {
         let ret_type = self.get_ret_type(gen, pos)?;
 
         let ret_type = match ret_type {
-            BasicTypeEnum::ArrayType(val) => val.fn_type(arg_types.as_slice(), true),
-            BasicTypeEnum::FloatType(val) => val.fn_type(arg_types.as_slice(), true),
-            BasicTypeEnum::IntType(val) => val.fn_type(arg_types.as_slice(), true),
-            BasicTypeEnum::PointerType(val) => val.fn_type(arg_types.as_slice(), true),
-            BasicTypeEnum::StructType(val) => val.fn_type(arg_types.as_slice(), true),
-            BasicTypeEnum::VectorType(val) => val.fn_type(arg_types.as_slice(), true)
+            BasicTypeEnum::ArrayType(val) => val.fn_type(arg_types.as_slice(), false),
+            BasicTypeEnum::FloatType(val) => val.fn_type(arg_types.as_slice(), false),
+            BasicTypeEnum::IntType(val) => val.fn_type(arg_types.as_slice(), false),
+            BasicTypeEnum::PointerType(val) => val.fn_type(arg_types.as_slice(), false),
+            BasicTypeEnum::StructType(val) => val.fn_type(arg_types.as_slice(), false),
+            BasicTypeEnum::VectorType(val) => val.fn_type(arg_types.as_slice(), false)
         };
 
         Ok(ret_type)
