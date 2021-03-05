@@ -6,7 +6,7 @@ use crate::ast::statements::StatementObject;
 use crate::error::error_token::{ FilePosition, ErrorToken };
 
 ///
-/// `IfObject` is an object which represents a statement with the keyword `#let`.
+/// `IfObject` is an object which represents a statement with the keyword `#if`.
 ///
 #[derive(Debug,PartialEq)]
 pub struct IfObject {
@@ -61,7 +61,6 @@ impl<'ctx> IfObject {
         gen.builder.build_unconditional_branch(merged_block);
 
         gen.builder.position_at_end(merged_block);
-        gen.builder.build_unreachable();
         Ok(())
     }
 }
