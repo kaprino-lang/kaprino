@@ -1,5 +1,4 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
 use nom::character::complete::multispace0;
 use nom::character::complete::multispace1;
 use nom::combinator::opt;
@@ -12,6 +11,7 @@ use crate::ast::statements::StatementObject;
 use crate::error::error_token::FilePosition;
 use crate::parsers::Span;
 use crate::parsers::exprs::expr_parser;
+use crate::parsers::utils::identifier;
 
 ///
 /// Parse an assign object. Can be written in BNF as follow.
@@ -41,11 +41,11 @@ fn type_parser(text: Span) -> IResult<Span, &str, VerboseError<Span>> {
     let (text, _) = multispace0(text)?;
     let (text, _) = tag("<-")(text)?;
     let (text, _) = multispace0(text)?;
-    let (text, type_name) = alphanumeric1(text)?;
+    let (text, type_name) = identifier(text)?;
     let (text, _) = multispace0(text)?;
     let (text, _) = tag(")")(text)?;
     let (text, _) = multispace0(text)?;
-    Ok((text, type_name.fragment()))
+    Ok((text, type_name))
 }
 
 ///
@@ -59,7 +59,7 @@ pub fn let_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Spa
     let (text, pos) = position(text)?;
     let (text, _) = tag("#let")(text)?;
     let (text, _) = multispace1(text)?;
-    let (text, param_name) = alphanumeric1(text)?;
+    let (text, param_name) = identifier(text)?;
     let (text, assign) = opt(assign_parser)(text)?;
     let (text, type_name) = type_parser(text)?;
     let pos = FilePosition::from_span("".to_string(), &pos);

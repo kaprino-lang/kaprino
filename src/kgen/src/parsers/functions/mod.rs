@@ -1,6 +1,5 @@
 use nom::branch::alt;
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
 use nom::character::complete::multispace0;
 use nom::combinator::map;
 use nom::combinator::opt;
@@ -13,6 +12,7 @@ use crate::parsers::functions::expr_function::expr_function_parser;
 use crate::parsers::functions::external_function::external_function_parser;
 use crate::parsers::functions::statement_function::statement_function_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::identifier;
 
 ///
 /// Parse a function into `FunctionObject`.
@@ -35,22 +35,22 @@ pub fn args_inside_parser(text: Span) -> IResult<Span, Vec<&str>, VerboseError<S
                 multispace0,
                 tag(","),
                 multispace0,
-                alphanumeric1
+                identifier
             )),
-            |(_, _, _, arg): (_, _, _, Span)| {
-                arg.fragment() as &str
+            |(_, _, _, arg): (_, _, _, &str)| {
+                arg as &str
             }
         );
 
     let internal_args_parser =
         map(
             tuple((
-                alphanumeric1,
+                identifier,
                 many0(second_args_parser)
             )),
-            |(first_arg, second_args): (Span, Vec<&str>)| {
+            |(first_arg, second_args): (&str, Vec<&str>)| {
                 let mut second_args = second_args.clone();
-                second_args.insert(0, first_arg.fragment());
+                second_args.insert(0, first_arg);
                 second_args
             }
         );
@@ -93,14 +93,14 @@ pub fn function_type_parser(text: Span) -> IResult<Span, (Vec<&str>, &str), Verb
             multispace0,
             tag("->"),
             multispace0,
-            opt(alphanumeric1),
+            opt(identifier),
             multispace0,
             tag(")")
         )),
-        |(_, _, args, _, _, _, ret, _, _): (_, _, Vec<&str>, _, _, _, Option<Span>, _, _)| {
+        |(_, _, args, _, _, _, ret, _, _): (_, _, Vec<&str>, _, _, _, Option<&str>, _, _)| {
             match ret {
                 Some(ret) => {
-                    (args, ret.fragment() as &str)
+                    (args, ret)
                 },
                 None => {
                     (args, "")

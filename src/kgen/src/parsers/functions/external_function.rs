@@ -1,5 +1,4 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
 use nom::character::complete::multispace0;
 use nom::combinator::map;
 use nom::error::VerboseError;
@@ -12,6 +11,7 @@ use crate::error::error_token::FilePosition;
 use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::identifier;
 
 ///
 /// Parse a function which is declared externally.
@@ -22,7 +22,7 @@ pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, Ver
             position,
             tag("#extern"),
             multispace0,
-            alphanumeric1,
+            identifier,
             multispace0,
             args_parser,
             multispace0,

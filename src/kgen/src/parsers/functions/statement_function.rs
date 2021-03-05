@@ -1,5 +1,4 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
 use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
@@ -13,6 +12,7 @@ use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
 use crate::parsers::statements::statement_parser;
+use crate::parsers::utils::identifier;
 
 ///
 /// Parse a statement enclosed with spaces.
@@ -31,7 +31,7 @@ pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, Ve
     let (text, pos) = position(text)?;
     let (text, _) = tag("#func")(text)?;
     let (text, _) = multispace0(text)?;
-    let (text, function_name) = alphanumeric1(text)?;
+    let (text, function_name) = identifier(text)?;
     let (text, _) = multispace0(text)?;
     let (text, args) = args_parser(text)?;
     let (text, _) = multispace0(text)?;
