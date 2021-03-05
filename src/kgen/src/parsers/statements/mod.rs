@@ -3,6 +3,7 @@ use nom::IResult;
 use nom::branch::alt;
 use crate::ast::statements::StatementObject;
 use crate::parsers::Span;
+use crate::parsers::statements::assign_object::assign_parser;
 use crate::parsers::statements::break_object::break_parser;
 use crate::parsers::statements::call_object::call_parser;
 use crate::parsers::statements::if_object::if_parser;
@@ -15,6 +16,7 @@ use crate::parsers::statements::ret_object::ret_parser;
 ///
 pub fn statement_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
     alt((
+        assign_parser,
         break_parser,
         call_parser,
         if_parser,
@@ -24,6 +26,7 @@ pub fn statement_parser(text: Span) -> IResult<Span, StatementObject, VerboseErr
     ))(text)
 }
 
+pub mod assign_object;
 pub mod break_object;
 pub mod call_object;
 pub mod if_object;
