@@ -1,5 +1,6 @@
 use crate::ast::CodeGen;
 use crate::ast::statements::break_object::BreakObject;
+use crate::ast::statements::call_object::CallObject;
 use crate::ast::statements::if_object::IfObject;
 use crate::ast::statements::let_object::LetObject;
 use crate::ast::statements::loop_object::LoopObject;
@@ -12,6 +13,7 @@ use crate::error::error_token::ErrorToken;
 #[derive(Debug,PartialEq)]
 pub enum StatementObject {
     BreakObject(Box<BreakObject>),
+    CallObject(Box<CallObject>),
     IfObject(Box<IfObject>),
     LetObject(Box<LetObject>),
     LoopObject(Box<LoopObject>),
@@ -25,6 +27,7 @@ impl<'ctx> StatementObject {
     pub fn codegen(&self, gen: &CodeGen<'ctx>) -> Result<(), ErrorToken> {
         match self {
             StatementObject::BreakObject(obj) => obj.codegen(gen),
+            StatementObject::CallObject(obj) => obj.codegen(gen),
             StatementObject::IfObject(obj) => obj.codegen(gen),
             StatementObject::LetObject(obj) => obj.codegen(gen),
             StatementObject::LoopObject(obj) => obj.codegen(gen),
@@ -34,6 +37,7 @@ impl<'ctx> StatementObject {
 }
 
 pub mod break_object;
+pub mod call_object;
 pub mod if_object;
 pub mod let_object;
 pub mod loop_object;
