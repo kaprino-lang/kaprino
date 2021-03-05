@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use inkwell::basic_block::BasicBlock;
 use inkwell::builder::Builder;
 use inkwell::context::Context;
 use inkwell::module::Module;
@@ -20,7 +21,8 @@ pub struct CodeGen<'ctx> {
     pub builder: Builder<'ctx>,
     pub param_resolver: RefCell<ParameterResolver<'ctx>>,
     pub type_resolver: RefCell<TypeResolver<'ctx>>,
-    pub function_resolver: RefCell<FunctionResolver<'ctx>>
+    pub function_resolver: RefCell<FunctionResolver<'ctx>>,
+    pub loop_destinations: RefCell<Vec<BasicBlock<'ctx>>>
 }
 
 impl<'ctx> CodeGen<'ctx> {
@@ -33,6 +35,7 @@ impl<'ctx> CodeGen<'ctx> {
         let param_resolver = RefCell::new(ParameterResolver::new());
         let type_resolver = RefCell::new(TypeResolver::new());
         let function_resolver = RefCell::new(FunctionResolver::new());
+        let loop_destinations = RefCell::new(Vec::new());
 
         type_resolver.borrow_mut().init_default_types();
 
@@ -42,7 +45,8 @@ impl<'ctx> CodeGen<'ctx> {
             builder,
             param_resolver,
             type_resolver,
-            function_resolver
+            function_resolver,
+            loop_destinations
         }
     }
 
