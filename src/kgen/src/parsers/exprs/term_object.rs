@@ -4,12 +4,11 @@ use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
-use nom_locate::position;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::term_object::{ TermObject, TermOpKind };
-use crate::error::error_token::FilePosition;
 use crate::parsers::exprs::exponents_object::exponents_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::get_position;
 
 ///
 /// Parse an expression which contains exponentiations with one operator. Can be written in BNF as follow.
@@ -40,12 +39,10 @@ fn exponents_with_op_parser(text: Span) -> IResult<Span, (TermOpKind, EvaluableO
 /// ```
 ///
 pub fn term_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, left_value) = exponents_parser(text)?;
     let (text, _) = multispace0(text)?;
     let (text, right_values) = many0(exponents_with_op_parser)(text)?;
-
-    let pos = FilePosition::from_span("File".to_string(), &pos);
 
     let obj =
         if right_values.len() == 0 {

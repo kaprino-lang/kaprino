@@ -4,12 +4,11 @@ use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
-use nom_locate::position;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::expr_object::{ ExprObject, ExprOpKind };
-use crate::error::error_token::FilePosition;
 use crate::parsers::exprs::term_object::term_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::get_position;
 
 ///
 /// Parse a term with one operator. Can be written in BNF as follow.
@@ -40,12 +39,10 @@ fn term_with_op_parser(text: Span) -> IResult<Span, (ExprOpKind, EvaluableObject
 /// ```
 ///
 pub fn expr_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, left_value) = term_parser(text)?;
     let (text, _) = multispace0(text)?;
     let (text, right_values) = many0(term_with_op_parser)(text)?;
-
-    let pos = FilePosition::from_span("File".to_string(), &pos);
 
     if right_values.len() == 0 {
         Ok((text, left_value))

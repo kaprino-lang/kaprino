@@ -3,16 +3,14 @@ use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
-use nom_locate::position;
 use crate::ast::functions::FunctionObject;
 use crate::ast::functions::statement_function::StatementFunction;
 use crate::ast::statements::StatementObject;
-use crate::error::error_token::FilePosition;
 use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
 use crate::parsers::statements::statement_parser;
-use crate::parsers::utils::identifier;
+use crate::parsers::utils::{ identifier, get_position };
 
 ///
 /// Parse a statement enclosed with spaces.
@@ -28,7 +26,7 @@ fn statement_with_spaces_parser(text: Span) -> IResult<Span, StatementObject, Ve
 /// Parse a C-like function into `FunctionObject`.
 ///
 pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, _) = tag("#func")(text)?;
     let (text, _) = multispace0(text)?;
     let (text, function_name) = identifier(text)?;
@@ -41,7 +39,6 @@ pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, Ve
     let (text, statements) = many0(statement_with_spaces_parser)(text)?;
     let (text, _) = tag("|<")(text)?;
 
-    let pos = FilePosition::from_span("File".to_string(), &pos);
     let function_name = function_name.to_string();
     let args = args.iter().map(|s| { s.to_string() }).collect();
     let (types, ret_type) = function_type;

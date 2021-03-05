@@ -4,17 +4,16 @@ use nom::character::complete::none_of;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::sequence::delimited;
-use nom_locate::position;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::string_object::StringObject;
-use crate::error::error_token::FilePosition;
 use crate::parsers::Span;
+use crate::parsers::utils::get_position;
 
 ///
 /// Parse an expression which is enclosed in paren.
 ///
 pub fn string_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, val) = delimited(
         tag("\""),
         escaped(
@@ -24,7 +23,6 @@ pub fn string_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<
         ),
         tag("\"")
     )(text)?;
-    let pos = FilePosition::from_span("File".to_string(), &pos);
 
     let obj = EvaluableObject::StringObject(Box::new(
             StringObject::new(pos, val.to_string())

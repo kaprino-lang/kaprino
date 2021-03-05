@@ -3,12 +3,11 @@ use nom::character::complete::multispace0;
 use nom::combinator::opt;
 use nom::error::VerboseError;
 use nom::IResult;
-use nom_locate::position;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::exponents_object::ExponentsObject;
-use crate::error::error_token::FilePosition;
 use crate::parsers::factors::factor_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::get_position;
 
 ///
 /// Parse a factor with an exponentiation operator. Can be written in BNF as follow.
@@ -32,11 +31,10 @@ fn factor_with_op_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseEr
 /// ```
 ///
 pub fn exponents_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, left_value) = factor_parser(text)?;
     let (text, _) = multispace0(text)?;
     let (text, right_value) = opt(factor_with_op_parser)(text)?;
-    let pos = FilePosition::from_span("File".to_string(), &pos);
     let obj = match right_value {
         None => {
             left_value
