@@ -1,6 +1,6 @@
 use nom::character::complete::alphanumeric1;
 use nom::character::complete::char;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::combinator::map;
 use nom::error::VerboseError;
 use nom::IResult;
@@ -23,13 +23,13 @@ pub fn expr_function_parser(text: Span) -> IResult<Span, FunctionObject, Verbose
         tuple((
             position,
             alphanumeric1,
-            space0,
+            multispace0,
             args_parser,
-            space0,
+            multispace0,
             char('='),
-            space0,
+            multispace0,
             expr_parser,
-            space0,
+            multispace0,
             function_type_parser
         )),
         |(pos, func_name, _, args, _, _, _, expr, _, fn_type): (Span, Span, _, Vec<&str>, _, _, _, EvaluableObject, _, (Vec<&str>, &str))| {

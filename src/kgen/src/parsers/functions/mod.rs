@@ -1,7 +1,7 @@
 use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::combinator::map;
 use nom::combinator::opt;
 use nom::error::VerboseError;
@@ -32,9 +32,9 @@ pub fn args_inside_parser(text: Span) -> IResult<Span, Vec<&str>, VerboseError<S
     let second_args_parser =
         map(
             tuple((
-                space0,
+                multispace0,
                 tag(","),
-                space0,
+                multispace0,
                 alphanumeric1
             )),
             |(_, _, _, arg): (_, _, _, Span)| {
@@ -70,9 +70,9 @@ pub fn args_parser(text: Span) -> IResult<Span, Vec<&str>, VerboseError<Span>> {
     map(
         tuple((
             tag("("),
-            space0,
+            multispace0,
             args_inside_parser,
-            space0,
+            multispace0,
             tag(")")
         )),
         |(_, _, args, _, _)| {
@@ -88,13 +88,13 @@ pub fn function_type_parser(text: Span) -> IResult<Span, (Vec<&str>, &str), Verb
     map(
         tuple((
             tag("("),
-            space0,
+            multispace0,
             args_inside_parser,
-            space0,
+            multispace0,
             tag("->"),
-            space0,
+            multispace0,
             opt(alphanumeric1),
-            space0,
+            multispace0,
             tag(")")
         )),
         |(_, _, args, _, _, _, ret, _, _): (_, _, Vec<&str>, _, _, _, Option<Span>, _, _)| {

@@ -1,5 +1,5 @@
 use nom::character::complete::char;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::combinator::opt;
 use nom::error::VerboseError;
 use nom::IResult;
@@ -19,7 +19,7 @@ use crate::parsers::Span;
 ///
 fn factor_with_op_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
     let (text, _) = char('^')(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, factor) = factor_parser(text)?;
     Ok((text, factor))
 }
@@ -34,7 +34,7 @@ fn factor_with_op_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseEr
 pub fn exponents_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
     let (text, pos) = position(text)?;
     let (text, left_value) = factor_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, right_value) = opt(factor_with_op_parser)(text)?;
     let pos = FilePosition::from_span("File".to_string(), &pos);
     let obj = match right_value {

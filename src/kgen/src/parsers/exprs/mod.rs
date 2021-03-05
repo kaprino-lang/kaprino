@@ -1,6 +1,6 @@
 use nom::branch::alt;
 use nom::character::complete::char;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
@@ -20,7 +20,7 @@ use crate::parsers::Span;
 ///
 fn term_with_op_parser(text: Span) -> IResult<Span, (ExprOpKind, EvaluableObject), VerboseError<Span>> {
     let (text, op) = alt((char('+'), char('-')))(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, term) = term_parser(text)?;
 
     let op = match op {
@@ -42,7 +42,7 @@ fn term_with_op_parser(text: Span) -> IResult<Span, (ExprOpKind, EvaluableObject
 pub fn expr_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
     let (text, pos) = position(text)?;
     let (text, left_value) = term_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, right_values) = many0(term_with_op_parser)(text)?;
 
     let pos = FilePosition::from_span("File".to_string(), &pos);

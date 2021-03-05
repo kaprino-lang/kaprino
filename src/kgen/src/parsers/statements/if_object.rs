@@ -1,5 +1,5 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::{ space0, space1 };
+use nom::character::complete::{ multispace0, multispace1 };
 use nom::combinator::map;
 use nom::error::VerboseError;
 use nom::IResult;
@@ -22,9 +22,9 @@ use crate::parsers::utils::get_position;
 pub fn if_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
     let statement_with_space_parser = map(
         tuple((
-            space0,
+            multispace0,
             statement_parser,
-            space0
+            multispace0
         )),
         |(_, statement, _)| {
             statement
@@ -33,9 +33,9 @@ pub fn if_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span
 
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, _) = tag("#if")(text)?;
-    let (text, _) = space1(text)?;
+    let (text, _) = multispace1(text)?;
     let (text, expr) = expr_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag("|>")(text)?;
     let (text, statements) = many0(statement_with_space_parser)(text)?;
     let (text, _) = tag("|<")(text)?;

@@ -1,4 +1,4 @@
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::combinator::eof;
 use nom::combinator::map;
 use nom::error::VerboseError;
@@ -20,9 +20,9 @@ pub type Span<'a> = LocatedSpan<&'a str>;
 pub fn program_parser(text: Span) -> IResult<Span, Vec<FunctionObject>, VerboseError<Span>> {
     let function_with_space_parser = map(
         tuple((
-            space0,
+            multispace0,
             function_parser,
-            space0
+            multispace0
         )),
         |(_, function, _)| {
             function

@@ -1,6 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
@@ -18,9 +18,9 @@ use crate::parsers::statements::statement_parser;
 /// Parse a statement enclosed with spaces.
 ///
 fn statement_with_spaces_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, statement) = statement_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     Ok((text, statement))
 }
 
@@ -30,13 +30,13 @@ fn statement_with_spaces_parser(text: Span) -> IResult<Span, StatementObject, Ve
 pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
     let (text, pos) = position(text)?;
     let (text, _) = tag("#func")(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, function_name) = alphanumeric1(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, args) = args_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, function_type) = function_type_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag("|>")(text)?;
     let (text, statements) = many0(statement_with_spaces_parser)(text)?;
     let (text, _) = tag("|<")(text)?;

@@ -1,6 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::combinator::map;
 use nom::error::VerboseError;
 use nom::IResult;
@@ -21,11 +21,11 @@ pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, Ver
         tuple((
             position,
             tag("#extern"),
-            space0,
+            multispace0,
             alphanumeric1,
-            space0,
+            multispace0,
             args_parser,
-            space0,
+            multispace0,
             function_type_parser
         )),
         |(pos, _, _, func_name, _, args, _, fn_type)| {

@@ -1,6 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
 use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::separated_list0;
@@ -15,9 +15,9 @@ use crate::parsers::Span;
 /// Parse an expression with spaces.
 ///
 fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, expr) = expr_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     Ok((text, expr))
 }
 
@@ -31,7 +31,7 @@ fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, VerboseError<S
 pub fn function_call_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
     let (text, pos) = position(text)?;
     let (text, function_name) = alphanumeric1(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag("(")(text)?;
     let (text, args) = separated_list0(tag(","), expr_with_spaces)(text)?;
     let (text, _) = tag(")")(text)?;
