@@ -1,13 +1,12 @@
 use nom::character::complete::char;
 use nom::character::complete::multispace0;
 use nom::combinator::opt;
-use nom::error::VerboseError;
 use nom::IResult;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::exponents_object::ExponentsObject;
 use crate::parsers::factors::factor_parser;
 use crate::parsers::Span;
-use crate::parsers::utils::get_position;
+use crate::parsers::utils::{ get_position, GSError };
 
 ///
 /// Parse a factor with an exponentiation operator. Can be written in BNF as follow.
@@ -16,7 +15,7 @@ use crate::parsers::utils::get_position;
 /// <factor_with_op> ::= "^" <factor>
 /// ```
 ///
-fn factor_with_op_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+fn factor_with_op_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, _) = char('^')(text)?;
     let (text, _) = multispace0(text)?;
     let (text, factor) = factor_parser(text)?;
@@ -30,7 +29,7 @@ fn factor_with_op_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseEr
 /// <exponents> ::= <factor> ("^" <factor>)*
 /// ```
 ///
-pub fn exponents_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+pub fn exponents_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, left_value) = factor_parser(text)?;
     let (text, _) = multispace0(text)?;

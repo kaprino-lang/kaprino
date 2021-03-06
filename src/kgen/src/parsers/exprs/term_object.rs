@@ -1,14 +1,13 @@
 use nom::branch::alt;
 use nom::character::complete::char;
 use nom::character::complete::multispace0;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::term_object::{ TermObject, TermOpKind };
 use crate::parsers::exprs::exponents_object::exponents_parser;
 use crate::parsers::Span;
-use crate::parsers::utils::get_position;
+use crate::parsers::utils::{ get_position, GSError };
 
 ///
 /// Parse an expression which contains exponentiations with one operator. Can be written in BNF as follow.
@@ -17,7 +16,7 @@ use crate::parsers::utils::get_position;
 /// <exponents_with_op> ::= ("*" | "/") <exponents>
 /// ```
 ///
-fn exponents_with_op_parser(text: Span) -> IResult<Span, (TermOpKind, EvaluableObject), VerboseError<Span>> {
+fn exponents_with_op_parser(text: Span) -> IResult<Span, (TermOpKind, EvaluableObject), GSError> {
     let (text, op) = alt((char('*'), char('/')))(text)?;
     let (text, _) = multispace0(text)?;
     let (text, exp) = exponents_parser(text)?;
@@ -38,7 +37,7 @@ fn exponents_with_op_parser(text: Span) -> IResult<Span, (TermOpKind, EvaluableO
 /// <term> ::= <exponents> (("*" | "/") <exponents>)*
 /// ```
 ///
-pub fn term_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+pub fn term_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, left_value) = exponents_parser(text)?;
     let (text, _) = multispace0(text)?;

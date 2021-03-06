@@ -1,7 +1,6 @@
 use nom::character::complete::char;
 use nom::character::complete::multispace0;
 use nom::combinator::map;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::sequence::tuple;
 use crate::ast::exprs::EvaluableObject;
@@ -12,12 +11,12 @@ use crate::parsers::exprs::expr_parser;
 use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
-use crate::parsers::utils::{ identifier, get_position };
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse a function which has only one expression.
 ///
-pub fn expr_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
+pub fn expr_function_parser(text: Span) -> IResult<Span, FunctionObject, GSError> {
     map(
         tuple((
             get_position("File".to_string()),

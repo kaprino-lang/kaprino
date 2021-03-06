@@ -2,14 +2,13 @@ use nom::bytes::complete::tag;
 use nom::character::complete::multispace0;
 use nom::character::complete::multispace1;
 use nom::combinator::opt;
-use nom::error::VerboseError;
 use nom::IResult;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::statements::let_object::LetObject;
 use crate::ast::statements::StatementObject;
 use crate::parsers::Span;
 use crate::parsers::exprs::expr_parser;
-use crate::parsers::utils::{ identifier, get_position };
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse an assign object. Can be written in BNF as follow.
@@ -18,7 +17,7 @@ use crate::parsers::utils::{ identifier, get_position };
 /// <assign> ::= ":=" <expr>
 /// ```
 ///
-fn assign_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+fn assign_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, _) = multispace0(text)?;
     let (text, _) = tag(":=")(text)?;
     let (text, _) = multispace0(text)?;
@@ -33,7 +32,7 @@ fn assign_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span
 /// <type> ::= "(" "<-" .* ")"
 /// ```
 ///
-fn type_parser(text: Span) -> IResult<Span, &str, VerboseError<Span>> {
+fn type_parser(text: Span) -> IResult<Span, &str, GSError> {
     let (text, _) = multispace0(text)?;
     let (text, _) = tag("(")(text)?;
     let (text, _) = multispace0(text)?;
@@ -53,7 +52,7 @@ fn type_parser(text: Span) -> IResult<Span, &str, VerboseError<Span>> {
 /// <let> ::= "#let" .* (":=" <expr>)* "(" "<-"" .* ")"
 /// ```
 ///
-pub fn let_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
+pub fn let_parser(text: Span) -> IResult<Span, StatementObject, GSError> {
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, _) = tag("#let")(text)?;
     let (text, _) = multispace1(text)?;

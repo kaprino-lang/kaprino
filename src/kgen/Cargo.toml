@@ -11,4 +11,5 @@ inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", feat
 lazy_static = "1.4.0"
 regex = "^1.4.3"
 nom = "^6.1.2"
+nom-greedyerror = "0.3.1"
 nom_locate = "^3.0.0"

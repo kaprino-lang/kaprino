@@ -1,7 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace0;
 use nom::combinator::map;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::sequence::tuple;
 use crate::ast::functions::external_function::ExternalFunction;
@@ -9,12 +8,12 @@ use crate::ast::functions::FunctionObject;
 use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
-use crate::parsers::utils::{ identifier, get_position };
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse a function which is declared externally.
 ///
-pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
+pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, GSError> {
     map(
         tuple((
             get_position("File".to_string()),

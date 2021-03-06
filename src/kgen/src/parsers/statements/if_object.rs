@@ -1,7 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::{ multispace0, multispace1 };
 use nom::combinator::map;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
 use nom::sequence::tuple;
@@ -10,7 +9,7 @@ use crate::ast::statements::StatementObject;
 use crate::parsers::exprs::expr_parser;
 use crate::parsers::Span;
 use crate::parsers::statements::statement_parser;
-use crate::parsers::utils::get_position;
+use crate::parsers::utils::{ get_position, GSError };
 
 ///
 /// Parse an if statement. Can be written in BNF as follow.
@@ -19,7 +18,7 @@ use crate::parsers::utils::get_position;
 /// <if> ::= "#if" <expr> "|>" <statements> "<|"
 /// ```
 ///
-pub fn if_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
+pub fn if_parser(text: Span) -> IResult<Span, StatementObject, GSError> {
     let statement_with_space_parser = map(
         tuple((
             multispace0,

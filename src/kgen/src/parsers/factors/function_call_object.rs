@@ -1,19 +1,17 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace0;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::separated_list0;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::function_call_object::FunctionCallObject;
 use crate::parsers::exprs::expr_parser;
 use crate::parsers::Span;
-use crate::parsers::utils::identifier;
-use crate::parsers::utils::get_position;
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse an expression with spaces.
 ///
-fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, _) = multispace0(text)?;
     let (text, expr) = expr_parser(text)?;
     let (text, _) = multispace0(text)?;
@@ -27,7 +25,7 @@ fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, VerboseError<S
 /// <function_call> ::= .* "(" (<expr> ("," <expr>)*)* ")"
 /// ```
 ///
-pub fn function_call_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+pub fn function_call_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, function_name) = identifier(text)?;
     let (text, _) = multispace0(text)?;

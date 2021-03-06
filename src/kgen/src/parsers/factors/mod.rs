@@ -1,5 +1,4 @@
 use nom::branch::alt;
-use nom::error::VerboseError;
 use nom::IResult;
 use crate::ast::exprs::EvaluableObject;
 use crate::parsers::factors::function_call_object::function_call_parser;
@@ -8,11 +7,12 @@ use crate::parsers::factors::paren_object::paren_parser;
 use crate::parsers::factors::param_object::param_parser;
 use crate::parsers::factors::string_object::string_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::GSError;
 
 ///
 /// Parse a factor into `EvaluableObject`.
 ///
-pub fn factor_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+pub fn factor_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     alt((
         function_call_parser,
         numbers_parser,

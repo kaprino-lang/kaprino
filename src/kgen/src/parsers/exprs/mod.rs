@@ -1,14 +1,13 @@
 use nom::branch::alt;
 use nom::character::complete::char;
 use nom::character::complete::multispace0;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::multi::many0;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::expr_object::{ ExprObject, ExprOpKind };
 use crate::parsers::exprs::term_object::term_parser;
 use crate::parsers::Span;
-use crate::parsers::utils::get_position;
+use crate::parsers::utils::{ get_position, GSError };
 
 ///
 /// Parse a term with one operator. Can be written in BNF as follow.
@@ -17,7 +16,7 @@ use crate::parsers::utils::get_position;
 /// <term_with_op> ::= ("+" | "-") <term>
 /// ```
 ///
-fn term_with_op_parser(text: Span) -> IResult<Span, (ExprOpKind, EvaluableObject), VerboseError<Span>> {
+fn term_with_op_parser(text: Span) -> IResult<Span, (ExprOpKind, EvaluableObject), GSError> {
     let (text, op) = alt((char('+'), char('-')))(text)?;
     let (text, _) = multispace0(text)?;
     let (text, term) = term_parser(text)?;
@@ -38,7 +37,7 @@ fn term_with_op_parser(text: Span) -> IResult<Span, (ExprOpKind, EvaluableObject
 /// <expr> ::= <term> (("+" | "-") <term>)*
 /// ```
 ///
-pub fn expr_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
+pub fn expr_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, left_value) = term_parser(text)?;
     let (text, _) = multispace0(text)?;

@@ -1,9 +1,17 @@
 use nom::{ IResult, Slice };
-use nom::error::{ ErrorKind, ParseError, VerboseError };
+use nom::error::{ ErrorKind, ParseError };
 use nom_locate::position;
+use nom_greedyerror::GreedyError;
 use regex::Regex;
 use crate::error::error_token::FilePosition;
 use crate::parsers::Span;
+
+///
+/// `GSError` is an initial of Greedy Span Error. Can be used for tracking an error with `alt` correctly.
+///
+/// For more information, please refer [nom-greedyerror](https://github.com/dalance/nom-greedyerror), an awesome project.
+///
+pub type GSError<'a> = GreedyError<Span<'a>, ErrorKind>;
 
 lazy_static! {
     ///
@@ -17,7 +25,7 @@ lazy_static! {
 ///
 /// Parse a word which is valid for the identifiers of kaprino.
 ///
-pub fn identifier(content: Span) -> IResult<Span, &str, VerboseError<Span>> {
+pub fn identifier(content: Span) -> IResult<Span, &str, GSError> {
     let matched = IDENTIFIER_REGEX
         .captures(content.fragment())
         .ok_or(nom::Err::Error(ParseError::from_error_kind(content, ErrorKind::RegexpCapture)))?;
@@ -33,7 +41,7 @@ pub fn identifier(content: Span) -> IResult<Span, &str, VerboseError<Span>> {
 ///
 /// Never forget to give a file name before calling this function.
 ///
-pub fn get_position(file_name: String) -> impl Fn(Span) -> IResult<Span, FilePosition, VerboseError<Span>> {
+pub fn get_position(file_name: String) -> impl Fn(Span) -> IResult<Span, FilePosition, GSError> {
     move |input| {
         let (input, pos) = position(input)?;
         let pos = FilePosition::from_span(file_name.clone(), &pos);
