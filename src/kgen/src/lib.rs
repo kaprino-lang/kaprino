@@ -1,9 +1,8 @@
 extern crate inkwell;
-#[macro_use]
-extern crate lazy_static;
-extern crate regex;
-extern crate nom;
+extern crate nom_greedyerror;
 extern crate nom_locate;
+extern crate nom;
+extern crate regex;
 
 pub mod ast;
 pub mod error;

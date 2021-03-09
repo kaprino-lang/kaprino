@@ -3,6 +3,7 @@ use inkwell::basic_block::BasicBlock;
 use inkwell::builder::Builder;
 use inkwell::context::Context;
 use inkwell::module::Module;
+use nom_greedyerror::GreedyErrorKind;
 use crate::ast::functions::FunctionObject;
 use crate::error::error_token::{ErrorToken, FilePosition};
 use crate::parsers::program_parser;
@@ -66,15 +67,25 @@ impl<'ctx> CodeGen<'ctx> {
                         let errors =
                             text.errors
                                 .into_iter()
-                                .map(|(err, _)| {
+                                .map(|(err, kind)| {
                                     let pos = FilePosition::from_span(
                                         "File".to_string(),
                                         &err
                                     );
-                                    ErrorToken::error(
-                                        pos,
-                                        "Syntax error was found.".to_string()
-                                    )
+                                    match kind {
+                                        GreedyErrorKind::Nom(item) => {
+                                            ErrorToken::error(
+                                                pos,
+                                                item.description().to_string()
+                                            )
+                                        },
+                                        _ => {
+                                            ErrorToken::error(
+                                                pos,
+                                                "Syntax error was found.".to_string()
+                                            )
+                                        }
+                                    }
                                 })
                                 .collect();
                         Err(errors)
