@@ -4,7 +4,8 @@ use nom::character::complete::multispace0;
 use nom::combinator::map;
 use nom::combinator::opt;
 use nom::IResult;
-use nom::multi::many0;
+use nom::multi::separated_list0;
+use nom::sequence::delimited;
 use nom::sequence::tuple;
 use crate::ast::functions::FunctionObject;
 use crate::parsers::functions::expr_function::expr_function_parser;
@@ -28,38 +29,17 @@ pub fn function_parser(text: Span) -> IResult<Span, FunctionObject, GSError> {
 /// Parse arguments inside paren.
 ///
 pub fn args_inside_parser(text: Span) -> IResult<Span, Vec<&str>, GSError> {
-    let second_args_parser =
-        map(
-            tuple((
-                multispace0,
-                tag(","),
-                multispace0,
-                identifier
-            )),
-            |(_, _, _, arg): (_, _, _, &str)| {
-                arg as &str
-            }
+    let one_arg_parser =
+        delimited(
+            multispace0,
+            identifier,
+            multispace0
         );
 
-    let internal_args_parser =
-        map(
-            tuple((
-                identifier,
-                many0(second_args_parser)
-            )),
-            |(first_arg, second_args): (&str, Vec<&str>)| {
-                let mut second_args = second_args.clone();
-                second_args.insert(0, first_arg);
-                second_args
-            }
-        );
-
-    let (text, args) = opt(internal_args_parser)(text)?;
-
-    match args {
-        Some(args) => Ok((text, args)),
-        None => Ok((text, Vec::new()))
-    }
+    separated_list0(
+        tag(","),
+        one_arg_parser
+    )(text)
 }
 
 ///

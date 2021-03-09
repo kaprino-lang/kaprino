@@ -3,6 +3,7 @@ use nom::combinator::eof;
 use nom::combinator::map;
 use nom::IResult;
 use nom::multi::many0;
+use nom::sequence::delimited;
 use nom::sequence::tuple;
 use nom_locate::LocatedSpan;
 use crate::ast::functions::FunctionObject;
@@ -18,16 +19,12 @@ pub type Span<'a> = LocatedSpan<&'a str>;
 /// Parse a whole program.
 ///
 pub fn program_parser(text: Span) -> IResult<Span, Vec<FunctionObject>, GSError> {
-    let function_with_space_parser = map(
-        tuple((
+    let function_with_space_parser =
+        delimited(
             multispace0,
             function_parser,
             multispace0
-        )),
-        |(_, function, _)| {
-            function
-        }
-    );
+        );
 
     map(
         tuple((

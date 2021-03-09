@@ -1,5 +1,6 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace0;
+use nom::character::complete::multispace1;
 use nom::combinator::map;
 use nom::IResult;
 use nom::sequence::tuple;
@@ -18,7 +19,7 @@ pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, GSE
         tuple((
             get_position("File".to_string()),
             tag("#extern"),
-            multispace0,
+            multispace1,
             identifier,
             multispace0,
             args_parser,

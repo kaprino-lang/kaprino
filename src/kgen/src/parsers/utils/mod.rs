@@ -61,12 +61,8 @@ mod test {
             let val = Span::new(name);
             let val = identifier(val);
 
-            if let Ok((_, parsed)) = val {
-                assert_eq!(parsed, name);
-            }
-            else {
-                panic!();
-            }
+            assert!(val.is_ok());
+            assert_eq!(val.unwrap().1, name);
         }
     }
 
@@ -79,9 +75,7 @@ mod test {
             let val = Span::new(name);
             let val = identifier(val);
 
-            if let Ok((_, _)) = val {
-                panic!();
-            }
+            assert!(val.is_err());
         }
     }
 }

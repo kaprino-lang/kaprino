@@ -1,22 +1,14 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace0;
+use nom::combinator::map;
 use nom::IResult;
 use nom::multi::separated_list0;
+use nom::sequence::tuple;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::exprs::function_call_object::FunctionCallObject;
 use crate::parsers::exprs::expr_parser;
 use crate::parsers::Span;
 use crate::parsers::utils::{ identifier, get_position, GSError };
-
-///
-/// Parse an expression with spaces.
-///
-fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, GSError> {
-    let (text, _) = multispace0(text)?;
-    let (text, expr) = expr_parser(text)?;
-    let (text, _) = multispace0(text)?;
-    Ok((text, expr))
-}
 
 ///
 /// Parse a factor which calls a function. Can be written in BNF as follow.
@@ -26,6 +18,18 @@ fn expr_with_spaces(text: Span) -> IResult<Span, EvaluableObject, GSError> {
 /// ```
 ///
 pub fn function_call_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
+    let expr_with_spaces =
+        map(
+            tuple((
+                multispace0,
+                expr_parser,
+                multispace0
+            )),
+            |(_, statement, _)| {
+                statement
+            }
+        );
+
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, function_name) = identifier(text)?;
     let (text, _) = multispace0(text)?;

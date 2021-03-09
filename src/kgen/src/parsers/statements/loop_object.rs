@@ -18,21 +18,22 @@ use crate::parsers::utils::{ get_position, GSError };
 /// ```
 ///
 pub fn loop_parser(text: Span) -> IResult<Span, StatementObject, GSError> {
-    let statement_with_space_parser = map(
-        tuple((
-            multispace0,
-            statement_parser,
-            multispace0
-        )),
-        |(_, statement, _)| {
-            statement
-        }
-    );
+    let statement_with_space_parser =
+        map(
+            tuple((
+                statement_parser,
+                multispace0
+            )),
+            |(statement, _)| {
+                statement
+            }
+        );
 
     let (text, pos) = get_position("File".to_string())(text)?;
     let (text, _) = tag("#loop")(text)?;
     let (text, _) = multispace0(text)?;
     let (text, _) = tag("|>")(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, statements) = many0(statement_with_space_parser)(text)?;
     let (text, _) = tag("|<")(text)?;
     Ok((
