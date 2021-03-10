@@ -1,35 +1,32 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
+use nom::character::complete::multispace0;
+use nom::character::complete::multispace1;
 use nom::combinator::map;
-use nom::error::VerboseError;
 use nom::IResult;
 use nom::sequence::tuple;
-use nom_locate::position;
 use crate::ast::functions::external_function::ExternalFunction;
 use crate::ast::functions::FunctionObject;
-use crate::error::error_token::FilePosition;
 use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse a function which is declared externally.
 ///
-pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
+pub fn external_function_parser(text: Span) -> IResult<Span, FunctionObject, GSError> {
     map(
         tuple((
-            position,
+            get_position("File".to_string()),
             tag("#extern"),
-            space0,
-            alphanumeric1,
-            space0,
+            multispace1,
+            identifier,
+            multispace0,
             args_parser,
-            space0,
+            multispace0,
             function_type_parser
         )),
         |(pos, _, _, func_name, _, args, _, fn_type)| {
-            let pos = FilePosition::from_span("File".to_string(), &pos);
             let func_name = func_name.to_string();
             let args: Vec<String> = args.iter().map(|s| { s.to_string() }).collect();
             let types: Vec<String> = fn_type.0.iter().map(|s| { s.to_string() }).collect();

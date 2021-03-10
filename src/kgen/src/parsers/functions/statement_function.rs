@@ -1,47 +1,45 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
-use nom::error::VerboseError;
+use nom::character::complete::multispace0;
+use nom::combinator::map;
 use nom::IResult;
 use nom::multi::many0;
-use nom_locate::position;
+use nom::sequence::tuple;
 use crate::ast::functions::FunctionObject;
 use crate::ast::functions::statement_function::StatementFunction;
-use crate::ast::statements::StatementObject;
-use crate::error::error_token::FilePosition;
 use crate::parsers::functions::args_parser;
 use crate::parsers::functions::function_type_parser;
 use crate::parsers::Span;
 use crate::parsers::statements::statement_parser;
-
-///
-/// Parse a statement enclosed with spaces.
-///
-fn statement_with_spaces_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
-    let (text, _) = space0(text)?;
-    let (text, statement) = statement_parser(text)?;
-    let (text, _) = space0(text)?;
-    Ok((text, statement))
-}
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse a C-like function into `FunctionObject`.
 ///
-pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+pub fn statement_function_parser(text: Span) -> IResult<Span, FunctionObject, GSError> {
+    let statement_with_spaces_parser = map(
+        tuple((
+            statement_parser,
+            multispace0
+        )),
+        |(statement, _)| {
+            statement
+        }
+    );
+
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, _) = tag("#func")(text)?;
-    let (text, _) = space0(text)?;
-    let (text, function_name) = alphanumeric1(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
+    let (text, function_name) = identifier(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, args) = args_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, function_type) = function_type_parser(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag("|>")(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, statements) = many0(statement_with_spaces_parser)(text)?;
     let (text, _) = tag("|<")(text)?;
 
-    let pos = FilePosition::from_span("File".to_string(), &pos);
     let function_name = function_name.to_string();
     let args = args.iter().map(|s| { s.to_string() }).collect();
     let (types, ret_type) = function_type;

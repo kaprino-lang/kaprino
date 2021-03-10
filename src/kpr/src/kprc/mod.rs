@@ -127,12 +127,8 @@ impl KprcApp {
         let gen = CodeGen::new(context, &self.source_file);
 
         println!("log: Loading \"{}\"...", self.source_file);
-        let mut content = self.get_source_content()?;
 
-        content = content.replace("\r", "");
-        content = content.replace("\n", "");
-        content = content.replace("\t", "");
-
+        let content = self.get_source_content()?;
         let output_path = self.get_output_path();
 
         println!("log: Parsing \"{}\"...", self.source_file);

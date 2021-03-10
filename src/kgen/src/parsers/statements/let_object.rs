@@ -1,17 +1,14 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::alphanumeric1;
-use nom::character::complete::space0;
-use nom::character::complete::space1;
+use nom::character::complete::multispace0;
+use nom::character::complete::multispace1;
 use nom::combinator::opt;
-use nom::error::VerboseError;
 use nom::IResult;
-use nom_locate::position;
 use crate::ast::exprs::EvaluableObject;
 use crate::ast::statements::let_object::LetObject;
 use crate::ast::statements::StatementObject;
-use crate::error::error_token::FilePosition;
 use crate::parsers::Span;
 use crate::parsers::exprs::expr_parser;
+use crate::parsers::utils::{ identifier, get_position, GSError };
 
 ///
 /// Parse an assign object. Can be written in BNF as follow.
@@ -20,10 +17,10 @@ use crate::parsers::exprs::expr_parser;
 /// <assign> ::= ":=" <expr>
 /// ```
 ///
-fn assign_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span>> {
-    let (text, _) = space0(text)?;
+fn assign_parser(text: Span) -> IResult<Span, EvaluableObject, GSError> {
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag(":=")(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, expr) = expr_parser(text)?;
     Ok((text, expr))
 }
@@ -35,17 +32,17 @@ fn assign_parser(text: Span) -> IResult<Span, EvaluableObject, VerboseError<Span
 /// <type> ::= "(" "<-" .* ")"
 /// ```
 ///
-fn type_parser(text: Span) -> IResult<Span, &str, VerboseError<Span>> {
-    let (text, _) = space0(text)?;
+fn type_parser(text: Span) -> IResult<Span, &str, GSError> {
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag("(")(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag("<-")(text)?;
-    let (text, _) = space0(text)?;
-    let (text, type_name) = alphanumeric1(text)?;
-    let (text, _) = space0(text)?;
+    let (text, _) = multispace0(text)?;
+    let (text, type_name) = identifier(text)?;
+    let (text, _) = multispace0(text)?;
     let (text, _) = tag(")")(text)?;
-    let (text, _) = space0(text)?;
-    Ok((text, type_name.fragment()))
+    let (text, _) = multispace0(text)?;
+    Ok((text, type_name))
 }
 
 ///
@@ -55,14 +52,13 @@ fn type_parser(text: Span) -> IResult<Span, &str, VerboseError<Span>> {
 /// <let> ::= "#let" .* (":=" <expr>)* "(" "<-"" .* ")"
 /// ```
 ///
-pub fn let_parser(text: Span) -> IResult<Span, StatementObject, VerboseError<Span>> {
-    let (text, pos) = position(text)?;
+pub fn let_parser(text: Span) -> IResult<Span, StatementObject, GSError> {
+    let (text, pos) = get_position("File".to_string())(text)?;
     let (text, _) = tag("#let")(text)?;
-    let (text, _) = space1(text)?;
-    let (text, param_name) = alphanumeric1(text)?;
+    let (text, _) = multispace1(text)?;
+    let (text, param_name) = identifier(text)?;
     let (text, assign) = opt(assign_parser)(text)?;
     let (text, type_name) = type_parser(text)?;
-    let pos = FilePosition::from_span("".to_string(), &pos);
     Ok((
         text,
         StatementObject::LetObject(
