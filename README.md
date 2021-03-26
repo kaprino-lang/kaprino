@@ -8,37 +8,31 @@
 [![GitHub issues](https://img.shields.io/github/issues/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/kaprino-lang/kaprino)](https://github.com/kaprino-lang/kaprino)
 
-This is a strongly-typed programming language that tastes like a mathematics.
+<p align="center">
+  <img width="314" height="314" src="https://raw.githubusercontent.com/kaprino-lang/kaprino/master/img/icon.png" />
+</p>
 
-## BREAKING NEWS :loudspeaker:
+**kaprino** is a new programming language which lies **great emphasis on the correctness of the result** of programs.  
+It is recommended for people who want to do some **mathematical** stuffs **strictly**.
 
-We switched a language for developing kaprino from C++ to Rust in the view of maintainability. And kaprino written by Rust haven't been stable yet.
+Also, its syntax is as close to mathematics as possible. It's because I would like to see it used by not only people who are familiar with programming but also those who are new to programming!
 
-Wait a release of kaprino written by Rust!
+This project lacks some features yet. I would be appreciate it if you contribute to this project no matter how it is small.
 
-If you want to access stable kaprino written by C++, please refer to [cpp-HEAD](https://github.com/kaprino-lang/kaprino/tree/cpp-HEAD) branch of this repository.
+---
 
-## Code snippets :memo:
+## 📢 IMPORTANT NOTICE
 
-![Code example](https://raw.githubusercontent.com/kaprino-lang/kaprino/master/img/code_example1.png)
+We moved a language for developing kaprino from C++ to Rust in the view of maintainability.   
+However, kaprino written by Rust haven't been stable yet, so if you want to access stable kaprino, written by C++, please refer to [cpp-HEAD](https://github.com/kaprino-lang/kaprino/tree/cpp-HEAD) branch in this repository.
 
-## How to run :computer:
+---
 
-Write a code and save it with the extension, `.kpr`.  
-Now, you can compile it by executing the following command:  
-("kprc" is the shorteness of "kaprino compiler".)
+## 💽 Installation
 
-```
-$ kprc some-source.kpr
-```
+There are three ways available.
 
-kprc will generate an executable.
-
-If you are tired to set your environment, you can use [Kaprino Online Compiler](https://kaprino-lang.github.io/online).
-
-## Installation :cd:
-
-### Download from release page :floppy_disk:
+### 💾 Download from release page
 
 Download achievements from [Release Page](https://github.com/kaprino-lang/kaprino/releases) and put the directory path into PATH.  
 Here is the table of available environments.
@@ -49,11 +43,11 @@ Here is the table of available environments.
 |Windows x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/Windows%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
 |MacOS x64| ✔️ |[![Build](https://github.com/kaprino-lang/kaprino/workflows/MacOS%20release/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)|
 
-### Build from sources :hammer:
+### 🛠️ Build from sources
 
-Please read [How to build](https://github.com/kaprino-lang/kaprino/blob/master/HowToBuild.md).
+In preparation.
 
-### Run kaprino using Docker :whale:
+### 🐳 Run kaprino using Docker
 
 You can use a docker image which is already installed kaprino.
 
@@ -65,10 +59,10 @@ You can use a docker image which is already installed kaprino.
 docker run --rm -it kaprino/kaprino:latest
 ```
 
-## Requirements
+## 📋 Requirements
 
 - Clang (>=9.0.1)
 
-## License
+## ⚖️ License
 
-[MIT license](https://github.com/kaprino-lang/kaprino/blob/master/LICENSE)
+kaprino is under [MIT license](https://github.com/kaprino-lang/kaprino/blob/master/LICENSE).
