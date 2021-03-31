@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Kaprino <i>- A language of mathematical thinking</i></h1>
+  <h1>Kaprino <i>- A language for pursuing correctness</i></h1>
 </div>
 
 [![Build](https://github.com/kaprino-lang/kaprino/workflows/Build/badge.svg)](https://github.com/kaprino-lang/kaprino/actions)
@@ -13,17 +13,17 @@
 </p>
 
 **kaprino** is a new programming language which lies **great emphasis on the correctness of the result** of programs.  
-It is recommended for people who want to do some **mathematical** stuffs **strictly**.
+It is recommended for people who want to do some **mathematical** stuffs **strictly** on your computer machine.
 
 Also, its syntax is as close to mathematics as possible. It's because I would like to see it used by not only people who are familiar with programming but also those who are new to programming!
 
-This project lacks some features yet. I would be appreciate it if you contribute to this project no matter how it is small.
+It is only recently that kaprino has launched, so it lacks some features yet. I would be appreciate it if you contribute to this project no matter how it is small.
 
 ---
 
 ## 📢 IMPORTANT NOTICE
 
-We moved a language for developing kaprino from C++ to Rust in the view of maintainability.   
+We moved a language for developing kaprino from C++ to Rust in the view of maintainability.  
 However, kaprino written by Rust haven't been stable yet, so if you want to access stable kaprino, written by C++, please refer to [cpp-HEAD](https://github.com/kaprino-lang/kaprino/tree/cpp-HEAD) branch in this repository.
 
 ---
