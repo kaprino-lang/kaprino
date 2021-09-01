@@ -10,5 +10,5 @@ edition = "2018"
 inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", features = ["llvm11-0"] }
 regex = "^1.4.3"
 nom = { version = "^6.1.2", features = ["regexp"] }
-nom-greedyerror = "0.3.1"
+nom-greedyerror = "0.4.0"
 nom_locate = "^3.0.0"
