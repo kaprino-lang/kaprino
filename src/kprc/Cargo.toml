@@ -13,4 +13,4 @@ path = "../kgen"
 path = "../kpr"
 
 [dependencies]
-clap = "2.33.3"
+clap = "3.2.8"
